@@ -9,11 +9,11 @@ package MainClasses;
  * @author Angelo
  */
 public class ProcesoCPUBOUND extends Proceso {
-    private int CicloGenerarExcepcion;
-    private int CicloSatisfacerExcepcion;
-
-    public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, int tipo, PCB PCB_proceso) {
-        super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
+    
+    
+    public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso) {
+        super(nombre_proceso, cant_instrucciones, "I/O BOUND", PCB_proceso);
     }
+    
     
 }
