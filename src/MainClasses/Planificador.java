@@ -79,10 +79,13 @@ public class Planificador {
         if (ColaListos.isEmpty()) {
             return null; // Si no hay procesos listos, retorna null
         }
+        System.out.println("Antes de ordenar:");
+        System.out.println(ColaListos.travel());
 
         // Ordenar la cola por número de instrucciones antes de buscar el proceso más corto
         ordenarColaPorNumeroInstrucciones(ColaListos);
-
+        System.out.println("Después de ordenar:");
+        System.out.println(ColaListos.travel());
         // Obtener el proceso con el menor número de instrucciones
         Proceso procesoMasCorto = ColaListos.getHead().gettInfo();
         ColaListos.desencolar(); // Eliminar de la cola
@@ -102,40 +105,29 @@ public class Planificador {
     
     //Ordenamiento de colas (Ordenamiento burbuja)
     public void ordenarColaPorNumeroInstrucciones(Cola<Proceso> cola) {
-        if (cola.isEmpty() || cola.getHead().getpNext() == null) {
-            return; // La cola está vacía o tiene un solo elemento
-        }
-
-        boolean intercambiado;
-        do {
-            Nodo<Proceso> actual = cola.getHead();
-            Nodo<Proceso> anterior = null;
-            intercambiado = false;
-
-            while (actual.getpNext() != null) {
-                Proceso procesoActual = actual.gettInfo();
-                Proceso procesoSiguiente = actual.getpNext().gettInfo();
-
-                // Comparar número de instrucciones
-                if (procesoActual.getCant_instrucciones() > procesoSiguiente.getCant_instrucciones()) {
-                    // Intercambiar nodos
-                    if (anterior == null) {
-                        // Intercambiando el head
-                        Nodo<Proceso> temp = actual.getpNext();
-                        actual.setpNext(temp.getpNext());
-                        temp.setpNext(actual);
-                        cola.setHead(temp); // Actualizar el head de la cola
-                    } else {
-                        anterior.setpNext(actual.getpNext());
-                        actual.setpNext(actual.getpNext().getpNext());
-                        anterior.getpNext().setpNext(actual);
-                    }
-                    intercambiado = true;
-                } else {
-                    anterior = actual;
-                    actual = actual.getpNext();
-                }
-            }
-        } while (intercambiado);
+    if (cola.isEmpty() || cola.getHead().getpNext() == null) {
+        return; // La cola está vacía o tiene un solo elemento
     }
+
+    boolean intercambiado;
+    do {
+        Nodo<Proceso> actual = cola.getHead();
+        Nodo<Proceso> siguiente = actual.getpNext();
+        intercambiado = false;
+
+        while (siguiente != null) {
+            // Comparar el número de instrucciones entre los nodos
+            if (actual.gettInfo().getCant_instrucciones() > siguiente.gettInfo().getCant_instrucciones()) {
+                // Intercambiar los datos de los nodos
+                Proceso temp = actual.gettInfo();
+                actual.settInfo(siguiente.gettInfo());
+                siguiente.settInfo(temp);
+                intercambiado = true;
+            }
+            // Avanzar a los siguientes nodos
+            actual = siguiente;
+            siguiente = siguiente.getpNext();
+        }
+    } while (intercambiado);
+}
 }
