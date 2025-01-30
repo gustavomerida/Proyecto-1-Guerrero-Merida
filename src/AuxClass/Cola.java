@@ -32,6 +32,7 @@ public class Cola <T> {
 
     public void encolar(T dato) {
         Nodo<T> nuevo = new Nodo<>(dato);
+        System.out.println();
         if (isEmpty()) {
             this.head = nuevo;
             this.tail = nuevo;

@@ -10,13 +10,26 @@ package MainClasses;
  */
 public class CPU {
     private int id;
-    private Proceso ActualProceso;
-    private String Estado; // Ocupado o libre
+    private Proceso actualProceso;
+    private String estado; // Ocupado o libre
 
-    public CPU(int id, Proceso ActualProceso, String Estado) {
+    public CPU(int id, Proceso actualProceso, String estado) {
         this.id = id;
-        this.ActualProceso = ActualProceso;
-        this.Estado = Estado;
-    }        
+        this.actualProceso = actualProceso;
+        this.estado = estado;
+    }
+
+    public Proceso getActualProceso() {
+        return actualProceso;
+    }
+
+    public void setActualProceso(Proceso actualProceso) {
+        this.actualProceso = actualProceso;
+    }
+    
+    
+    
+    
+    
             
 }
