@@ -9,9 +9,14 @@ package MainClasses;
  * @author Angelo
  */
 public class SO {
-    private PCB CurrentProcess;
-    private PCB NewProcess;
+    private PCB currentProcess;
+    private PCB newProcess;
+    public Planificador planificador;
 
-    
-    
+    public SO(PCB CurrentProcess, PCB NewProcess, Planificador planificador) {
+        this.currentProcess = CurrentProcess;
+        this.newProcess = NewProcess;
+        this.planificador = planificador;
+    }
+   
 }

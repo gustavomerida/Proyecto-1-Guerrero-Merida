@@ -10,11 +10,14 @@ package MainClasses;
  */
 public class ProcesoIOBOUND extends Proceso {
     
-    private int CicloGenerarExcepcion;
-    private int CicloSatisfacerExcepcion;
+    private int cicloGenerarExcepcion;
+    private int cicloSatisfacerExcepcion;
 
-    public ProcesoIOBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso) {
+    public ProcesoIOBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, int cicloGenerarExcepcion, int cicloSatisfacerExcepcion) {
         super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
+        
+        this.cicloGenerarExcepcion = cicloGenerarExcepcion;
+        this.cicloSatisfacerExcepcion = cicloSatisfacerExcepcion;
     }
     
     
