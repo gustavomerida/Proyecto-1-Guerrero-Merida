@@ -4,6 +4,7 @@
  */
 package GUI.Classes;
 
+import MainPackage.App;
 import java.awt.FontFormatException;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -18,8 +19,16 @@ public class Home extends javax.swing.JFrame {
     /**
      * Creates new form Home2
      */
+    
+    // Principal y unica instancia app
+    
+    private final App app =  App.getInstance();
+   
     public Home() {
         initComponents();
+        this.setResizable(false);
+        this.setSize(1100, 625);
+        
     }
 
     /**
@@ -176,6 +185,7 @@ public class Home extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new Home().setVisible(true);
             }

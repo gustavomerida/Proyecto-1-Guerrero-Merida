@@ -22,5 +22,14 @@ public class PCB {
         Posibles estados: Running, Blocked, Ready
     */
     private String estado;
-    private List <RegistrosControlEstado> ambienteEjecucion;
+    private RegistrosControlEstado ambienteEjecucion;
+
+    public PCB(int id, String nombre_proceso, String estado, RegistrosControlEstado ambienteEjecucion) {
+        this.id = id;
+        this.nombre_proceso = nombre_proceso;
+        this.estado = estado;
+        this.ambienteEjecucion = ambienteEjecucion;
+    }
+    
+    
 }

@@ -15,7 +15,7 @@ import MainClasses.Proceso;
  */
 public class Planificador {
     private String nombreAlgoritmo;
-    private Cola<Proceso> ColaListos;
+    public Cola<Proceso> ColaListos;
     private Cola<Proceso> ColaBloqueados;
     private Cola<Proceso> ColaTerminados;
 
