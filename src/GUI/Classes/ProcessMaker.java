@@ -65,7 +65,7 @@ public class ProcessMaker extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         Salir = new javax.swing.JButton();
         CreateProcess = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        simulatorButton = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         homeButton = new javax.swing.JButton();
@@ -112,13 +112,13 @@ public class ProcessMaker extends javax.swing.JFrame {
         });
         jPanel2.add(CreateProcess, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 230, 140, 40));
 
-        jButton4.setText("Simulador");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        simulatorButton.setText("Simulador");
+        simulatorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                simulatorButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, 110, 40));
+        jPanel2.add(simulatorButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, 110, 40));
 
         jButton5.setText("Estadistica");
         jButton5.setMaximumSize(new java.awt.Dimension(72, 23));
@@ -319,9 +319,11 @@ public class ProcessMaker extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cycleDurationPerInstruction1ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void simulatorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simulatorButtonActionPerformed
+        Simulator simulator = new Simulator();
+        this.setVisible(false);
+        simulator.setVisible(true);
+    }//GEN-LAST:event_simulatorButtonActionPerformed
 
     private Proceso createNewProcess(){
         String processName = this.processName2.getText();
@@ -415,7 +417,6 @@ public class ProcessMaker extends javax.swing.JFrame {
     private javax.swing.JButton homeButton;
     private javax.swing.JTextField instructionsQuantity1;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
@@ -429,5 +430,6 @@ public class ProcessMaker extends javax.swing.JFrame {
     private javax.swing.JLabel label2IOEXTRA;
     private javax.swing.JTextField processName2;
     private javax.swing.JComboBox<String> processType;
+    private javax.swing.JButton simulatorButton;
     // End of variables declaration//GEN-END:variables
 }
