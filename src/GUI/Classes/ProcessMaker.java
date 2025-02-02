@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import javax.swing.JTextField;
 
 /**
+ * cyc
  *
  * @author Angelo
  */
@@ -34,19 +35,28 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         initComponents();
         initializationWindow();
-
     }
 
     private void initializationWindow() throws FontFormatException, IOException {
+        this.setResizable(false);
+        this.setSize(1100, 605);
+        this.setLocationRelativeTo(null);
+
+        // Label extras - Caso I/O BOUND
         label1IOEXTRA.setVisible(false);
         label2IOEXTRA.setVisible(false);
+
+        // JTextField extras - Caso I/O BOUND
         cycleDurationES.setVisible(false);
         cycleDurationException.setVisible(false);
-        ebGaramondFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/GUI/Assets/Font/EBGaramond-Bold.ttf")).deriveFont(Font.BOLD, 18);
 
-        jLabel7.setFont(ebGaramondFont);
-        jLabel7.setBounds(jLabel7.getX(), jLabel7.getY(), jLabel7.getWidth() + 50, jLabel7.getHeight());
+        ebGaramondFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/GUI/Assets/Font/EBGaramond-Bold.ttf")).deriveFont(Font.PLAIN, 16);
 
+        JLabel[] labelArrayParameters = {jLabel7, jLabel4, jLabel5, label1IOEXTRA, label2IOEXTRA, activeProcessorsLabel, cycleDurationLabel};
+
+        for (JLabel currentLabel : labelArrayParameters) {
+            currentLabel.setFont(ebGaramondFont);
+        }
     }
 
     /**
@@ -148,7 +158,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Assets/background2.png"))); // NOI18N
         jLabel3.setText("jLabel3");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1110, 600));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -10, 1110, 660));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 270, 570));
 
@@ -165,7 +175,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Cantidad de Instrucciones");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 150, 150, 30));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 150, 180, 40));
 
         processType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CPU BOUND", "I/O BOUND" }));
         processType.setToolTipText("");
@@ -177,8 +187,9 @@ public class ProcessMaker extends javax.swing.JFrame {
         jPanel1.add(processType, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 200, -1, -1));
 
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Tipo");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 200, 30, 30));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 200, 70, 40));
 
         instructionsQuantity1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -212,7 +223,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Nombre del Proceso:");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 110, 190, 30));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 110, 170, 40));
 
         processName2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -229,12 +240,14 @@ public class ProcessMaker extends javax.swing.JFrame {
         jPanel1.add(activeProcessors, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 400, 240, -1));
 
         activeProcessorsLabel.setForeground(new java.awt.Color(255, 255, 255));
+        activeProcessorsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         activeProcessorsLabel.setText("Número de procesadores activos");
-        jPanel1.add(activeProcessorsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 390, 180, 30));
+        jPanel1.add(activeProcessorsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 390, 220, 50));
 
         cycleDurationLabel.setForeground(new java.awt.Color(255, 255, 255));
+        cycleDurationLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         cycleDurationLabel.setText("Duración del ciclo de ejecución de una instrucción");
-        jPanel1.add(cycleDurationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 440, 270, 30));
+        jPanel1.add(cycleDurationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 420, 270, 50));
 
         cycleDurationPerInstruction1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -253,15 +266,15 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Assets/solid-background-color.png"))); // NOI18N
         jLabel1.setText("jLabel1");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, 830, 570));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 0, 830, 620));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1109, -1));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1109, 570));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_SalirActionPerformed
 
     private void CreateProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateProcessActionPerformed
@@ -281,7 +294,7 @@ public class ProcessMaker extends javax.swing.JFrame {
     }//GEN-LAST:event_cycleDurationExceptionActionPerformed
 
     private void activeProcessorsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activeProcessorsActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_activeProcessorsActionPerformed
 
     private void processTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processTypeActionPerformed
@@ -316,38 +329,41 @@ public class ProcessMaker extends javax.swing.JFrame {
     }//GEN-LAST:event_processName2ActionPerformed
 
     private void cycleDurationPerInstruction1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cycleDurationPerInstruction1ActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_cycleDurationPerInstruction1ActionPerformed
 
     private void simulatorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simulatorButtonActionPerformed
-        Simulator simulator = new Simulator();
+        /*
+        NECESITO RECUPERAR EL ESTADO ANTERIOR PARA SETEAR LOS PARAMETROS DEL 
+        SIMULADOR. CON LA IMPLEMENTACION DEL ARCHIVO GUARDADO ESTO CAMBIARA.
+         */
+        Simulator simulator = saveSimulatorParameters();
         this.setVisible(false);
         simulator.setVisible(true);
     }//GEN-LAST:event_simulatorButtonActionPerformed
 
-    private Proceso createNewProcess(){
+    private Proceso createNewProcess() {
         String processName = this.processName2.getText();
         int instructionsQuantity = Integer.parseInt(this.instructionsQuantity1.getText());
         String processType = this.processType.getModel().getSelectedItem().toString();
-        
+
+        // OJO CON ESTO
         RegistrosControlEstado executionEnvironment = new RegistrosControlEstado(0, 1, 0);
-   
-        PCB PCBProcess = new PCB(1, processName, "Ready", executionEnvironment);
-        
-        if ("CPU BOUND".equals(processType)) {   
+
+        PCB PCBProcess = new PCB(1, processName, "READY", executionEnvironment);
+
+        if ("CPU BOUND".equals(processType)) {
             ProcesoCPUBOUND newCPUBoundProcess = new ProcesoCPUBOUND(processName, instructionsQuantity, processType, PCBProcess);
             return newCPUBoundProcess;
-        }
-        else {
+        } else {
             int cycleDuration = Integer.parseInt(this.cycleDurationES.getText());
             int cycleDurationExcept = Integer.parseInt(this.cycleDurationException.getText());
             ProcesoIOBOUND newIOBoundProcess = new ProcesoIOBOUND(processName, instructionsQuantity, processType, PCBProcess, cycleDuration, cycleDurationExcept);
-            
+
             return newIOBoundProcess;
         }
     }
-    
-    
+
     private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
 
         Home home = new Home();
@@ -355,11 +371,29 @@ public class ProcessMaker extends javax.swing.JFrame {
         home.setVisible(true);
 
     }//GEN-LAST:event_homeButtonActionPerformed
-
+    
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
-        Proceso newProcess = createNewProcess();    
-        app.getPlanificador().ColaListos.encolar(newProcess);        
+        Proceso newProcess = createNewProcess();
+        app.getPlanificador().ColaListos.encolar(newProcess);
+        
+        cleanTextField();
+        // DADO QUE NO TENEMOS UN ARCHIVO, ESTO SERÁ TEMPORAL
     }//GEN-LAST:event_guardarActionPerformed
+
+    private Simulator saveSimulatorParameters() {
+        String cycleDurationParameter = String.valueOf(cycleDurationPerInstruction1.getText());
+        int processorsQuantity = Integer.parseInt(this.activeProcessors.getText());
+
+        Simulator simulatorWindow = new Simulator(cycleDurationParameter, processorsQuantity);
+        return simulatorWindow;
+    }
+    
+    private void cleanTextField(){
+        processName2.setText("");
+        instructionsQuantity1.setText("");
+        cycleDurationES.setText("");
+        cycleDurationException.setText("");
+    }
 
     /**
      * @param args the command line arguments

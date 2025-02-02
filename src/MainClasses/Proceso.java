@@ -49,6 +49,20 @@ public class Proceso extends Thread{
         return cant_instrucciones;
     }
 
+    public String getNombre_proceso() {
+        return nombre_proceso;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public PCB getPCB_proceso() {
+        return PCB_proceso;
+    }
+    
+    
+
     /**
      * @param cant_instrucciones the cant_instrucciones to set
      */

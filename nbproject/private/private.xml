@@ -3,14 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Angelo/Documents/Unimet/Sistemas%20Operativos/Proyectos/Proyecto-1-SO/Proyecto-1-Guerrero-Merida/src/AuxClass/Nodo.java</file>
-            <file>file:/C:/Users/Angelo/Documents/Unimet/Sistemas%20Operativos/Proyectos/Proyecto-1-SO/Proyecto-1-Guerrero-Merida/src/AuxClass/Cola.java</file>
+            <file>file:/C:/Users/Angelo/Documents/Unimet/Sistemas%20Operativos/Proyectos/Proyecto-1-SO/Proyecto-1-Guerrero-Merida/src/MainClasses/SO.java</file>
             <file>file:/C:/Users/Angelo/Documents/Unimet/Sistemas%20Operativos/Proyectos/Proyecto-1-SO/Proyecto-1-Guerrero-Merida/src/GUI/Classes/Home.java</file>
+            <file>file:/C:/Users/Angelo/Documents/Unimet/Sistemas%20Operativos/Proyectos/Proyecto-1-SO/Proyecto-1-Guerrero-Merida/src/MainClasses/PCB.java</file>
             <file>file:/C:/Users/Angelo/Documents/Unimet/Sistemas%20Operativos/Proyectos/Proyecto-1-SO/Proyecto-1-Guerrero-Merida/src/MainPackage/Main.java</file>
             <file>file:/C:/Users/Angelo/Documents/Unimet/Sistemas%20Operativos/Proyectos/Proyecto-1-SO/Proyecto-1-Guerrero-Merida/src/MainPackage/App.java</file>
-            <file>file:/C:/Users/Angelo/Documents/Unimet/Sistemas%20Operativos/Proyectos/Proyecto-1-SO/Proyecto-1-Guerrero-Merida/src/AuxClass/List.java</file>
+            <file>file:/C:/Users/Angelo/Documents/Unimet/Sistemas%20Operativos/Proyectos/Proyecto-1-SO/Proyecto-1-Guerrero-Merida/src/MainClasses/RegistrosControlEstado.java</file>
             <file>file:/C:/Users/Angelo/Documents/Unimet/Sistemas%20Operativos/Proyectos/Proyecto-1-SO/Proyecto-1-Guerrero-Merida/src/GUI/Classes/Simulator.java</file>
             <file>file:/C:/Users/Angelo/Documents/Unimet/Sistemas%20Operativos/Proyectos/Proyecto-1-SO/Proyecto-1-Guerrero-Merida/src/GUI/Classes/ProcessMaker.java</file>
+            <file>file:/C:/Users/Angelo/Documents/Unimet/Sistemas%20Operativos/Proyectos/Proyecto-1-SO/Proyecto-1-Guerrero-Merida/src/MainClasses/CPU.java</file>
+            <file>file:/C:/Users/Angelo/Documents/Unimet/Sistemas%20Operativos/Proyectos/Proyecto-1-SO/Proyecto-1-Guerrero-Merida/src/MainClasses/Planificador.java</file>
         </group>
     </open-files>
 </project-private>

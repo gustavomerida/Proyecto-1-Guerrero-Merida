@@ -18,5 +18,19 @@ public class RegistrosControlEstado {
         this.pc = pc;
         this.MAR = MAR;
     }
+
+    public int getPsw() {
+        return psw;
+    }
+
+    public int getPc() {
+        return pc;
+    }
+
+    public int getMAR() {
+        return MAR;
+    }
+    
+    
          
 }
