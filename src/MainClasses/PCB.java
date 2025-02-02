@@ -30,6 +30,12 @@ public class PCB {
         this.estado = estado;
         this.ambienteEjecucion = ambienteEjecucion;
     }
+
+    public RegistrosControlEstado getAmbienteEjecucion() {
+        return ambienteEjecucion;
+    }
+    
+    
     
     
 }

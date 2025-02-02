@@ -139,4 +139,10 @@ public class Planificador {
             }
         } while (intercambiado);
     }
+
+    public String getNombreAlgoritmo() {
+        return nombreAlgoritmo;
+    }
+    
+    
 }

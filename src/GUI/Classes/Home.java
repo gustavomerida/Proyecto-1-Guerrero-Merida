@@ -21,13 +21,13 @@ public class Home extends javax.swing.JFrame {
      */
     
     // Principal y unica instancia app
-    
     private final App app =  App.getInstance();
    
     public Home() {
         initComponents();
         this.setResizable(false);
         this.setSize(1100, 625);
+        this.setLocationRelativeTo(null);
         
     }
 
@@ -45,9 +45,9 @@ public class Home extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         Salir = new javax.swing.JButton();
         CreateProcess = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        simulatorButton = new javax.swing.JButton();
+        stadisticsButton = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         backgroundImage = new javax.swing.JLabel();
 
@@ -82,35 +82,35 @@ public class Home extends javax.swing.JFrame {
         });
         jPanel2.add(CreateProcess, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 230, 140, 40));
 
-        jButton4.setText("Simulador");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        simulatorButton.setText("Simulador");
+        simulatorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                simulatorButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, 110, 40));
+        jPanel2.add(simulatorButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, 110, 40));
 
-        jButton5.setText("Estadistica");
-        jButton5.setMaximumSize(new java.awt.Dimension(72, 23));
-        jButton5.setMinimumSize(new java.awt.Dimension(72, 23));
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        stadisticsButton.setText("Estadistica");
+        stadisticsButton.setMaximumSize(new java.awt.Dimension(72, 23));
+        stadisticsButton.setMinimumSize(new java.awt.Dimension(72, 23));
+        stadisticsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                stadisticsButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 330, 110, 40));
+        jPanel2.add(stadisticsButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 330, 110, 40));
 
-        jButton3.setText("Guardar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        saveButton.setText("Guardar");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                saveButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, 110, 40));
+        jPanel2.add(saveButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, 110, 40));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Assets/background2.png"))); // NOI18N
         jLabel3.setText("jLabel3");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 620));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, 640));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 260, -1));
 
@@ -127,33 +127,39 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_SalirActionPerformed
 
     private void CreateProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateProcessActionPerformed
         try {
+            
             ProcessMaker ProcessMakerWindow = new ProcessMaker();
             this.setVisible(false);
-            
             ProcessMakerWindow.setVisible(true);
-        } catch (FontFormatException ex) {
-            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+            
+        } catch (FontFormatException | IOException ex) {
             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_CreateProcessActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void simulatorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simulatorButtonActionPerformed
+        /*
+        SE DEBE MODIFICAR LOS VALORES DEL SIMULADOR EN FUNCION A LO QUE SE TENGA GUARDADO.
+        */
+        
+        Simulator simulatorWindow = new Simulator(null, 0);
+        this.setVisible(false);
+        
+        simulatorWindow.setVisible(true);
+    }//GEN-LAST:event_simulatorButtonActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void stadisticsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stadisticsButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_stadisticsButtonActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_saveButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -197,11 +203,11 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton Salir;
     private javax.swing.JLabel backgroundImage;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton saveButton;
+    private javax.swing.JButton simulatorButton;
+    private javax.swing.JButton stadisticsButton;
     // End of variables declaration//GEN-END:variables
 }
