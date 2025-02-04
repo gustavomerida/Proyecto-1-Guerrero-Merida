@@ -39,6 +39,7 @@ public class Planificador {
             switch (nombreAlgoritmo) {
                 case "FCFS":
                     proceso = fcfs();
+                    ejecutarFCFS(proceso);
                     break;
                 case "RR":
                     proceso = roundRobin();
@@ -63,7 +64,7 @@ public class Planificador {
 
     public void despacharProceso(Proceso proceso) {
         // Lógica para ejecutar el proceso
-        ejecutarProceso(proceso);
+        ejecutarProcesos(proceso);
     }
 
     private Proceso fcfs() {
@@ -103,6 +104,8 @@ public class Planificador {
             semaphore.release(); // Liberar el permiso del semáforo
         }
     }
+    
+    
 
     private Proceso spn() {
         try {
@@ -183,18 +186,23 @@ public class Planificador {
         }
     }
 
-    public void ejecutarProceso(Proceso proceso) {
-//        if (proceso.getTipo() == Proceso.TIPO_CPU_BOUND) {
-//            //proceso.ejecutarProcesoCPUBound();
-//        } else if (proceso.getTipo() == Proceso.TIPO_IO_BOUND) {
-//            //proceso.ejecutarProcesoIOBound();
-//            // Agregar el proceso a la cola de bloqueados
-//            ColaBloqueados.encolar(proceso);
-//            // Eliminar el proceso de la cola de listos
-//            //ColaListos.eliminar(proceso);
-//        }
-//        // Actualizar las colas según el estado del proceso
-//        actualizarColas(proceso);
+    public void ejecutarProcesos(Proceso proceso) {
+        if (proceso.getTipo() == "CPU BOUND") {
+            if (nombreAlgoritmo == "FCFS"){
+                this.escogerProceso();
+            }
+            this.cpuDefault.setActualProceso(proceso);
+            proceso.start();
+        } else if (proceso.getTipo() == "I/O BOUND"){
+            
+            proceso.start();
+            // Agregar el proceso a la cola de bloqueados
+            ColaBloqueados.encolar(proceso);
+            // Eliminar el proceso de la cola de listos
+            //ColaListos.eliminar(proceso);
+        }
+        // Actualizar las colas según el estado del proceso
+        actualizarColas(proceso);
     }
 
     private void actualizarColas(Proceso proceso) {
@@ -224,6 +232,14 @@ public class Planificador {
 
     public String getNombreAlgoritmo() {
         return nombreAlgoritmo;
+    }
+    
+    private void ejecutarFCFS(Proceso proceso) {
+        // Lógica para ejecutar el proceso en FCFS
+        cpuDefault.setActualProceso(proceso);
+        proceso.start();
+        // Actualizar las colas según el estado del proceso
+        actualizarColas(proceso);
     }
 }
 

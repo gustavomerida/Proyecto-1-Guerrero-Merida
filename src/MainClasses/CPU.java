@@ -17,7 +17,7 @@ public class CPU {
         this.id = id;
         this.actualProceso = actualProceso;
         this.estado = estado;
-        this.getActualProceso().start(); //Esto hace que al despacharse un proceso, se ejecute
+        this.actualProceso.start();
     }
 
     public Proceso getActualProceso() {
@@ -26,7 +26,6 @@ public class CPU {
 
     public void setActualProceso(Proceso actualProceso) {
         this.actualProceso = actualProceso;
-        this.getActualProceso().start(); //Esto hace que al despacharse un proceso, se ejecute
     }
     
               

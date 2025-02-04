@@ -9,7 +9,7 @@ package MainClasses;
  * @author Angelo
  */
 public class RegistrosControlEstado {
-    private int psw;
+    private int psw; // 0 modo kernel 1 modo usuario ?? 
     private int pc;
     private int MAR;
     

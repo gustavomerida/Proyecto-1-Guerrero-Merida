@@ -41,19 +41,24 @@ public class App {
         TESTEO DE PROCESOS -- CREACION DE PROCESOS
         */
         RegistrosControlEstado environment = new RegistrosControlEstado(0, 1, 0);
-        PCB pcb = new PCB(0, "p1", "READY", environment);
-        
+        PCB pcb = new PCB(0, "p1", "Ready", environment);
         Proceso p1 = new ProcesoCPUBOUND("p1", 10, "CPU BOUND", pcb, 3000);
-        Proceso p2 = new ProcesoIOBOUND("p2", 8, "I/O BOUND", pcb, 3000, 2, 3);
-        //Proceso p3 = new ProcesoCPUBOUND("p3", 4, "CPU BOUND", pcb);
+        
+//        RegistrosControlEstado environment2 = new RegistrosControlEstado(0, 1, 0);
+//        PCB pcb2 = new PCB(0, "p2", "Ready", environment2);
+//        Proceso p2 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 3000);
+        
+        
+        //Proceso p4 = new ProcesoIOBOUND("p4", 8, "I/O BOUND", pcb, 3000, 2, 3);
+        
         
         colaListos.encolar(p1);
-        colaListos.encolar(p2);
+//        colaListos.encolar(p2);
         //colaListos.encolar(p3);
         
         
         ////////////////////////////////////////////////////////////////////////////
-        this.cpu = new CPU(0, p2, "Activo");
+        this.cpu = new CPU(0, p1, "Activo");
         this.planificador = new Planificador("FCFS", colaListos, colaBloqueados, colaTerminados, cpu);
         
         return new SO(null, null, planificador);
@@ -64,6 +69,14 @@ public class App {
         home.setVisible(true);
 
     }
+    
+    public void setearProcesoACPU()
+    {
+       this.planificador.escogerProceso();
+       //this.cpu.setActualProceso(actualProceso);
+    
+    }
+    
     
     public SO getSistemaOperativo() {
         return sistemaOperativo;
