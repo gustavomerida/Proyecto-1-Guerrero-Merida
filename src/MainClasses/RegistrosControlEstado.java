@@ -30,6 +30,27 @@ public class RegistrosControlEstado {
     public int getMAR() {
         return MAR;
     }
+
+    /**
+     * @param psw the psw to set
+     */
+    public void setPsw(int psw) {
+        this.psw = psw;
+    }
+
+    /**
+     * @param pc the pc to set
+     */
+    public void setPc(int pc) {
+        this.pc = pc;
+    }
+
+    /**
+     * @param MAR the MAR to set
+     */
+    public void setMAR(int MAR) {
+        this.MAR = MAR;
+    }
     
     
          

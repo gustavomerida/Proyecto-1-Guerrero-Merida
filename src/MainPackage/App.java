@@ -7,6 +7,7 @@ import MainClasses.PCB;
 import MainClasses.Planificador;
 import MainClasses.Proceso;
 import MainClasses.ProcesoCPUBOUND;
+import MainClasses.ProcesoIOBOUND;
 import MainClasses.RegistrosControlEstado;
 import MainClasses.SO;
 
@@ -42,22 +43,23 @@ public class App {
         RegistrosControlEstado environment = new RegistrosControlEstado(0, 1, 0);
         PCB pcb = new PCB(0, "p1", "READY", environment);
         
-        Proceso p1 = new ProcesoCPUBOUND("p1", 10, "CPU BOUND", pcb);
-        Proceso p2 = new ProcesoCPUBOUND("p2", 8, "CPU BOUND", pcb);
-        Proceso p3 = new ProcesoCPUBOUND("p3", 4, "CPU BOUND", pcb);
+        Proceso p1 = new ProcesoCPUBOUND("p1", 10, "CPU BOUND", pcb, 3000);
+        Proceso p2 = new ProcesoIOBOUND("p2", 8, "I/O BOUND", pcb, 3000, 2, 3);
+        //Proceso p3 = new ProcesoCPUBOUND("p3", 4, "CPU BOUND", pcb);
         
         colaListos.encolar(p1);
         colaListos.encolar(p2);
-        colaListos.encolar(p3);
+        //colaListos.encolar(p3);
+        
         
         ////////////////////////////////////////////////////////////////////////////
-        this.cpu = new CPU(0, p1, "Activo");
+        this.cpu = new CPU(0, p2, "Activo");
         this.planificador = new Planificador("FCFS", colaListos, colaBloqueados, colaTerminados, cpu);
         
         return new SO(null, null, planificador);
     }
     
-    public void start() {
+    public void start() { //Este me confunde un poco porque pienso que es un hilo
         Home home = new Home();
         home.setVisible(true);
 
