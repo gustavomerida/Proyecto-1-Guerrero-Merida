@@ -4,6 +4,7 @@
  */
 package MainClasses;
 
+import MainPackage.App;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,6 +18,8 @@ public class ProcesoIOBOUND extends Proceso {
     private int cicloGenerarExcepcion;
     private int cicloSatisfacerExcepcion;
     private int contadorCiclos;
+    
+    private final App app = App.getInstance();
 
     public ProcesoIOBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, int ciclosDuracion, int cicloGenerarExcepcion, int cicloSatisfacerExcepcion) {
         super(nombre_proceso, cant_instrucciones, "I/O BOUND", PCB_proceso);
@@ -32,7 +35,7 @@ public class ProcesoIOBOUND extends Proceso {
     }
 
     private void satisfacerExcepcion() {
-        this.getPCB_proceso().setEstado("Ready");
+        this.getPCB_proceso().setEstado("Running");
         System.out.println("Proceso " + this.getNombreProceso() + " listo para ejecutarse nuevamente");
     }
 
@@ -53,7 +56,7 @@ public class ProcesoIOBOUND extends Proceso {
                 System.out.println("PC: " + this.getPCB_proceso().getAmbienteEjecucion().getPc());
                 System.out.println("Estado: " + this.getPCB_proceso().getEstado());
                 System.out.println("");
-                this.reducirTiempo(1);
+//                this.reducirTiempo(1);
                 this.contadorCiclos++;
                 if (this.contadorCiclos % this.cicloGenerarExcepcion == 0) {
                     this.generarExcepcion();

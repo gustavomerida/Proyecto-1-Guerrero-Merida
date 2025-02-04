@@ -28,6 +28,7 @@ public class ProcesoCPUBOUND extends Proceso {
                 this.sleep(this.ciclosDuracion);
                 if (this.getTiempoRestante() == 0) {
                     this.getPCB_proceso().setEstado("Exit");
+                    //llamar al planificador o importar App
                 }
                 System.out.println("Proceso " + this.getNombreProceso() + " ejecutándose");
                 System.out.println("Cant_instrucciones: " + this.getCant_instrucciones());
@@ -41,6 +42,7 @@ public class ProcesoCPUBOUND extends Proceso {
                 System.out.println("Estado: " + this.getPCB_proceso().getEstado());
                 System.out.println("");
                 this.reducirTiempo(1);
+                
             } catch (InterruptedException ex) {
                 Logger.getLogger(ProcesoCPUBOUND.class.getName()).log(Level.SEVERE, null, ex);
             }

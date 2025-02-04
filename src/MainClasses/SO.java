@@ -32,8 +32,10 @@ public class SO extends Thread {
     }
     
     
+    
+    
 
-    private void satisfacerExcepcion(CPU cpu, Proceso proceso) {
+    public void satisfacerExcepcion(CPU cpu, Proceso proceso) {
         proceso.getPCB_proceso().setEstado("Ready");
         System.out.println("Proceso " + proceso.getNombreProceso() + " listo para ejecutarse nuevamente");
     }
