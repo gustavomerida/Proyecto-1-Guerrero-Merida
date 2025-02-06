@@ -163,8 +163,8 @@ public class ProcessMaker extends javax.swing.JFrame {
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 270, 570));
 
         label2IOEXTRA.setForeground(new java.awt.Color(21, 97, 240));
-        label2IOEXTRA.setText("Número de ciclos en el que completa la solicitud de esa excepción");
-        jPanel1.add(label2IOEXTRA, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 280, 370, 30));
+        label2IOEXTRA.setText("Número de ciclos  para completar la solicitud:");
+        jPanel1.add(label2IOEXTRA, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 270, 330, 40));
 
         cycleDurationException.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -174,7 +174,7 @@ public class ProcessMaker extends javax.swing.JFrame {
         jPanel1.add(cycleDurationException, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 280, 240, -1));
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Cantidad de Instrucciones");
+        jLabel4.setText("Cantidad de Instrucciones:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 150, 180, 40));
 
         processType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CPU BOUND", "I/O BOUND" }));
@@ -188,7 +188,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Tipo");
+        jLabel5.setText("Tipo:");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 200, 70, 40));
 
         instructionsQuantity1.addActionListener(new java.awt.event.ActionListener() {
@@ -199,8 +199,8 @@ public class ProcessMaker extends javax.swing.JFrame {
         jPanel1.add(instructionsQuantity1, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 160, 240, -1));
 
         label1IOEXTRA.setForeground(new java.awt.Color(21, 97, 240));
-        label1IOEXTRA.setText("Número de ciclos para que el proceso haga una solicitud de E/S");
-        jPanel1.add(label1IOEXTRA, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 240, 350, 30));
+        label1IOEXTRA.setText("Número de ciclos para solicitud de E/S:");
+        jPanel1.add(label1IOEXTRA, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 240, 320, 40));
 
         cycleDurationES.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -218,7 +218,7 @@ public class ProcessMaker extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Rockwell", 0, 36)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Creacion de Procesos");
+        jLabel6.setText("Creación de Procesos");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 50, 440, 40));
 
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -241,12 +241,12 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         activeProcessorsLabel.setForeground(new java.awt.Color(255, 255, 255));
         activeProcessorsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        activeProcessorsLabel.setText("Número de procesadores activos");
+        activeProcessorsLabel.setText("Número de procesadores activos:");
         jPanel1.add(activeProcessorsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 390, 220, 50));
 
         cycleDurationLabel.setForeground(new java.awt.Color(255, 255, 255));
         cycleDurationLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        cycleDurationLabel.setText("Duración del ciclo de ejecución de una instrucción");
+        cycleDurationLabel.setText("Duración del ciclo de ejecución de una instrucción:");
         jPanel1.add(cycleDurationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 420, 270, 50));
 
         cycleDurationPerInstruction1.addActionListener(new java.awt.event.ActionListener() {
