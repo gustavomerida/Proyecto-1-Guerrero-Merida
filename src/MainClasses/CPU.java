@@ -17,6 +17,7 @@ public class CPU {
         this.id = id;
         this.actualProceso = actualProceso;
         this.estado = estado;
+        this.actualProceso.start();
     }
 
     public Proceso getActualProceso() {
@@ -27,9 +28,5 @@ public class CPU {
         this.actualProceso = actualProceso;
     }
     
-    
-    
-    
-    
-            
+              
 }

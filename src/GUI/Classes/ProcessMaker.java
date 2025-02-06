@@ -346,6 +346,7 @@ public class ProcessMaker extends javax.swing.JFrame {
         String processName = this.processName2.getText();
         int instructionsQuantity = Integer.parseInt(this.instructionsQuantity1.getText());
         String processType = this.processType.getModel().getSelectedItem().toString();
+        int cycleDurationInstruction = Integer.parseInt(this.cycleDurationPerInstruction1.getText());
 
         // OJO CON ESTO
         RegistrosControlEstado executionEnvironment = new RegistrosControlEstado(0, 1, 0);
@@ -353,12 +354,12 @@ public class ProcessMaker extends javax.swing.JFrame {
         PCB PCBProcess = new PCB(1, processName, "READY", executionEnvironment);
 
         if ("CPU BOUND".equals(processType)) {
-            ProcesoCPUBOUND newCPUBoundProcess = new ProcesoCPUBOUND(processName, instructionsQuantity, processType, PCBProcess);
+            ProcesoCPUBOUND newCPUBoundProcess = new ProcesoCPUBOUND(processName, instructionsQuantity, processType, PCBProcess, cycleDurationInstruction);
             return newCPUBoundProcess;
         } else {
             int cycleDuration = Integer.parseInt(this.cycleDurationES.getText());
             int cycleDurationExcept = Integer.parseInt(this.cycleDurationException.getText());
-            ProcesoIOBOUND newIOBoundProcess = new ProcesoIOBOUND(processName, instructionsQuantity, processType, PCBProcess, cycleDuration, cycleDurationExcept);
+            ProcesoIOBOUND newIOBoundProcess = new ProcesoIOBOUND(processName, instructionsQuantity, processType, PCBProcess, cycleDurationInstruction, cycleDuration, cycleDurationExcept);
 
             return newIOBoundProcess;
         }

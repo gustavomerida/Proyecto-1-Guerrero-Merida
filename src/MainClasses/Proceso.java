@@ -49,7 +49,7 @@ public class Proceso extends Thread{
         return cant_instrucciones;
     }
 
-    public String getNombre_proceso() {
+    public String getNombre_proceso() { //esto está repetido chamo
         return nombre_proceso;
     }
 
