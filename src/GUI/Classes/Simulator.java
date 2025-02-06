@@ -36,25 +36,30 @@ public class Simulator extends javax.swing.JFrame {
     private final App app = App.getInstance();
     private String cycleDurationSetter;
     private int processorsQuantity;
+    private DefaultListModel[] modelosCPU;
 
     public Simulator(String cycleDurationSetter, int processorsQuantity) {
 
         initComponents();
-        this.processorsQuantity = 2;
+        this.processorsQuantity = 3;
         this.cycleDurationSetter = cycleDurationSetter;
-        
-        
+        // CREACION DE PROCESADORES
+        this.modelosCPU = createProcessors();
+
+        // LABELS EN LA PARTE SUPERIOR
         updateAlgorithm();
         updatecycleDuration();
+
         
         
+
         this.setResizable(false);
         this.setSize(1100, 605);
         this.setLocationRelativeTo(null);
-        
+
         // SOLO PARA VISUALIZACION
         createJScrollPaneOnReady();
-        
+
     }
 
     /**
@@ -67,8 +72,9 @@ public class Simulator extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        auxPanelCPU = new javax.swing.JPanel();
+        primaryPanelCPU = new javax.swing.JPanel();
         currentAlgorithmLabel = new javax.swing.JLabel();
         cycleDurationLabel = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -78,8 +84,6 @@ public class Simulator extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        cpu3 = new javax.swing.JScrollPane();
-        jList3 = new javax.swing.JList<>();
         cpu2 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList<>();
         bloqueadosCPU1 = new javax.swing.JScrollPane();
@@ -104,21 +108,25 @@ public class Simulator extends javax.swing.JFrame {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel4.setBackground(new java.awt.Color(56, 12, 36));
-        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 200, 330, 160));
-
         jButton1.setText("jButton1");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 390, -1, -1));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 270, -1, -1));
+
+        auxPanelCPU.setBackground(new java.awt.Color(56, 12, 36));
+        auxPanelCPU.setLayout(new javax.swing.BoxLayout(auxPanelCPU, javax.swing.BoxLayout.LINE_AXIS));
+        jPanel1.add(auxPanelCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 370, 180, 160));
+
+        primaryPanelCPU.setBackground(new java.awt.Color(56, 12, 36));
+        primaryPanelCPU.setLayout(new javax.swing.BoxLayout(primaryPanelCPU, javax.swing.BoxLayout.LINE_AXIS));
+        jPanel1.add(primaryPanelCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 200, 330, 160));
 
         currentAlgorithmLabel.setForeground(new java.awt.Color(255, 215, 0));
         currentAlgorithmLabel.setText("Algoritmo actual:");
-        jPanel1.add(currentAlgorithmLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 10, 130, -1));
+        jPanel1.add(currentAlgorithmLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 16, 130, 20));
 
         cycleDurationLabel.setForeground(new java.awt.Color(255, 215, 0));
         cycleDurationLabel.setText("Ciclos de reloj:");
@@ -152,7 +160,7 @@ public class Simulator extends javax.swing.JFrame {
         jLabel7.setForeground(new java.awt.Color(255, 140, 0));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("CPU-3");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 510, 80, 40));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 530, 80, 30));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 140, 0));
@@ -165,15 +173,6 @@ public class Simulator extends javax.swing.JFrame {
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("CPU-2");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 170, 80, 40));
-
-        jList3.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        cpu3.setViewportView(jList3);
-
-        jPanel1.add(cpu3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 370, 150, 140));
 
         jList2.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -306,7 +305,6 @@ public class Simulator extends javax.swing.JFrame {
             modeloListos.addElement(process.getPCB_proceso().getAmbienteEjecucion().getPc());
             modeloListos.addElement(process.getPCB_proceso().getAmbienteEjecucion().getMAR());
             modeloListos.addElement(process.getPCB_proceso().getAmbienteEjecucion().getPsw());
-            
 
             JScrollPane scrollPane = new JScrollPane(newJList);
             Dimension dimensionScrollPane = new Dimension(30, 20);
@@ -328,33 +326,52 @@ public class Simulator extends javax.swing.JFrame {
         String currentAlgorithm = app.getPlanificador().getNombreAlgoritmo();
         currentAlgorithmLabel.setText("Algoritmo Actual: " + currentAlgorithm);
     }
-    
-    private void setProcessors(){
-        DefaultListModel<String> modeloCPU = new DefaultListModel<>();
+
+    private DefaultListModel[] createProcessors() {
+        int gap = 10;
+        int processors = this.processorsQuantity;
+
+        auxPanelCPU.setVisible(processors != 2);
+        jLabel7.setVisible(processors != 2);
+
+        DefaultListModel<String>[] modelosCPU = new DefaultListModel[processors];
+        JList[] cpuLists = new JList[processors];
+        JScrollPane[] scrollPanes = new JScrollPane[processors];
+        Dimension dimensionScrollPane = new Dimension(30, 20);
+
+        for (int i = 0; i < processors; i++) {
+            modelosCPU[i] = new DefaultListModel<>();
+            cpuLists[i] = new JList(modelosCPU[i]);
+            scrollPanes[i] = new JScrollPane(cpuLists[i]);
+            scrollPanes[i].setPreferredSize(dimensionScrollPane);
+            addProcessorToPanel(scrollPanes[i], i, processors, gap);
+        }
+
+        primaryPanelCPU.repaint();
+        primaryPanelCPU.revalidate();
+
+        auxPanelCPU.repaint();
+        auxPanelCPU.revalidate();
         
-        if (this.processorsQuantity == 2) {
-            JList cpu1 = new JList(modeloCPU);
-            JList cpu2 = new JList(modeloCPU);
-            int gap = 10;
-            
-            // SE DEBEN CREAR MAS INSTANCIAS CPU EN APP.JAVA
-            modeloCPU.addElement(app.getCpu().getActualProceso().getNombreProceso());
-            
-            JScrollPane scrollPaneCPU1 = new JScrollPane(cpu1);
-            JScrollPane scrollPaneCPU2 = new JScrollPane(cpu2);
-            
-            Dimension dimensionScrollPane =  new Dimension(30, 20);
-            scrollPaneCPU1.setPreferredSize(dimensionScrollPane);
-            scrollPaneCPU2.setPreferredSize(dimensionScrollPane);
-            
-            
-            jPanel4.add(scrollPaneCPU1);
-            jPanel4.add(scrollPaneCPU2);
-            
-            jPanel4.add(Box.createRigidArea(new Dimension(gap, 0)));
-            
-            jPanel4.repaint();
-            jPanel4.revalidate();
+        return modelosCPU;
+    }
+
+       
+    private void setProcessIntoProcessor(){
+        DefaultListModel<String>[] CPUModelsGenerated = this.modelosCPU;
+        
+        CPUModelsGenerated[0].addElement("Nombre Proceso: " + app.getPlanificador().ColaListos.getHead().gettInfo());
+        
+        
+}
+   
+    private void addProcessorToPanel(JScrollPane scrollPane, int index, int totalProcessors, int gap) {
+        if (totalProcessors == 2 || index < 2) {
+            primaryPanelCPU.add(scrollPane);
+            primaryPanelCPU.add(Box.createRigidArea(new Dimension(gap, 0)));
+        } else {
+            auxPanelCPU.add(scrollPane);
+            auxPanelCPU.add(Box.createRigidArea(new Dimension(gap, 0)));
         }
     }
 
@@ -367,9 +384,7 @@ public class Simulator extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_SalirActionPerformed
 
-    
-    
-    
+
     private void CreateProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateProcessActionPerformed
         try {
             ProcessMaker processMakerWindow = new ProcessMaker();
@@ -400,7 +415,7 @@ public class Simulator extends javax.swing.JFrame {
     }//GEN-LAST:event_homeButtonActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        setProcessors();
+        setProcessIntoProcessor();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -441,11 +456,11 @@ public class Simulator extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CreateProcess;
     private javax.swing.JButton Salir;
+    private javax.swing.JPanel auxPanelCPU;
     private javax.swing.JScrollPane bloqueadosCPU1;
     private javax.swing.JScrollPane bloqueadosCPU2;
     private javax.swing.JScrollPane bloqueadosCPU3;
     private javax.swing.JScrollPane cpu2;
-    private javax.swing.JScrollPane cpu3;
     private javax.swing.JLabel currentAlgorithmLabel;
     private javax.swing.JLabel cycleDurationLabel;
     private javax.swing.JButton homeButton;
@@ -464,12 +479,11 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jList2;
-    private javax.swing.JList<String> jList3;
     private javax.swing.JList<String> jList6;
     private javax.swing.JList<String> jList7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel primaryPanelCPU;
     // End of variables declaration//GEN-END:variables
 }
