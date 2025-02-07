@@ -32,14 +32,16 @@ public class Planificador {
         this.semaphore = new Semaphore(1); // Inicializar el semáforo con un permiso disponible
     }
 
-    public void escogerProceso() {
+    public Proceso escogerProceso() {
+        System.out.println(ColaListos.travel());
         Proceso proceso = null;
+        System.out.println("EScogiendo");
         try {
             semaphore.acquire(); // Adquirir el permiso del semáforo (wait)
             switch (nombreAlgoritmo) {
                 case "FCFS":
+                    System.out.println("jejejeje");
                     proceso = fcfs();
-                    ejecutarFCFS(proceso);
                     break;
                 case "RR":
                     proceso = roundRobin();
@@ -52,14 +54,14 @@ public class Planificador {
                     break;
                 // Agregar otro caso para el algoritmo que falta
             }
-            if (proceso != null) {
-                despacharProceso(proceso);
-            }
+            
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             semaphore.release(); // Liberar el permiso del semáforo (signal)
         }
+        return proceso;
     }
 
     public void despacharProceso(Proceso proceso) {
@@ -68,21 +70,17 @@ public class Planificador {
     }
 
     private Proceso fcfs() {
-        try {
-            semaphore.acquire(); // Adquirir el permiso del semáforo (wait)
-            if (ColaListos.isEmpty()) {
-                return null; // Si no hay procesos listos, retorna null
-            }
+        System.out.println("Escogiendo en fcfs");
 
-            Proceso proceso = ColaListos.getHead().gettInfo(); // Obtener el primer proceso
-            ColaListos.desencolar(); // Eliminar de la cola
-            return proceso; // Retornar el proceso
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            semaphore.release(); // Liberar el permiso del semáforo (signal)
+        // Verifica si la cola de procesos está vacía
+        if (ColaListos.isEmpty()) {
+            return null; // Si no hay procesos listos, retorna null
         }
+
+        Proceso proceso = ColaListos.getHead().gettInfo(); // Obtener el primer proceso
+        ColaListos.desencolar(); // Eliminar de la cola
+        System.out.println(proceso + " escogidooo");
+        return proceso; // Retornar el proceso
     }
 
     /*La diferencia es que este se ejecuta 

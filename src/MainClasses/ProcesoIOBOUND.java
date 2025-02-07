@@ -35,20 +35,21 @@ public class ProcesoIOBOUND extends Proceso {
     }
 
     private void satisfacerExcepcion() {
-        this.getPCB_proceso().setEstado("Running");
         System.out.println("Proceso " + this.getNombreProceso() + " listo para ejecutarse nuevamente");
+        this.getPCB_proceso().setEstado("Running"); //En realidad se va a ready y hay que tener un semáforo para la cola de listos
     }
 
+    
     @Override
     public void run() {
         this.getPCB_proceso().setEstado("Running");
-        while ("Running".equals(this.getPCB_proceso().getEstado())) {
+        while (true) {
             if (this.getTiempoRestante() == 0) {
                 this.getPCB_proceso().setEstado("Exit");
-            } else {
+            }
+            if ("Running".equals(this.getPCB_proceso().getEstado())){
                 System.out.println("Proceso " + this.getNombreProceso() + " ejecutándose");
                 System.out.println("Cant_instrucciones: " + this.getCant_instrucciones());
-                this.reducirTiempo(1);
                 int MAR_num = this.getCant_instrucciones() - this.getTiempoRestante();
                 this.getPCB_proceso().getAmbienteEjecucion().setMAR(MAR_num);
                 this.getPCB_proceso().getAmbienteEjecucion().setPc(MAR_num + 1);
@@ -56,28 +57,53 @@ public class ProcesoIOBOUND extends Proceso {
                 System.out.println("PC: " + this.getPCB_proceso().getAmbienteEjecucion().getPc());
                 System.out.println("Estado: " + this.getPCB_proceso().getEstado());
                 System.out.println("");
-//                this.reducirTiempo(1);
+                this.reducirTiempo(1);
                 this.contadorCiclos++;
                 if (this.contadorCiclos % this.cicloGenerarExcepcion == 0) {
+                    //AQUÏ HAY QUE USAR UN SEMÁFORO PARA AGG A LA COLA DE BLOQUEADOS
                     this.generarExcepcion();
-                    for (int i = 0; i < this.cicloSatisfacerExcepcion; i++) {
-                        try {
-                            this.sleep(this.ciclosDuracion);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(ProcesoIOBOUND.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    this.satisfacerExcepcion();
                 } else {
                     try {
-                        this.sleep(this.ciclosDuracion);
+                        this.sleep(this.getCiclosDuracion());
                     } catch (InterruptedException ex) {
                         Logger.getLogger(ProcesoIOBOUND.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-            }
-        }
-        System.out.println("Proceso terminado");
+            }else if ("Blocked".equals(this.getPCB_proceso().getEstado())){
+                for (int i = 0; i < this.cicloSatisfacerExcepcion; i++) {
+                        try {
+                            this.sleep(this.getCiclosDuracion());
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(ProcesoIOBOUND.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                this.satisfacerExcepcion();
+            }else if ("Ready".equals(this.getPCB_proceso().getEstado())){
+                //Nada
+                System.out.println("Proceso listo");
+            }else {
+                System.out.println("Proceso terminado");
+            } 
+            if (this.getTiempoRestante() == 0) {
+                this.getPCB_proceso().setEstado("Exit");
+                System.out.println("Proceso terminado");
+                break;
+            } 
+        } 
+    }
+
+    /**
+     * @return the ciclosDuracion
+     */
+    public int getCiclosDuracion() {
+        return ciclosDuracion;
+    }
+
+    /**
+     * @param ciclosDuracion the ciclosDuracion to set
+     */
+    public void setCiclosDuracion(int ciclosDuracion) {
+        this.ciclosDuracion = ciclosDuracion;
     }
 }
 
