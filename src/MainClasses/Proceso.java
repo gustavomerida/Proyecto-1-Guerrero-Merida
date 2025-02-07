@@ -14,6 +14,7 @@ public class Proceso extends Thread{
     private String tipo;
     private PCB PCB_proceso;
     private int tiempoRestante; // Tiempo restante en ciclos
+    private int ciclosDuracion;
     
     public Proceso(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso){
         this.nombre_proceso = nombre_proceso;
@@ -61,6 +62,19 @@ public class Proceso extends Thread{
         return PCB_proceso;
     }
     
+    /**
+     * @return the ciclosDuracion
+     */
+    public int getCiclosDuracion() {
+        return ciclosDuracion;
+    }
+
+    /**
+     * @param ciclosDuracion the ciclosDuracion to set
+     */
+    public void setCiclosDuracion(int ciclosDuracion) {
+        this.ciclosDuracion = ciclosDuracion;
+    }
     
 
     /**
