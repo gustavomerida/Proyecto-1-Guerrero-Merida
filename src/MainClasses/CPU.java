@@ -11,7 +11,8 @@ import java.util.logging.Logger;
  *
  * @author Angelo
  */
-public class CPU extends Thread{
+public class CPU extends Thread {
+
     private int id;
     private Proceso actualProceso;
     private String estado; // Ocupado o libre
@@ -21,7 +22,7 @@ public class CPU extends Thread{
         this.id = id;
         this.actualProceso = actualProceso;
         this.estado = estado;
-        //this.actualProceso.start();
+        
     }
 
     public Proceso getActualProceso() {
@@ -29,63 +30,59 @@ public class CPU extends Thread{
     }
 
     public void setActualProceso(Proceso actualProceso) {
-        
+
         this.actualProceso = actualProceso;
         actualProceso.getPCB_proceso().setEstado("Running");
     }
-    
-    
-    
+
     @Override
-    public void run(){
-        while (true){
+    public void run() {
+        while (true) {
+
             Proceso p = this.getPlanificador().escogerProceso();
-            System.out.println(p);
-            if (p!=null){
-                switch (this.getPlanificador().getNombreAlgoritmo()) {
-                    case "FCFS":
-                        this.setActualProceso(p);
-                        
-                    {
-                        try {
-                            p.start();
-                            this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion());
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+
+            if (p != null) {
+                this.setEstado("Activo");
+                this.setActualProceso(p);
+                System.out.println("Ejecutando proceso: " + p.getNombreProceso());
+
+                // Iniciar ejecución en otro hilo
+                Thread procesoThread = new Thread(p);
+                procesoThread.start();
+                 
+                //////////////////////////////////////////////////////
+                System.out.println("soy cpu");
+                System.out.println(p.getTiempoRestante());
+                //////////////////////////////////////////////////////
+
+                // Esperar hasta que el proceso termine
+                while (p.getTiempoRestante() > 0) {
+                    try {
+                        Thread.sleep(p.getCiclosDuracion()); // Simular ciclo de CPU
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                        break;
-
-                    case "RR":
-
-                        break;
-                    case "SPN":
-
-                        break;
-                    case "SRT":
-                        //srt(this.cpuDefault);
-                        break;
-                    // Agregar otro caso para el algoritmo que falta
                 }
+                // Proceso finalizado
+                p.getPCB_proceso().setEstado("Exit");
+                System.out.println("CPU " + this.id + " terminó proceso: " + p.getNombreProceso());
+
             } else {
-                try { 
-                    RegistrosControlEstado environment = new RegistrosControlEstado(0, 1, 0);
-                    PCB pcb = new PCB(0, "Proceso de SO", "Running", environment);
-                    p = new ProcesoCPUBOUND("Proceso de SO", 3, "CPU BOUND", pcb, 3000);
-                    p.start();
-                    System.out.println("Esperando por proceso de SO a terminar...");
-                    this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion()); //HAY que cambiar este tiempo. 
+                this.setEstado("Inactivo");
+                System.out.println("CPU " + this.id + " está inactivo. Ejecutando proceso de SO...");
+                
+                try {
+                    Thread.sleep(1000); // Esperar un tiempo antes de revisar otra vez
                 } catch (InterruptedException ex) {
                     Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }  
-        }  
-    }             
+            }
+        }
+    }
 
     /**
      * @return the id
      */
-
     public int getIdp() { //Tuve que cambiarle el nombre
         return id;
     }

@@ -2,6 +2,7 @@ package MainPackage;
 
 import AuxClass.Cola;
 import GUI.Classes.Home;
+import GUI.Classes.Simulator;
 import MainClasses.CPU;
 import MainClasses.PCB;
 import MainClasses.Planificador;
@@ -12,7 +13,7 @@ import MainClasses.RegistrosControlEstado;
 import MainClasses.SO;
 
 public class App {
-    // 1. Instancia única Singleton 
+   
     private static final App uniqueApp = new App();
     
     // 2. Componentes del sistema encapsulados
@@ -42,17 +43,14 @@ public class App {
         */
         RegistrosControlEstado environment = new RegistrosControlEstado(0, 1, 0);
         PCB pcb = new PCB(0, "p1", "Ready", environment);
-        Proceso p1 = new ProcesoCPUBOUND("p1", 10, "CPU BOUND", pcb, 3000);
+        Proceso p1 = new ProcesoCPUBOUND("p1", 10, "CPU BOUND", pcb, 500);
 
         RegistrosControlEstado environment2 = new RegistrosControlEstado(0, 1, 0);
         PCB pcb2 = new PCB(0, "p2", "Ready", environment2);
-        Proceso p2 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 3000);
+        
+        Proceso p2 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
 
-        
-        //Proceso p4 = new ProcesoIOBOUND("p4", 8, "I/O BOUND", pcb, 3000, 2, 3);
-        
-        
-        colaListos.encolar(p1);
+        //colaListos.encolar(p1);
         colaListos.encolar(p2);
         //colaListos.encolar(p4);
         
@@ -67,9 +65,13 @@ public class App {
     }
     
     public void start() { //Este me confunde un poco porque pienso que es un hilo
-        Home home = new Home();
-        home.setVisible(true);
+//        Home home = new Home();
+//        home.setVisible(true);
         //SO so = this.inicializarSistemaOperativo();
+        
+        Simulator simulator =  new Simulator("1000", 2);
+        simulator.setVisible(true);
+        
 
     }
     
