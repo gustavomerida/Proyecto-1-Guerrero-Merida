@@ -73,7 +73,7 @@ public class Simulator extends javax.swing.JFrame {
             while (true) {
                 try {
                     SwingUtilities.invokeLater(() -> {
-                        ejecutarProcesos(); 
+                        ejecutarProcesos();
                         actualizarInterfaz(); // Refresca la UI
                     });
                     Thread.sleep(1000); // Actualiza cada segundo
@@ -85,31 +85,39 @@ public class Simulator extends javax.swing.JFrame {
         });
         simulationThread.start();
     }
-    
-    
 
     private void ejecutarProcesos() {
-        
-        CPU currentCPU = app.getCpu();
+
+        CPU currentCPU0 = app.getCpu1();
+
+        CPU currentCPU1 = app.getCpu2();
 
         for (int i = 0; i < modelosCPU.length; i++) {
-            if (currentCPU.getActualProceso() == null) {
+            if (currentCPU1.getActualProceso() == null) {
                 modelosCPU[i].clear();
 
-                // Posible Ejecucion de SO
+                // Posible Ejecucion del SO
                 modelosCPU[i].addElement("CPU " + (i + 1) + " Vacío");
                 continue;
             }
 
-            // Obtener el proceso en la cabeza de la cola
-            Proceso procesoActual = currentCPU.getActualProceso();
-
-            if (procesoActual != null) {
-
+            if (i == 0) {
+                Proceso procesoActual = currentCPU0.getActualProceso();
                 int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
                 procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
                 procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
-                
+
+                modelosCPU[i].clear();
+                modelosCPU[i].addElement("Proceso: " + procesoActual.getNombreProceso());
+                modelosCPU[i].addElement("Instrucciones Restantes: " + procesoActual.getTiempoRestante());
+                modelosCPU[i].addElement("PC: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getPc());
+                modelosCPU[i].addElement("MAR: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getMAR());
+
+            } else {
+                Proceso procesoActual = currentCPU1.getActualProceso();
+                int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
+                procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
+                procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
 
                 modelosCPU[i].clear();
                 modelosCPU[i].addElement("Proceso: " + procesoActual.getNombreProceso());
@@ -117,6 +125,9 @@ public class Simulator extends javax.swing.JFrame {
                 modelosCPU[i].addElement("PC: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getPc());
                 modelosCPU[i].addElement("MAR: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getMAR());
             }
+
+            // Obtener el proceso en la cabeza de la cola
+            // Proceso procesoActual = currentCPU1.getActualProceso();
         }
     }
 

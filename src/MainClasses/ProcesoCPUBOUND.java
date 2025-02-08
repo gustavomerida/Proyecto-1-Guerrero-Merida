@@ -22,14 +22,12 @@ public class ProcesoCPUBOUND extends Proceso {
 
     @Override
     public void run() {
-       
- 
-        
+
         while (this.getTiempoRestante() > 0) {
             try {
                 // Simular la duración del ciclo de instrucción
                 Thread.sleep(this.ciclosDuracion);
-                
+
                 System.out.println("soy proceso");
 
                 // Reducir el tiempo restante del proceso

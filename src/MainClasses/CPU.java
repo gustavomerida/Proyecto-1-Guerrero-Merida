@@ -22,7 +22,7 @@ public class CPU extends Thread {
         this.id = id;
         this.actualProceso = actualProceso;
         this.estado = estado;
-        
+
     }
 
     public Proceso getActualProceso() {
@@ -46,10 +46,8 @@ public class CPU extends Thread {
                 this.setActualProceso(p);
                 System.out.println("Ejecutando proceso: " + p.getNombreProceso());
 
-                // Iniciar ejecución en otro hilo
-                Thread procesoThread = new Thread(p);
-                procesoThread.start();
-                 
+                p.start();
+
                 //////////////////////////////////////////////////////
                 System.out.println("soy cpu");
                 System.out.println(p.getTiempoRestante());
@@ -70,7 +68,7 @@ public class CPU extends Thread {
             } else {
                 this.setEstado("Inactivo");
                 System.out.println("CPU " + this.id + " está inactivo. Ejecutando proceso de SO...");
-                
+
                 try {
                     Thread.sleep(1000); // Esperar un tiempo antes de revisar otra vez
                 } catch (InterruptedException ex) {
