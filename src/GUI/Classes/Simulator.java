@@ -7,6 +7,7 @@ package GUI.Classes;
 import AuxClass.Cola;
 import AuxClass.List;
 import AuxClass.Nodo;
+import MainClasses.CPU;
 import MainClasses.Proceso;
 import MainPackage.App;
 import java.awt.Component;
@@ -23,6 +24,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -34,14 +36,18 @@ public class Simulator extends javax.swing.JFrame {
      * Creates new form Simulator
      */
     private final App app = App.getInstance();
+
     private String cycleDurationSetter;
     private int processorsQuantity;
     private DefaultListModel[] modelosCPU;
 
+    private Thread simulationThread;
+
     public Simulator(String cycleDurationSetter, int processorsQuantity) {
 
         initComponents();
-        this.processorsQuantity = 3;
+
+        this.processorsQuantity = 2;
         this.cycleDurationSetter = cycleDurationSetter;
         // CREACION DE PROCESADORES
         this.modelosCPU = createProcessors();
@@ -50,9 +56,6 @@ public class Simulator extends javax.swing.JFrame {
         updateAlgorithm();
         updatecycleDuration();
 
-        
-        
-
         this.setResizable(false);
         this.setSize(1100, 605);
         this.setLocationRelativeTo(null);
@@ -60,6 +63,77 @@ public class Simulator extends javax.swing.JFrame {
         // SOLO PARA VISUALIZACION
         createJScrollPaneOnReady();
 
+        ////
+        startSimulation();
+
+    }
+
+    private void startSimulation() {
+        simulationThread = new Thread(() -> {
+            while (true) {
+                try {
+                    SwingUtilities.invokeLater(() -> {
+                        ejecutarProcesos();
+                        actualizarInterfaz(); // Refresca la UI
+                    });
+                    Thread.sleep(1000); // Actualiza cada segundo
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    break;
+                }
+            }
+        });
+        simulationThread.start();
+    }
+
+    private void ejecutarProcesos() {
+
+        CPU currentCPU0 = app.getCpu1();
+
+        CPU currentCPU1 = app.getCpu2();
+
+        for (int i = 0; i < modelosCPU.length; i++) {
+            if (currentCPU1.getActualProceso() == null) {
+                modelosCPU[i].clear();
+
+                // Posible Ejecucion del SO
+                modelosCPU[i].addElement("CPU " + (i + 1) + " Vacío");
+                continue;
+            }
+
+            if (i == 0) {
+                Proceso procesoActual = currentCPU0.getActualProceso();
+                int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
+                procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
+                procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
+
+                modelosCPU[i].clear();
+                modelosCPU[i].addElement("Proceso: " + procesoActual.getNombreProceso());
+                modelosCPU[i].addElement("Instrucciones Restantes: " + procesoActual.getTiempoRestante());
+                modelosCPU[i].addElement("PC: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getPc());
+                modelosCPU[i].addElement("MAR: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getMAR());
+
+            } else {
+                Proceso procesoActual = currentCPU1.getActualProceso();
+                int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
+                procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
+                procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
+
+                modelosCPU[i].clear();
+                modelosCPU[i].addElement("Proceso: " + procesoActual.getNombreProceso());
+                modelosCPU[i].addElement("Instrucciones Restantes: " + procesoActual.getTiempoRestante());
+                modelosCPU[i].addElement("PC: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getPc());
+                modelosCPU[i].addElement("MAR: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getMAR());
+            }
+
+            // Obtener el proceso en la cabeza de la cola
+            // Proceso procesoActual = currentCPU1.getActualProceso();
+        }
+    }
+
+    private void actualizarInterfaz() {
+        jPanel3.revalidate();
+        jPanel3.repaint();
     }
 
     /**
@@ -72,7 +146,6 @@ public class Simulator extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
         auxPanelCPU = new javax.swing.JPanel();
         primaryPanelCPU = new javax.swing.JPanel();
         currentAlgorithmLabel = new javax.swing.JLabel();
@@ -107,14 +180,6 @@ public class Simulator extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 270, -1, -1));
 
         auxPanelCPU.setBackground(new java.awt.Color(56, 12, 36));
         auxPanelCPU.setLayout(new javax.swing.BoxLayout(auxPanelCPU, javax.swing.BoxLayout.LINE_AXIS));
@@ -331,6 +396,7 @@ public class Simulator extends javax.swing.JFrame {
         int gap = 10;
         int processors = this.processorsQuantity;
 
+        // Forma interactiva de mostrar el tercer cpu
         auxPanelCPU.setVisible(processors != 2);
         jLabel7.setVisible(processors != 2);
 
@@ -352,19 +418,10 @@ public class Simulator extends javax.swing.JFrame {
 
         auxPanelCPU.repaint();
         auxPanelCPU.revalidate();
-        
+
         return modelosCPU;
     }
 
-       
-    private void setProcessIntoProcessor(){
-        DefaultListModel<String>[] CPUModelsGenerated = this.modelosCPU;
-        
-        CPUModelsGenerated[0].addElement("Nombre Proceso: " + app.getPlanificador().ColaListos.getHead().gettInfo());
-        
-        
-}
-   
     private void addProcessorToPanel(JScrollPane scrollPane, int index, int totalProcessors, int gap) {
         if (totalProcessors == 2 || index < 2) {
             primaryPanelCPU.add(scrollPane);
@@ -414,44 +471,6 @@ public class Simulator extends javax.swing.JFrame {
         home.setVisible(true);
     }//GEN-LAST:event_homeButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        setProcessIntoProcessor();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Simulator.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Simulator.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Simulator.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Simulator.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Simulator(null, 1).setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CreateProcess;
@@ -464,7 +483,6 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JLabel currentAlgorithmLabel;
     private javax.swing.JLabel cycleDurationLabel;
     private javax.swing.JButton homeButton;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;

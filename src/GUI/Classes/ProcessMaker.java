@@ -4,7 +4,6 @@
  */
 package GUI.Classes;
 
-import AuxClass.List;
 import MainClasses.PCB;
 import MainClasses.Proceso;
 import MainClasses.ProcesoCPUBOUND;
@@ -16,7 +15,6 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -316,33 +314,46 @@ public class ProcessMaker extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_processTypeComboBoxActionPerformed
 
-    private boolean checkPositiveIntger(JTextField jTextField) {
+    private boolean checkPositiveInteger(JTextField jTextField) {
+        String valueAsString = jTextField.getText().trim();
 
-        try {
-            int value = Integer.parseInt(jTextField.getText());
-            return value > 0;
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Error", "El valor ingresado no es un número positivo", JOptionPane.ERROR_MESSAGE);
+        if (valueAsString.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El campo no puede estar vacío", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
 
+        try {
+            int value = Integer.parseInt(valueAsString);
+            if (value > 0) {
+                return true;
+
+            } else {
+
+                JOptionPane.showMessageDialog(null, "El valor ingresado debe ser un número positivo", "Error", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El valor ingresado no es un número positivo", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     private int setSimulatorProcessors() {
-        int activeProcessors;
 
-        if (checkPositiveIntger(activeProcessorsTextField)) {
-            activeProcessors = Integer.parseInt(activeProcessorsTextField.getText());
+        if (checkPositiveInteger(activeProcessorsTextField)) {
+            int activeProcessors = Integer.parseInt(activeProcessorsTextField.getText());
+
             if (activeProcessors == 2 || activeProcessors == 3) {
-                return activeProcessors;
+                return activeProcessors; // Retorna el valor válido
             } else {
-                JOptionPane.showMessageDialog(null, "Error", "El valor ingresado en el número de procesadores es incorrecto", JOptionPane.ERROR_MESSAGE);
-                return 0;
+                JOptionPane.showMessageDialog(null, "El número de procesadores debe ser 2 o 3", "Error",JOptionPane.ERROR_MESSAGE);
             }
         }
+
         return 0;
-        
     }
+
 
     private void instructionsQuantityTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_instructionsQuantityTextFieldActionPerformed
 
@@ -365,7 +376,7 @@ public class ProcessMaker extends javax.swing.JFrame {
         NECESITO RECUPERAR EL ESTADO ANTERIOR PARA SETEAR LOS PARAMETROS DEL 
         SIMULADOR. CON LA IMPLEMENTACION DEL ARCHIVO GUARDADO ESTO CAMBIARA.
          */
-        
+
         Simulator simulator = saveSimulatorParameters();
         this.setVisible(false);
         simulator.setVisible(true);
@@ -390,7 +401,7 @@ public class ProcessMaker extends javax.swing.JFrame {
         PCB PCBProcess = new PCB(1, processName, "READY", executionEnvironment);
 
         ///////////////////////////////////////////////////////////////////////////////////////
-        if (checkPositiveIntger(this.instructionsQuantityTextField) && checkPositiveIntger(this.cycleDurationPerInstructionTextField)) {
+        if (checkPositiveInteger(this.instructionsQuantityTextField) && checkPositiveInteger(this.cycleDurationPerInstructionTextField)) {
 
             instructionsQuantity = Integer.parseInt(this.instructionsQuantityTextField.getText());
             cycleDurationInstruction = Integer.parseInt(this.cycleDurationPerInstructionTextField.getText());
@@ -404,7 +415,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         } else {
 
-            if (checkPositiveIntger(this.cycleDurationESTextField) && checkPositiveIntger(this.cycleDurationExceptionTextField)) {
+            if (checkPositiveInteger(this.cycleDurationESTextField) && checkPositiveInteger(this.cycleDurationExceptionTextField)) {
 
                 cycleDurationIO = Integer.parseInt(this.cycleDurationESTextField.getText());
                 cycleDurationExceptIO = Integer.parseInt(this.cycleDurationExceptionTextField.getText());
@@ -426,12 +437,15 @@ public class ProcessMaker extends javax.swing.JFrame {
     }//GEN-LAST:event_homeButtonActionPerformed
 
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
+        
+        
         Proceso newProcess = createNewProcess();
+        setSimulatorProcessors();
 
         app.getPlanificador().ColaListos.encolar(newProcess);
-        
+
         cleanTextField();
-        
+
     }//GEN-LAST:event_guardarActionPerformed
 
     private Simulator saveSimulatorParameters() {
@@ -440,18 +454,18 @@ public class ProcessMaker extends javax.swing.JFrame {
         int processorsQuantity = setSimulatorProcessors();
 
         Simulator simulatorWindow = new Simulator(cycleDurationParameter, processorsQuantity);
-        
+
         return simulatorWindow;
     }
 
     private void cleanTextField() {
-        
+
         JTextField[] textFieldArray = {processNameTextField, instructionsQuantityTextField, cycleDurationESTextField, cycleDurationExceptionTextField, activeProcessorsTextField, cycleDurationPerInstructionTextField};
 
         for (JTextField currentTextField : textFieldArray) {
             currentTextField.setText("");
         }
-        
+
     }
 
     /**
