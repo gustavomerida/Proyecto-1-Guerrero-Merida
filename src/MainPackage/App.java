@@ -51,10 +51,38 @@ public class App {
         PCB pcb2 = new PCB(0, "p2", "Ready", environment2);
         
         Proceso p2 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
+        
+        
+        
+        Proceso p3 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
+        Proceso p4 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
+        Proceso p5 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
+        Proceso p6 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
+        Proceso p7 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
+        Proceso p8 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
+        Proceso p9 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
+        Proceso p10 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
+        Proceso p11 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
+        Proceso p12 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
+        Proceso p13 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
 
         colaListos.encolar(p1);
         colaListos.encolar(p2);
         //colaListos.encolar(p4);
+        
+        
+        colaListos.encolar(p3);
+        colaListos.encolar(p4);
+        colaListos.encolar(p5);
+        colaListos.encolar(p6);
+        colaListos.encolar(p7);
+        colaListos.encolar(p8);
+        colaListos.encolar(p9);
+        colaListos.encolar(p10);
+        colaListos.encolar(p11);
+        colaListos.encolar(p12);
+        colaListos.encolar(p13);
+        
         
         
         ////////////////////////////////////////////////////////////////////////////
@@ -77,7 +105,7 @@ public class App {
 //        home.setVisible(true);
         //SO so = this.inicializarSistemaOperativo();
         
-        Simulator simulator =  new Simulator("1000", 2);
+        Simulator simulator =  new Simulator("1000", 2, "FCFS");
         simulator.setVisible(true);
         
 

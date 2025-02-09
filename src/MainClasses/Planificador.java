@@ -231,6 +231,12 @@ public class Planificador {
     public String getNombreAlgoritmo() {
         return nombreAlgoritmo;
     }
+
+    public void setNombreAlgoritmo(String nombreAlgoritmo) {
+        this.nombreAlgoritmo = nombreAlgoritmo;
+    }
+    
+    
     
     private void ejecutarFCFS(Proceso proceso) {
         // Lógica para ejecutar el proceso en FCFS

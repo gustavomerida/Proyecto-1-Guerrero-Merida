@@ -51,7 +51,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         ebGaramondFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/GUI/Assets/Font/EBGaramond-Bold.ttf")).deriveFont(Font.PLAIN, 16);
 
-        JLabel[] labelArrayParameters = {jLabel7, jLabel4, jLabel5, label1IOEXTRA, label2IOEXTRA, activeProcessorsLabel, cycleDurationLabel};
+        JLabel[] labelArrayParameters = {jLabel7, jLabel4, jLabel5, label1IOEXTRA, label2IOEXTRA, activeProcessorsLabel, cycleDurationLabel, schedulerAlgorithmLabel};
 
         for (JLabel currentLabel : labelArrayParameters) {
             currentLabel.setFont(ebGaramondFont);
@@ -71,6 +71,8 @@ public class ProcessMaker extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        schedulerAlgorithmComboBox = new javax.swing.JComboBox<>();
+        quantityProcessorsComboBox = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         Salir = new javax.swing.JButton();
         CreateProcess = new javax.swing.JButton();
@@ -91,8 +93,8 @@ public class ProcessMaker extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         processNameTextField = new javax.swing.JTextField();
-        activeProcessorsTextField = new javax.swing.JTextField();
         activeProcessorsLabel = new javax.swing.JLabel();
+        schedulerAlgorithmLabel = new javax.swing.JLabel();
         cycleDurationLabel = new javax.swing.JLabel();
         cycleDurationPerInstructionTextField = new javax.swing.JTextField();
         guardar = new javax.swing.JButton();
@@ -102,6 +104,22 @@ public class ProcessMaker extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        schedulerAlgorithmComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SPN", "ROUND ROBIN", "SRT", "HRRN" }));
+        schedulerAlgorithmComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                schedulerAlgorithmComboBoxActionPerformed(evt);
+            }
+        });
+        jPanel1.add(schedulerAlgorithmComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 470, -1, -1));
+
+        quantityProcessorsComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2", "3" }));
+        quantityProcessorsComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quantityProcessorsComboBoxActionPerformed(evt);
+            }
+        });
+        jPanel1.add(quantityProcessorsComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 390, -1, -1));
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -212,7 +230,7 @@ public class ProcessMaker extends javax.swing.JFrame {
         attributesSimulatorTitle.setForeground(new java.awt.Color(255, 255, 255));
         attributesSimulatorTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         attributesSimulatorTitle.setText("Atributos del Simulador");
-        jPanel1.add(attributesSimulatorTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 330, 440, 40));
+        jPanel1.add(attributesSimulatorTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 320, 440, 40));
 
         jLabel6.setFont(new java.awt.Font("Rockwell", 0, 36)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
@@ -231,29 +249,27 @@ public class ProcessMaker extends javax.swing.JFrame {
         });
         jPanel1.add(processNameTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 120, 240, -1));
 
-        activeProcessorsTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                activeProcessorsTextFieldActionPerformed(evt);
-            }
-        });
-        jPanel1.add(activeProcessorsTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 400, 240, -1));
-
         activeProcessorsLabel.setForeground(new java.awt.Color(255, 255, 255));
         activeProcessorsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         activeProcessorsLabel.setText("Número de procesadores activos:");
-        jPanel1.add(activeProcessorsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 390, 220, 50));
+        jPanel1.add(activeProcessorsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 380, 220, 50));
+
+        schedulerAlgorithmLabel.setForeground(new java.awt.Color(255, 255, 255));
+        schedulerAlgorithmLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        schedulerAlgorithmLabel.setText("Algoritmo de planificacion inicial:");
+        jPanel1.add(schedulerAlgorithmLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 450, 230, 50));
 
         cycleDurationLabel.setForeground(new java.awt.Color(255, 255, 255));
         cycleDurationLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         cycleDurationLabel.setText("Duración del ciclo de ejecución de una instrucción:");
-        jPanel1.add(cycleDurationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 420, 270, 50));
+        jPanel1.add(cycleDurationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 410, 270, 50));
 
         cycleDurationPerInstructionTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cycleDurationPerInstructionTextFieldActionPerformed(evt);
             }
         });
-        jPanel1.add(cycleDurationPerInstructionTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 440, 240, -1));
+        jPanel1.add(cycleDurationPerInstructionTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 430, 240, -1));
 
         guardar.setText("Guardar");
         guardar.addActionListener(new java.awt.event.ActionListener() {
@@ -261,7 +277,7 @@ public class ProcessMaker extends javax.swing.JFrame {
                 guardarActionPerformed(evt);
             }
         });
-        jPanel1.add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 490, 120, 40));
+        jPanel1.add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 520, 120, 40));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Assets/solid-background-color.png"))); // NOI18N
         jLabel1.setText("jLabel1");
@@ -291,10 +307,6 @@ public class ProcessMaker extends javax.swing.JFrame {
     private void cycleDurationExceptionTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cycleDurationExceptionTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cycleDurationExceptionTextFieldActionPerformed
-
-    private void activeProcessorsTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activeProcessorsTextFieldActionPerformed
-
-    }//GEN-LAST:event_activeProcessorsTextFieldActionPerformed
 
     private void processTypeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_processTypeComboBoxActionPerformed
 
@@ -339,21 +351,6 @@ public class ProcessMaker extends javax.swing.JFrame {
         }
     }
 
-    private int setSimulatorProcessors() {
-
-        if (checkPositiveInteger(activeProcessorsTextField)) {
-            int activeProcessors = Integer.parseInt(activeProcessorsTextField.getText());
-
-            if (activeProcessors == 2 || activeProcessors == 3) {
-                return activeProcessors; // Retorna el valor válido
-            } else {
-                JOptionPane.showMessageDialog(null, "El número de procesadores debe ser 2 o 3", "Error",JOptionPane.ERROR_MESSAGE);
-            }
-        }
-
-        return 0;
-    }
-
 
     private void instructionsQuantityTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_instructionsQuantityTextFieldActionPerformed
 
@@ -376,7 +373,7 @@ public class ProcessMaker extends javax.swing.JFrame {
         NECESITO RECUPERAR EL ESTADO ANTERIOR PARA SETEAR LOS PARAMETROS DEL 
         SIMULADOR. CON LA IMPLEMENTACION DEL ARCHIVO GUARDADO ESTO CAMBIARA.
          */
-
+       
         Simulator simulator = saveSimulatorParameters();
         this.setVisible(false);
         simulator.setVisible(true);
@@ -437,10 +434,8 @@ public class ProcessMaker extends javax.swing.JFrame {
     }//GEN-LAST:event_homeButtonActionPerformed
 
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
-        
-        
+
         Proceso newProcess = createNewProcess();
-        setSimulatorProcessors();
 
         app.getPlanificador().ColaListos.encolar(newProcess);
 
@@ -448,19 +443,29 @@ public class ProcessMaker extends javax.swing.JFrame {
 
     }//GEN-LAST:event_guardarActionPerformed
 
+    private void schedulerAlgorithmComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_schedulerAlgorithmComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_schedulerAlgorithmComboBoxActionPerformed
+
+    private void quantityProcessorsComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantityProcessorsComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_quantityProcessorsComboBoxActionPerformed
+
     private Simulator saveSimulatorParameters() {
         // PREGUNTAR A GUSTAVINHO
         String cycleDurationParameter = String.valueOf(cycleDurationPerInstructionTextField.getText());
-        int processorsQuantity = setSimulatorProcessors();
+        int processorsQuantity = Integer.parseInt(quantityProcessorsComboBox.getModel().getSelectedItem().toString());
+        String initialAlgorithm = schedulerAlgorithmComboBox.getModel().getSelectedItem().toString();
+        
 
-        Simulator simulatorWindow = new Simulator(cycleDurationParameter, processorsQuantity);
+        Simulator simulatorWindow = new Simulator(cycleDurationParameter, processorsQuantity, initialAlgorithm);
 
         return simulatorWindow;
     }
 
     private void cleanTextField() {
 
-        JTextField[] textFieldArray = {processNameTextField, instructionsQuantityTextField, cycleDurationESTextField, cycleDurationExceptionTextField, activeProcessorsTextField, cycleDurationPerInstructionTextField};
+        JTextField[] textFieldArray = {processNameTextField, instructionsQuantityTextField, cycleDurationESTextField, cycleDurationExceptionTextField, cycleDurationPerInstructionTextField};
 
         for (JTextField currentTextField : textFieldArray) {
             currentTextField.setText("");
@@ -514,7 +519,6 @@ public class ProcessMaker extends javax.swing.JFrame {
     private javax.swing.JButton CreateProcess;
     private javax.swing.JButton Salir;
     private javax.swing.JLabel activeProcessorsLabel;
-    private javax.swing.JTextField activeProcessorsTextField;
     private javax.swing.JLabel attributesSimulatorTitle;
     private javax.swing.JTextField cycleDurationESTextField;
     private javax.swing.JTextField cycleDurationExceptionTextField;
@@ -537,6 +541,9 @@ public class ProcessMaker extends javax.swing.JFrame {
     private javax.swing.JLabel label2IOEXTRA;
     private javax.swing.JTextField processNameTextField;
     private javax.swing.JComboBox<String> processTypeComboBox;
+    private javax.swing.JComboBox<String> quantityProcessorsComboBox;
+    private javax.swing.JComboBox<String> schedulerAlgorithmComboBox;
+    private javax.swing.JLabel schedulerAlgorithmLabel;
     private javax.swing.JButton simulatorButton;
     // End of variables declaration//GEN-END:variables
 }
