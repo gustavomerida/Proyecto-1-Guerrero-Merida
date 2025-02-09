@@ -10,6 +10,7 @@ import AuxClass.Nodo;
 import MainClasses.CPU;
 import MainClasses.Proceso;
 import MainPackage.App;
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FontFormatException;
@@ -41,31 +42,40 @@ public class Simulator extends javax.swing.JFrame {
     private int processorsQuantity;
     private DefaultListModel[] modelosCPU;
 
+    private String currentAlgorithm;
+
     private Thread simulationThread;
 
-    public Simulator(String cycleDurationSetter, int processorsQuantity) {
+    public Simulator(String cycleDurationSetter, int processorsQuantity, String currentAlgorithm) {
 
         initComponents();
 
-        this.processorsQuantity = 2;
+        this.processorsQuantity = processorsQuantity;
         this.cycleDurationSetter = cycleDurationSetter;
         // CREACION DE PROCESADORES
         this.modelosCPU = createProcessors();
 
+        // SET UP DE ALGORITMO EN APP Y EN SIMULADOR (GUI)
+        setAlgorithm(currentAlgorithm);
+        app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
+
         // LABELS EN LA PARTE SUPERIOR
-        updateAlgorithm();
         updatecycleDuration();
 
         this.setResizable(false);
         this.setSize(1100, 605);
         this.setLocationRelativeTo(null);
 
-        // SOLO PARA VISUALIZACION
-        createJScrollPaneOnReady();
-
-        ////
         startSimulation();
 
+    }
+
+    private void setAlgorithm(String currentAlgorithm) {
+        for (int i = 0; i < currentAlgorithmComboBOX.getItemCount(); i++) {
+            if (currentAlgorithmComboBOX.getItemAt(i).equals(currentAlgorithm)) {
+                currentAlgorithmComboBOX.setSelectedItem(currentAlgorithm);
+            }
+        }
     }
 
     private void startSimulation() {
@@ -75,8 +85,12 @@ public class Simulator extends javax.swing.JFrame {
                     SwingUtilities.invokeLater(() -> {
                         ejecutarProcesos();
                         actualizarInterfaz(); // Refresca la UI
+                        createJScrollPaneOnReady();
+                        //app.getPlanificador().setNombreAlgoritmo(currentAlgorithmComboBOX.getModel().getSelectedItem().toString());
+
                     });
                     Thread.sleep(1000); // Actualiza cada segundo
+
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     break;
@@ -100,9 +114,12 @@ public class Simulator extends javax.swing.JFrame {
                 modelosCPU[i].addElement("CPU " + (i + 1) + " Vacío");
                 continue;
             }
+            
+            
 
             if (i == 0) {
                 Proceso procesoActual = currentCPU0.getActualProceso();
+                
                 int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
                 procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
                 procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
@@ -132,8 +149,9 @@ public class Simulator extends javax.swing.JFrame {
     }
 
     private void actualizarInterfaz() {
-        jPanel3.revalidate();
-        jPanel3.repaint();
+
+        jPanel4.revalidate();
+        jPanel4.repaint();
     }
 
     /**
@@ -146,28 +164,20 @@ public class Simulator extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        auxPanelCPU = new javax.swing.JPanel();
+        currentAlgorithmComboBOX = new javax.swing.JComboBox<>();
         primaryPanelCPU = new javax.swing.JPanel();
-        currentAlgorithmLabel = new javax.swing.JLabel();
-        cycleDurationLabel = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        cpu2 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
         bloqueadosCPU1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
-        bloqueadosCPU2 = new javax.swing.JScrollPane();
-        jList7 = new javax.swing.JList<>();
-        bloqueadosCPU3 = new javax.swing.JScrollPane();
-        jList6 = new javax.swing.JList<>();
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        cycleDurationLabel = new javax.swing.JLabel();
+        currentAlgorithmLabel = new javax.swing.JLabel();
         Salir = new javax.swing.JButton();
         CreateProcess = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -175,78 +185,54 @@ public class Simulator extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         homeButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        auxPanelCPU.setBackground(new java.awt.Color(56, 12, 36));
-        auxPanelCPU.setLayout(new javax.swing.BoxLayout(auxPanelCPU, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel1.add(auxPanelCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 370, 180, 160));
+        currentAlgorithmComboBOX.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SPN", "ROUND ROBIN", "SRT", "HRRN" }));
+        currentAlgorithmComboBOX.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                currentAlgorithmComboBOXActionPerformed(evt);
+            }
+        });
+        jPanel1.add(currentAlgorithmComboBOX, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 70, 130, -1));
 
         primaryPanelCPU.setBackground(new java.awt.Color(56, 12, 36));
         primaryPanelCPU.setLayout(new javax.swing.BoxLayout(primaryPanelCPU, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel1.add(primaryPanelCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 200, 330, 160));
-
-        currentAlgorithmLabel.setForeground(new java.awt.Color(255, 215, 0));
-        currentAlgorithmLabel.setText("Algoritmo actual:");
-        jPanel1.add(currentAlgorithmLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 16, 130, 20));
-
-        cycleDurationLabel.setForeground(new java.awt.Color(255, 215, 0));
-        cycleDurationLabel.setText("Ciclos de reloj:");
-        jPanel1.add(cycleDurationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 10, 140, 30));
+        jPanel1.add(primaryPanelCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 70, 470, 160));
 
         jPanel3.setBackground(new java.awt.Color(56, 12, 36));
         jPanel3.setForeground(new java.awt.Color(75, 0, 130));
         jPanel3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 50, 750, 100));
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 215, 0));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Cola Bloqueados CPU-3");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 430, 210, 30));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 750, 100));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 215, 0));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Cola Bloqueados CPU-1");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 210, 30));
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 215, 0));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("Cola Bloqueados CPU-2");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 290, 210, 30));
+        jLabel5.setText("Cola Bloqueados ");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 380, 160, 30));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 140, 0));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("CPU-3");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 530, 80, 30));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 20, 80, 40));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 140, 0));
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("CPU-1");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 170, 80, 40));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 20, 80, 40));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 140, 0));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("CPU-2");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 170, 80, 40));
-
-        jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        cpu2.setViewportView(jList2);
-
-        jPanel1.add(cpu2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 210, 150, 140));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 20, 80, 40));
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -255,37 +241,27 @@ public class Simulator extends javax.swing.JFrame {
         });
         bloqueadosCPU1.setViewportView(jList1);
 
-        jPanel1.add(bloqueadosCPU1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 180, 120, 100));
-
-        jList7.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        bloqueadosCPU2.setViewportView(jList7);
-
-        jPanel1.add(bloqueadosCPU2, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 320, 120, 100));
-
-        jList6.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        bloqueadosCPU3.setViewportView(jList6);
-
-        jPanel1.add(bloqueadosCPU3, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 460, 120, 100));
+        jPanel1.add(bloqueadosCPU1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 410, 120, 100));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 215, 0));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Cola de Listos");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 130, 20));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 240, 130, 20));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Assets/solid-background-color.png"))); // NOI18N
         jLabel1.setText("jLabel1");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 0, 890, 580));
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        cycleDurationLabel.setForeground(new java.awt.Color(255, 215, 0));
+        cycleDurationLabel.setText("Ciclos de reloj:");
+        jPanel2.add(cycleDurationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 480, 140, 30));
+
+        currentAlgorithmLabel.setForeground(new java.awt.Color(255, 215, 0));
+        currentAlgorithmLabel.setText("Algoritmo actual:");
+        jPanel2.add(currentAlgorithmLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 520, 130, 20));
 
         Salir.setText("Salir");
         Salir.addActionListener(new java.awt.event.ActionListener() {
@@ -343,53 +319,50 @@ public class Simulator extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, 570));
 
+        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 270, 750, 90));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void createJScrollPaneOnReady() {
-
-        jPanel3.setLayout(new BoxLayout(jPanel3, BoxLayout.X_AXIS));
-        int gap = 10;
+        jPanel4.removeAll();
+        jPanel4.setLayout(new BoxLayout(jPanel4, BoxLayout.X_AXIS));
 
         Cola<Proceso> colaListos = app.getPlanificador().ColaListos;
-
         Nodo<Proceso> current = colaListos.getHead();
 
         while (current != null) {
-
             DefaultListModel<Object> modeloListos = new DefaultListModel<>();
             JList<Object> newJList = new JList<>(modeloListos);
 
             Proceso process = current.gettInfo();
-
-            modeloListos.addElement(process);
-            modeloListos.addElement(process.getNombreProceso());
-            modeloListos.addElement(process.getCant_instrucciones());
-            modeloListos.addElement(process.getPCB_proceso().getAmbienteEjecucion().getPc());
-            modeloListos.addElement(process.getPCB_proceso().getAmbienteEjecucion().getMAR());
-            modeloListos.addElement(process.getPCB_proceso().getAmbienteEjecucion().getPsw());
+            modeloListos.addElement("Proceso: " + process.getNombreProceso());
+            modeloListos.addElement("Instrucciones: " + process.getCant_instrucciones());
+            modeloListos.addElement("PC: " + process.getPCB_proceso().getAmbienteEjecucion().getPc());
+            modeloListos.addElement("MAR: " + process.getPCB_proceso().getAmbienteEjecucion().getMAR());
+            modeloListos.addElement("PSW: " + process.getPCB_proceso().getAmbienteEjecucion().getPsw());
 
             JScrollPane scrollPane = new JScrollPane(newJList);
-            Dimension dimensionScrollPane = new Dimension(30, 20);
+            scrollPane.setPreferredSize(new Dimension(150, 150));
 
-            scrollPane.setPreferredSize(dimensionScrollPane);
-
-            jPanel3.add(scrollPane);
-
-            jPanel3.add(Box.createRigidArea(new Dimension(gap, 0)));
+            jPanel4.add(scrollPane);
+            jPanel4.add(Box.createRigidArea(new Dimension(10, 0)));
 
             current = current.getpNext();
         }
 
+        jPanel4.revalidate();
+        jPanel4.repaint();
+
+        // 🔹 Asegurar que `jPanel4` sigue dentro de `jPanel3`
+        jPanel3.removeAll();
+        jPanel3.setLayout(new BorderLayout());
+        jPanel3.add(new JScrollPane(jPanel4), BorderLayout.CENTER);
         jPanel3.revalidate();
         jPanel3.repaint();
-    }
-
-    private void updateAlgorithm() {
-        String currentAlgorithm = app.getPlanificador().getNombreAlgoritmo();
-        currentAlgorithmLabel.setText("Algoritmo Actual: " + currentAlgorithm);
     }
 
     private DefaultListModel[] createProcessors() {
@@ -397,7 +370,7 @@ public class Simulator extends javax.swing.JFrame {
         int processors = this.processorsQuantity;
 
         // Forma interactiva de mostrar el tercer cpu
-        auxPanelCPU.setVisible(processors != 2);
+//        auxPanelCPU.setVisible(processors != 2);
         jLabel7.setVisible(processors != 2);
 
         DefaultListModel<String>[] modelosCPU = new DefaultListModel[processors];
@@ -416,9 +389,6 @@ public class Simulator extends javax.swing.JFrame {
         primaryPanelCPU.repaint();
         primaryPanelCPU.revalidate();
 
-        auxPanelCPU.repaint();
-        auxPanelCPU.revalidate();
-
         return modelosCPU;
     }
 
@@ -427,8 +397,8 @@ public class Simulator extends javax.swing.JFrame {
             primaryPanelCPU.add(scrollPane);
             primaryPanelCPU.add(Box.createRigidArea(new Dimension(gap, 0)));
         } else {
-            auxPanelCPU.add(scrollPane);
-            auxPanelCPU.add(Box.createRigidArea(new Dimension(gap, 0)));
+            primaryPanelCPU.add(scrollPane);
+            primaryPanelCPU.add(Box.createRigidArea(new Dimension(gap, 0)));
         }
     }
 
@@ -471,15 +441,16 @@ public class Simulator extends javax.swing.JFrame {
         home.setVisible(true);
     }//GEN-LAST:event_homeButtonActionPerformed
 
+    private void currentAlgorithmComboBOXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_currentAlgorithmComboBOXActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_currentAlgorithmComboBOXActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CreateProcess;
     private javax.swing.JButton Salir;
-    private javax.swing.JPanel auxPanelCPU;
     private javax.swing.JScrollPane bloqueadosCPU1;
-    private javax.swing.JScrollPane bloqueadosCPU2;
-    private javax.swing.JScrollPane bloqueadosCPU3;
-    private javax.swing.JScrollPane cpu2;
+    private javax.swing.JComboBox<String> currentAlgorithmComboBOX;
     private javax.swing.JLabel currentAlgorithmLabel;
     private javax.swing.JLabel cycleDurationLabel;
     private javax.swing.JButton homeButton;
@@ -487,21 +458,17 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
-    private javax.swing.JList<String> jList6;
-    private javax.swing.JList<String> jList7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel primaryPanelCPU;
     // End of variables declaration//GEN-END:variables
 }
