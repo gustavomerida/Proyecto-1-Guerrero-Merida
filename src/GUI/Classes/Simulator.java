@@ -85,7 +85,7 @@ public class Simulator extends javax.swing.JFrame {
                     SwingUtilities.invokeLater(() -> {
                         ejecutarProcesos();
                         actualizarInterfaz(); // Refresca la UI
-                        createJScrollPaneOnReady();
+                        createJScrollPaneOnReady(app.getPlanificador().ColaListos);
                         //app.getPlanificador().setNombreAlgoritmo(currentAlgorithmComboBOX.getModel().getSelectedItem().toString());
 
                     });
@@ -327,11 +327,11 @@ public class Simulator extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void createJScrollPaneOnReady() {
+    private void createJScrollPaneOnReady(Cola<Proceso> colaListos) {
         jPanel4.removeAll();
         jPanel4.setLayout(new BoxLayout(jPanel4, BoxLayout.X_AXIS));
 
-        Cola<Proceso> colaListos = app.getPlanificador().ColaListos;
+        
         Nodo<Proceso> current = colaListos.getHead();
 
         while (current != null) {

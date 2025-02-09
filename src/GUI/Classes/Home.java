@@ -147,7 +147,7 @@ public class Home extends javax.swing.JFrame {
         SE DEBE MODIFICAR LOS VALORES DEL SIMULADOR EN FUNCION A LO QUE SE TENGA GUARDADO.
         */
         
-        Simulator simulatorWindow = new Simulator(null, 0);
+        Simulator simulatorWindow = new Simulator(null, 0 ,null);
         this.setVisible(false);
         
         simulatorWindow.setVisible(true);
