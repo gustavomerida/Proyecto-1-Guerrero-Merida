@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import GUI.Classes.Simulator;
 import javax.swing.SwingUtilities;
+import MainPackage.App;
 
 /**
  *
@@ -19,11 +20,13 @@ public class CPU extends Thread {
     private Proceso actualProceso;
     private String estado; // Ocupado o libre
     private Planificador planificador;
+    private final ProcesoCPUBOUND procesoSO;
 
-    public CPU(int id, Proceso actualProceso, String estado) {
+    public CPU(int id, Proceso actualProceso, String estado, ProcesoCPUBOUND procesoSO) {
         this.id = id;
         this.actualProceso = actualProceso;
         this.estado = estado;
+        this.procesoSO = procesoSO;
 
     }
 
@@ -38,39 +41,33 @@ public class CPU extends Thread {
     }
 
     @Override
-    public void run() {
-        while (true) {
-
+    public void run(){ //Aquí también hay que llevar el contadodor de ciclos global
+        while (true){
+            ProcesoCPUBOUND pr = procesoSO.copiar();
+            this.setActualProceso(pr);
+            try { 
+                pr.start();
+                System.out.println("Esperando por proceso de SO a terminar...");
+                this.sleep(pr.getCant_instrucciones() * pr.getCiclosDuracion().get()); //HAY que cambiar este tiempo. 
+            } catch (InterruptedException ex) {
+                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+            }
             Proceso p = this.getPlanificador().escogerProceso();
-
-            if (p != null) {
+            System.out.println(p);
+            if (p!=null){
                 this.setEstado("Activo");
-                // Entre cambios de proceso se debe llamar al so
-                // ejecutarProcesoSO();
                 switch (this.getPlanificador().getNombreAlgoritmo()) {
                     case "FCFS":
                         this.setActualProceso(p);
-                        System.out.println("Ejecutando proceso: " + p.getNombreProceso());
-
-                        p.start();
-
-                        //////////////////////////////////////////////////////
-                        System.out.println("soy cpu");
-                        System.out.println(p.getTiempoRestante());
-                        //////////////////////////////////////////////////////
-
-                        // Esperar hasta que el proceso termine
-                        while (p.getTiempoRestante() > 0) {
-                            try {
-                                Thread.sleep(p.getCiclosDuracion().get()); // Simular ciclo de CPU
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+                        
+                    {
+                        try {
+                            p.start();
+                            this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion().get());
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        // Proceso finalizado
-                        p.getPCB_proceso().setEstado("Exit");
-                        System.out.println("CPU " + this.id + " terminó proceso: " + p.getNombreProceso());
-                    
+                    }
                         break;
 
                     case "RR":
@@ -84,22 +81,20 @@ public class CPU extends Thread {
                         break;
                     // Agregar otro caso para el algoritmo que falta
                 }
-                
-                
-                
-
             } else {
                 this.setEstado("Inactivo");
-                System.out.println("CPU " + this.id + " está inactivo. Ejecutando proceso de SO...");
-
-                try {
-                    Thread.sleep(1000); // Esperar un tiempo antes de revisar otra vez
+                pr = procesoSO.copiar();
+                this.setActualProceso(pr);
+                try { 
+                    pr.start();
+                    System.out.println("Esperando por proceso de SO a terminar...");
+                    this.sleep(pr.getCant_instrucciones() * pr.getCiclosDuracion().get()); //HAY que cambiar este tiempo. 
                 } catch (InterruptedException ex) {
                     Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-        }
-    }
+            }  
+        }  
+    }  
 
     /*
     private void ejecutarProcesoSO() {

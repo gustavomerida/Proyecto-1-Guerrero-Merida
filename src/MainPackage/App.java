@@ -39,7 +39,9 @@ public class App {
         Cola<Proceso> colaListos = new Cola<>();
         Cola<Proceso> colaBloqueados = new Cola<>();
         Cola<Proceso> colaTerminados = new Cola<>();
-        
+        RegistrosControlEstado environmentSO = new RegistrosControlEstado(0, 1, 0);
+        PCB pcbSO = new PCB(0, "SO", "Running", environmentSO);
+        ProcesoCPUBOUND pSO = new ProcesoCPUBOUND("SO", 3, "CPU BOUND", pcbSO, duracionCicloInstruccion);
         //////////////////////////////////////////////////////////////////////////////
         /*
         TESTEO DE PROCESOS -- CREACION DE PROCESOS
@@ -91,11 +93,11 @@ public class App {
         
         
         ////////////////////////////////////////////////////////////////////////////
-        this.cpu1 = new CPU(0, null, "Activo");
+        this.cpu1 = new CPU(0, null, "Activo", pSO);
         this.planificador = new Planificador("FCFS", colaListos, colaBloqueados, colaTerminados, cpu1);
         this.cpu1.setPlanificador(planificador);
         //////////////////////////////////////////////////////////////////////////////
-        this.cpu2 = new CPU(0, null, "Activo");
+        this.cpu2 = new CPU(0, null, "Activo", pSO);
         this.planificador = new Planificador("FCFS", colaListos, colaBloqueados, colaTerminados, cpu2);
         this.cpu2.setPlanificador(planificador);
         
