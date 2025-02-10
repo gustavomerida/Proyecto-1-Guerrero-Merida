@@ -86,11 +86,10 @@ public class newSimulator extends JFrame {
     }
 
     private void iniciarProceso() {
-        PCB pcb = new PCB(1, "nombre", "Running", app.getCpu().getActualProceso().getPCB_proceso().getAmbienteEjecucion()); // Suponiendo que tienes la clase PCB implementada
-        proceso = new ProcesoCPUBOUND("Proceso1", 10, "CPU BOUND", pcb, 1000);
+        PCB pcb = new PCB(1, "nombre", "Running", app.getCpu1().getActualProceso().getPCB_proceso().getAmbienteEjecucion()); // Suponiendo que tienes la clase PCB implementada
+        proceso = new ProcesoCPUBOUND("Proceso1", 10, "CPU BOUND", pcb, app.duracionCicloInstruccion);
 
-        procesoThread = new Thread(proceso);
-        procesoThread.start();
+        proceso.start();
 
         // Hilo que actualiza la UI periódicamente
         uiUpdater = new Timer(500, new ActionListener() {

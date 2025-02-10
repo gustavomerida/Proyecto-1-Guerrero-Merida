@@ -44,7 +44,7 @@ public class Planificador {
                     proceso = fcfs();
                     break;
                 case "RR":
-                    proceso = roundRobin();
+                    proceso = fcfs();
                     break;
                 case "SPN":
                     proceso = spn();
@@ -86,104 +86,123 @@ public class Planificador {
     /*La diferencia es que este se ejecuta 
     cada vez que termina el quantum de tiempo*/
     private Proceso roundRobin() {
-        try {
-            semaphore.acquire(); // Adquirir el permiso del semáforo
-            if (ColaListos.isEmpty()) {
-                return null; // Si no hay procesos listos, retorna null
-            }
-
-            Proceso proceso = ColaListos.getHead().gettInfo(); // Obtener el primer proceso 
-            ColaListos.desencolar(); // Eliminar de la cola
-            return proceso; // Retornar el proceso
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            semaphore.release(); // Liberar el permiso del semáforo
+        if (ColaListos.isEmpty()) {
+            return null; // Si no hay procesos listos, retorna null
         }
-    }
+
+        Proceso proceso = ColaListos.getHead().gettInfo(); // Obtener el primer proceso 
+        ColaListos.desencolar(); // Eliminar de la cola
+        return proceso; // Retornar el proceso
+}
     
     
 
     private Proceso spn() {
-        try {
-            semaphore.acquire(); // Adquirir el permiso del semáforo
-            if (ColaListos.isEmpty()) {
-                return null; // Si no hay procesos listos, retorna null
-            }
-            System.out.println("Antes de ordenar:");
-            System.out.println(ColaListos.travel());
-
-            // Ordenar la cola por número de instrucciones antes de buscar el proceso más corto
-            ordenarColaPorNumeroInstrucciones(ColaListos);
-            System.out.println("Después de ordenar:");
-            System.out.println(ColaListos.travel());
-            // Obtener el proceso con el menor número de instrucciones
-            Proceso procesoMasCorto = ColaListos.getHead().gettInfo();
-            ColaListos.desencolar(); // Eliminar de la cola
-
-            return procesoMasCorto; // Retornar el proceso que se ha ejecutado
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            semaphore.release(); // Liberar el permiso del semáforo
+        if (ColaListos.isEmpty()) {
+            return null; // Si no hay procesos listos, retorna null
         }
-    }
+        System.out.println("Antes de ordenar:");
+        System.out.println(ColaListos.travel());
+
+        // Ordenar la cola por número de instrucciones antes de buscar el proceso más corto
+        ordenarColaPorNumeroInstrucciones(ColaListos); //Quizá haya que cambiar por el método que ordena por tiempo restante
+        System.out.println("Después de ordenar:");
+        System.out.println(ColaListos.travel());
+        // Obtener el proceso con el menor número de instrucciones
+        Proceso procesoMasCorto = ColaListos.getHead().gettInfo();
+        ColaListos.desencolar(); // Eliminar de la cola
+
+        return procesoMasCorto; // Retornar el proceso que se ha ejecutado
+}
 
     private void srt(CPU cpuDefault) {
-        try {
-            semaphore.acquire(); // Adquirir el permiso del semáforo
-            if (ColaListos.isEmpty()) {
-                return;
-            }
-            Proceso shorterProcess = spn();
-            Proceso cpuCurrentProcess = cpuDefault.getActualProceso();
-            
-            if (shorterProcess.getCant_instrucciones() < cpuCurrentProcess.getCant_instrucciones()) {
-                cpuDefault.setActualProceso(shorterProcess);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            semaphore.release(); // Liberar el permiso del semáforo
+        if (ColaListos.isEmpty()) {
+            return;
+        }
+        Proceso shorterProcess = spn();
+        Proceso cpuCurrentProcess = cpuDefault.getActualProceso();
+
+        if (shorterProcess.getCant_instrucciones() < cpuCurrentProcess.getCant_instrucciones()) {
+            cpuDefault.setActualProceso(shorterProcess);
         }
     }
 
     public void ordenarColaPorNumeroInstrucciones(Cola<Proceso> cola) {
-        try {
-            semaphore.acquire(); // Adquirir el permiso del semáforo
-            if (cola.isEmpty() || cola.getHead().getpNext() == null) {
-                return; // La cola está vacía o tiene un solo elemento
-            }
+        
+        if (cola.isEmpty() || cola.getHead().getpNext() == null) {
+            return; // La cola está vacía o tiene un solo elemento
+        }
 
-            boolean intercambiado;
-            do {
-                Nodo<Proceso> actual = cola.getHead();
-                Nodo<Proceso> siguiente = actual.getpNext();
-                intercambiado = false;
+        boolean intercambiado;
+        do {
+            Nodo<Proceso> actual = cola.getHead();
+            Nodo<Proceso> siguiente = actual.getpNext();
+            intercambiado = false;
 
-                while (siguiente != null) {
-                    // Comparar el número de instrucciones entre los nodos
-                    if (actual.gettInfo().getCant_instrucciones() > siguiente.gettInfo().getCant_instrucciones()) {
-                        // Intercambiar los datos de los nodos
-                        Proceso temp = actual.gettInfo();
-                        actual.settInfo(siguiente.gettInfo());
-                        siguiente.settInfo(temp);
-                        intercambiado = true;
-                    }
-                    // Avanzar a los siguientes nodos
-                    actual = siguiente;
-                    siguiente = siguiente.getpNext();
+            while (siguiente != null) {
+                // Comparar el número de instrucciones entre los nodos
+                if (actual.gettInfo().getCant_instrucciones() > siguiente.gettInfo().getCant_instrucciones()) {
+                    // Intercambiar los datos de los nodos
+                    Proceso temp = actual.gettInfo();
+                    actual.settInfo(siguiente.gettInfo());
+                    siguiente.settInfo(temp);
+                    intercambiado = true;
                 }
-            } while (intercambiado);
+                // Avanzar a los siguientes nodos
+                actual = siguiente;
+                siguiente = siguiente.getpNext();
+            }
+        } while (intercambiado);
+    }
+    
+    // Nuevo método para ordenar por tiempo restante
+    public void ordenarColaPorTiempoRestante(Cola<Proceso> cola) {
+        if (cola.isEmpty() || cola.getHead().getpNext() == null) {
+            return; // La cola está vacía o tiene un solo elemento
+        }
+
+        boolean intercambiado;
+        do {
+            Nodo<Proceso> actual = cola.getHead();
+            Nodo<Proceso> siguiente = actual.getpNext();
+            intercambiado = false;
+
+            while (siguiente != null) {
+                // Comparar el tiempo restante entre los nodos
+                if (actual.gettInfo().getTiempoRestante() > siguiente.gettInfo().getTiempoRestante()) {
+                    // Intercambiar los datos de los nodos
+                    Proceso temp = actual.gettInfo();
+                    actual.settInfo(siguiente.gettInfo());
+                    siguiente.settInfo(temp);
+                    intercambiado = true;
+                }
+                // Avanzar a los siguientes nodos
+                actual = siguiente;
+                siguiente = siguiente.getpNext();
+            }
+        } while (intercambiado);
+    }
+
+    public void expulsarProceso(Proceso proceso) {
+        try {
+            semaphore.acquire(); // Adquirir el permiso del semáforo (wait)
+            proceso.getPCB_proceso().setEstado("Ready"); // Cambiar el estado a Ready
+            int tiempoRestante = proceso.getTiempoRestante();
+            //Quería usar el metodo copiar pero no me deja
+            ProcesoCPUBOUND proceso2 = new ProcesoCPUBOUND( proceso.getNombreProceso(), proceso.getCant_instrucciones(), "CPU BOUND", proceso.getPCB_proceso(), proceso.getCiclosDuracion());
+            System.out.println("Al hilo le fantan " + tiempoRestante + " instrucciones");
+            System.out.println(proceso2.getTiempoRestante());
+            proceso2.setTiempoRestante(tiempoRestante);
+            proceso2.getPCB_proceso().setEstado("Ready");
+            
+            ColaListos.encolar(proceso2); // Reencolar el proceso
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            semaphore.release(); // Liberar el permiso del semáforo
+            semaphore.release(); // Liberar el permiso del semáforo (signal)
         }
     }
-
     public void ejecutarProcesos(Proceso proceso) {
         if (proceso.getTipo() == "CPU BOUND") {
             if (nombreAlgoritmo == "FCFS"){
@@ -244,6 +263,13 @@ public class Planificador {
         proceso.start();
         // Actualizar las colas según el estado del proceso
         actualizarColas(proceso);
+    }
+
+    /**
+     * @return the quantum
+     */
+    public int getQuantum() {
+        return quantum;
     }
 }
 

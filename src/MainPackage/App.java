@@ -11,6 +11,7 @@ import MainClasses.ProcesoCPUBOUND;
 import MainClasses.ProcesoIOBOUND;
 import MainClasses.RegistrosControlEstado;
 import MainClasses.SO;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class App {
    
@@ -21,7 +22,7 @@ public class App {
     private Planificador planificador;
     private CPU cpu1;
     private CPU cpu2;
-    
+    public AtomicInteger duracionCicloInstruccion = new AtomicInteger(2000); //Variable global que indica la duración de un ciclo de instrucción
     
     // 3. Constructor privado
     private App() {
@@ -38,7 +39,9 @@ public class App {
         Cola<Proceso> colaListos = new Cola<>();
         Cola<Proceso> colaBloqueados = new Cola<>();
         Cola<Proceso> colaTerminados = new Cola<>();
-        
+        RegistrosControlEstado environmentSO = new RegistrosControlEstado(0, 1, 0);
+        PCB pcbSO = new PCB(0, "SO", "Running", environmentSO);
+        ProcesoCPUBOUND pSO = new ProcesoCPUBOUND("SO", 3, "CPU BOUND", pcbSO, duracionCicloInstruccion);
         //////////////////////////////////////////////////////////////////////////////
         /*
         TESTEO DE PROCESOS -- CREACION DE PROCESOS
@@ -53,9 +56,9 @@ public class App {
         PCB pcb3 = new PCB(0, "p3", "Ready", environment3);
         
         
-        Proceso p1 = new ProcesoCPUBOUND("p1", 10, "CPU BOUND", pcb, 2000);
-        Proceso p2 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 3000);
-        Proceso p3 = new ProcesoCPUBOUND("p3", 4, "CPU BOUND", pcb3, 1000);
+        Proceso p1 = new ProcesoCPUBOUND("p1", 10, "CPU BOUND", pcb, duracionCicloInstruccion);
+        Proceso p2 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, duracionCicloInstruccion);
+        Proceso p3 = new ProcesoCPUBOUND("p3", 6, "CPU BOUND", pcb3, duracionCicloInstruccion);
         
         
 //        Proceso p4 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
@@ -90,12 +93,12 @@ public class App {
         
         
         ////////////////////////////////////////////////////////////////////////////
-        this.cpu1 = new CPU(0, null, "Activo");
-        this.planificador = new Planificador("FCFS", colaListos, colaBloqueados, colaTerminados, cpu1);
+        this.cpu1 = new CPU(0, null, "Activo", pSO);
+        this.planificador = new Planificador("RR", colaListos, colaBloqueados, colaTerminados, cpu1);
         this.cpu1.setPlanificador(planificador);
         //////////////////////////////////////////////////////////////////////////////
-        this.cpu2 = new CPU(0, null, "Activo");
-        this.planificador = new Planificador("FCFS", colaListos, colaBloqueados, colaTerminados, cpu2);
+        this.cpu2 = new CPU(0, null, "Activo", pSO);
+        this.planificador = new Planificador("RR", colaListos, colaBloqueados, colaTerminados, cpu2);
         this.cpu2.setPlanificador(planificador);
         
         this.cpu1.start();
