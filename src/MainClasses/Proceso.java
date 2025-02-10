@@ -4,6 +4,8 @@
  */
 package MainClasses;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  *
  * @author Angelo
@@ -14,7 +16,7 @@ public class Proceso extends Thread{
     private String tipo;
     private PCB PCB_proceso;
     private int tiempoRestante; // Tiempo restante en ciclos
-    private int ciclosDuracion;
+    private AtomicInteger ciclosDuracion;
     
     public Proceso(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso){
         this.nombre_proceso = nombre_proceso;
@@ -65,14 +67,14 @@ public class Proceso extends Thread{
     /**
      * @return the ciclosDuracion
      */
-    public int getCiclosDuracion() {
+    public AtomicInteger getCiclosDuracion() {
         return ciclosDuracion;
     }
 
     /**
      * @param ciclosDuracion the ciclosDuracion to set
      */
-    public void setCiclosDuracion(int ciclosDuracion) {
+    public void setCiclosDuracion(AtomicInteger ciclosDuracion) {
         this.ciclosDuracion = ciclosDuracion;
     }
     

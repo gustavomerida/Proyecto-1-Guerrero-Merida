@@ -4,6 +4,7 @@
  */
 package MainClasses;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,9 +14,14 @@ import java.util.logging.Logger;
  */
 public class ProcesoCPUBOUND extends Proceso {
 
-    private int ciclosDuracion;
+    private AtomicInteger ciclosDuracion;
 
-    public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, int ciclosDuracion) {
+//    public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, int ciclosDuracion) {
+//        super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
+//        this.ciclosDuracion = ciclosDuracion;
+//    }
+
+    public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, AtomicInteger ciclosDuracion) {
         super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
         this.ciclosDuracion = ciclosDuracion;
     }
@@ -26,7 +32,7 @@ public class ProcesoCPUBOUND extends Proceso {
         while (this.getTiempoRestante() > 0) {
             try {
                 // Simular la duración del ciclo de instrucción
-                Thread.sleep(this.ciclosDuracion);
+                Thread.sleep(ciclosDuracion.get());
 
                 System.out.println("soy proceso");
 
@@ -57,14 +63,15 @@ public class ProcesoCPUBOUND extends Proceso {
     /**
      * @return the ciclosDuracion
      */
-    public int getCiclosDuracion() {
+    public AtomicInteger getCiclosDuracion() {
         return ciclosDuracion;
     }
 
     /**
      * @param ciclosDuracion the ciclosDuracion to set
      */
-    public void setCiclosDuracion(int ciclosDuracion) {
+    @Override
+    public void setCiclosDuracion(AtomicInteger ciclosDuracion) {
         this.ciclosDuracion = ciclosDuracion;
     }
 }

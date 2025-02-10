@@ -5,6 +5,7 @@
 package MainClasses;
 
 import MainPackage.App;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,14 +15,14 @@ import java.util.logging.Logger;
  */
 public class ProcesoIOBOUND extends Proceso {
     
-    private int ciclosDuracion;
+    private AtomicInteger ciclosDuracion;
     private int cicloGenerarExcepcion;
     private int cicloSatisfacerExcepcion;
     private int contadorCiclos;
     
     private final App app = App.getInstance();
 
-    public ProcesoIOBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, int ciclosDuracion, int cicloGenerarExcepcion, int cicloSatisfacerExcepcion) {
+    public ProcesoIOBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, AtomicInteger ciclosDuracion, int cicloGenerarExcepcion, int cicloSatisfacerExcepcion) {
         super(nombre_proceso, cant_instrucciones, "I/O BOUND", PCB_proceso);
         this.ciclosDuracion = ciclosDuracion;
         this.cicloGenerarExcepcion = cicloGenerarExcepcion;
@@ -64,7 +65,7 @@ public class ProcesoIOBOUND extends Proceso {
                     this.generarExcepcion();
                 } else {
                     try {
-                        this.sleep(this.getCiclosDuracion());
+                        this.sleep(this.getCiclosDuracion().get());
                     } catch (InterruptedException ex) {
                         Logger.getLogger(ProcesoIOBOUND.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -72,7 +73,7 @@ public class ProcesoIOBOUND extends Proceso {
             }else if ("Blocked".equals(this.getPCB_proceso().getEstado())){
                 for (int i = 0; i < this.cicloSatisfacerExcepcion; i++) {
                         try {
-                            this.sleep(this.getCiclosDuracion());
+                            this.sleep(this.getCiclosDuracion().get());
                         } catch (InterruptedException ex) {
                             Logger.getLogger(ProcesoIOBOUND.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -95,14 +96,14 @@ public class ProcesoIOBOUND extends Proceso {
     /**
      * @return the ciclosDuracion
      */
-    public int getCiclosDuracion() {
+    public AtomicInteger getCiclosDuracion() {
         return ciclosDuracion;
     }
 
     /**
      * @param ciclosDuracion the ciclosDuracion to set
      */
-    public void setCiclosDuracion(int ciclosDuracion) {
+    public void setCiclosDuracion(AtomicInteger ciclosDuracion) {
         this.ciclosDuracion = ciclosDuracion;
     }
 }

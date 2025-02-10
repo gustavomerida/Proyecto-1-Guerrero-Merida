@@ -45,32 +45,48 @@ public class CPU extends Thread {
 
             if (p != null) {
                 this.setEstado("Activo");
-                
-                
                 // Entre cambios de proceso se debe llamar al so
                 // ejecutarProcesoSO();
-                
-                this.setActualProceso(p);
-                System.out.println("Ejecutando proceso: " + p.getNombreProceso());
+                switch (this.getPlanificador().getNombreAlgoritmo()) {
+                    case "FCFS":
+                        this.setActualProceso(p);
+                        System.out.println("Ejecutando proceso: " + p.getNombreProceso());
 
-                p.start();
+                        p.start();
 
-                //////////////////////////////////////////////////////
-                System.out.println("soy cpu");
-                System.out.println(p.getTiempoRestante());
-                //////////////////////////////////////////////////////
+                        //////////////////////////////////////////////////////
+                        System.out.println("soy cpu");
+                        System.out.println(p.getTiempoRestante());
+                        //////////////////////////////////////////////////////
 
-                // Esperar hasta que el proceso termine
-                while (p.getTiempoRestante() > 0) {
-                    try {
-                        Thread.sleep(p.getCiclosDuracion()); // Simular ciclo de CPU
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                        // Esperar hasta que el proceso termine
+                        while (p.getTiempoRestante() > 0) {
+                            try {
+                                Thread.sleep(p.getCiclosDuracion().get()); // Simular ciclo de CPU
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                        // Proceso finalizado
+                        p.getPCB_proceso().setEstado("Exit");
+                        System.out.println("CPU " + this.id + " terminó proceso: " + p.getNombreProceso());
+                    
+                        break;
+
+                    case "RR":
+
+                        break;
+                    case "SPN":
+
+                        break;
+                    case "SRT":
+                        //srt(this.cpuDefault);
+                        break;
+                    // Agregar otro caso para el algoritmo que falta
                 }
-                // Proceso finalizado
-                p.getPCB_proceso().setEstado("Exit");
-                System.out.println("CPU " + this.id + " terminó proceso: " + p.getNombreProceso());
+                
+                
+                
 
             } else {
                 this.setEstado("Inactivo");

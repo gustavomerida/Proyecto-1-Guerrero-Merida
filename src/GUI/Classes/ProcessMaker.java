@@ -15,6 +15,7 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -383,7 +384,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         // ATRIBUTOS GENERALES
         int instructionsQuantity = 0;
-        int cycleDurationInstruction = 0;
+        int cycleDurationInstruction;
 
         // ATRIBUTOS IO
         int cycleDurationIO = 0;
@@ -402,12 +403,13 @@ public class ProcessMaker extends javax.swing.JFrame {
 
             instructionsQuantity = Integer.parseInt(this.instructionsQuantityTextField.getText());
             cycleDurationInstruction = Integer.parseInt(this.cycleDurationPerInstructionTextField.getText());
+            app.duracionCicloInstruccion.set(cycleDurationInstruction);
 
         }
 
         if ("CPU BOUND".equals(processType)) {
 
-            ProcesoCPUBOUND newCPUBoundProcess = new ProcesoCPUBOUND(processName, instructionsQuantity, processType, PCBProcess, cycleDurationInstruction);
+            ProcesoCPUBOUND newCPUBoundProcess = new ProcesoCPUBOUND(processName, instructionsQuantity, processType, PCBProcess, app.duracionCicloInstruccion);
             return newCPUBoundProcess;
 
         } else {
@@ -417,7 +419,7 @@ public class ProcessMaker extends javax.swing.JFrame {
                 cycleDurationIO = Integer.parseInt(this.cycleDurationESTextField.getText());
                 cycleDurationExceptIO = Integer.parseInt(this.cycleDurationExceptionTextField.getText());
 
-                ProcesoIOBOUND newIOBoundProcess = new ProcesoIOBOUND(processName, instructionsQuantity, processType, PCBProcess, cycleDurationInstruction, cycleDurationIO, cycleDurationExceptIO);
+                ProcesoIOBOUND newIOBoundProcess = new ProcesoIOBOUND(processName, instructionsQuantity, processType, PCBProcess, app.duracionCicloInstruccion, cycleDurationIO, cycleDurationExceptIO);
                 return newIOBoundProcess;
             }
 
