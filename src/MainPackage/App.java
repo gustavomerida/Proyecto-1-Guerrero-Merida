@@ -112,7 +112,7 @@ public class App {
 //        home.setVisible(true);
         //SO so = this.inicializarSistemaOperativo();
         
-        Simulator simulator =  new Simulator("1000", 2, "FCFS");
+        Simulator simulator =  new Simulator("1000", 2, "RR");
         simulator.setVisible(true);
         
 
