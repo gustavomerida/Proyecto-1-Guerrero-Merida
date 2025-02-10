@@ -16,7 +16,7 @@ public class Planificador {
     private Cola<Proceso> ColaBloqueados;
     private Cola<Proceso> ColaTerminados;
 
-    private CPU cpuDefault;
+    //private CPU cpuDefault;
     private Proceso procesoEntrante;
 
     private final int quantum = 5; //Quantum de tiempo de RR en ciclos
@@ -28,7 +28,7 @@ public class Planificador {
         this.ColaBloqueados = ColaBloqueados;
         this.ColaTerminados = ColaTerminados;
 
-        this.cpuDefault = cpuDefault;
+        //this.cpuDefault = cpuDefault;
         this.semaphore = new Semaphore(1); // Inicializar el semáforo con un permiso disponible
     }
 
@@ -50,7 +50,7 @@ public class Planificador {
                     proceso = spn();
                     break;
                 case "SRT":
-                    srt(this.cpuDefault);
+                    //srt(this.cpuDefault);
                     break;
                 // Agregar otro caso para el algoritmo que falta
             }
@@ -208,7 +208,7 @@ public class Planificador {
             if (nombreAlgoritmo == "FCFS"){
                 this.escogerProceso();
             }
-            this.cpuDefault.setActualProceso(proceso);
+            //this.cpuDefault.setActualProceso(proceso);
             proceso.start();
         } else if (proceso.getTipo() == "I/O BOUND"){
             
@@ -259,7 +259,7 @@ public class Planificador {
     
     private void ejecutarFCFS(Proceso proceso) {
         // Lógica para ejecutar el proceso en FCFS
-        cpuDefault.setActualProceso(proceso);
+        //cpuDefault.setActualProceso(proceso);
         proceso.start();
         // Actualizar las colas según el estado del proceso
         actualizarColas(proceso);
