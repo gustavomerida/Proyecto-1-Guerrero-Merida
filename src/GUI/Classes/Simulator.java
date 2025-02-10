@@ -8,7 +8,10 @@ import AuxClass.Cola;
 import AuxClass.List;
 import AuxClass.Nodo;
 import MainClasses.CPU;
+import MainClasses.PCB;
 import MainClasses.Proceso;
+import MainClasses.ProcesoCPUBOUND;
+import MainClasses.RegistrosControlEstado;
 import MainPackage.App;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -442,7 +445,10 @@ public class Simulator extends javax.swing.JFrame {
     }//GEN-LAST:event_homeButtonActionPerformed
 
     private void currentAlgorithmComboBOXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_currentAlgorithmComboBOXActionPerformed
-         
+
+        // Cambiar el nombre del algoritmo:
+        app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
+
     }//GEN-LAST:event_currentAlgorithmComboBOXActionPerformed
 
 
