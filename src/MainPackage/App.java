@@ -58,7 +58,7 @@ public class App {
         
         Proceso p1 = new ProcesoCPUBOUND("p1", 10, "CPU BOUND", pcb, duracionCicloInstruccion);
         Proceso p2 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, duracionCicloInstruccion);
-        Proceso p3 = new ProcesoCPUBOUND("p3", 4, "CPU BOUND", pcb3, duracionCicloInstruccion);
+        Proceso p3 = new ProcesoCPUBOUND("p3", 6, "CPU BOUND", pcb3, duracionCicloInstruccion);
         
         
 //        Proceso p4 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
@@ -94,11 +94,11 @@ public class App {
         
         ////////////////////////////////////////////////////////////////////////////
         this.cpu1 = new CPU(0, null, "Activo", pSO);
-        this.planificador = new Planificador("FCFS", colaListos, colaBloqueados, colaTerminados, cpu1);
+        this.planificador = new Planificador("RR", colaListos, colaBloqueados, colaTerminados, cpu1);
         this.cpu1.setPlanificador(planificador);
         //////////////////////////////////////////////////////////////////////////////
         this.cpu2 = new CPU(0, null, "Activo", pSO);
-        this.planificador = new Planificador("FCFS", colaListos, colaBloqueados, colaTerminados, cpu2);
+        this.planificador = new Planificador("RR", colaListos, colaBloqueados, colaTerminados, cpu2);
         this.cpu2.setPlanificador(planificador);
         
         this.cpu1.start();

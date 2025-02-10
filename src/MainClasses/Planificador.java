@@ -183,7 +183,26 @@ public class Planificador {
         } while (intercambiado);
     }
 
+    public void expulsarProceso(Proceso proceso) {
+        try {
+            semaphore.acquire(); // Adquirir el permiso del semáforo (wait)
+            proceso.getPCB_proceso().setEstado("Ready"); // Cambiar el estado a Ready
+            int tiempoRestante = proceso.getTiempoRestante();
+            //Quería usar el metodo copiar pero no me deja
+            ProcesoCPUBOUND proceso2 = new ProcesoCPUBOUND( proceso.getNombreProceso(), proceso.getCant_instrucciones(), "CPU BOUND", proceso.getPCB_proceso(), proceso.getCiclosDuracion());
+            System.out.println("Al hilo le fantan " + tiempoRestante + " instrucciones");
+            System.out.println(proceso2.getTiempoRestante());
+            proceso2.setTiempoRestante(tiempoRestante);
+            proceso2.getPCB_proceso().setEstado("Ready");
+            
+            ColaListos.encolar(proceso2); // Reencolar el proceso
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            semaphore.release(); // Liberar el permiso del semáforo (signal)
+        }
+    }
     public void ejecutarProcesos(Proceso proceso) {
         if (proceso.getTipo() == "CPU BOUND") {
             if (nombreAlgoritmo == "FCFS"){
@@ -244,6 +263,13 @@ public class Planificador {
         proceso.start();
         // Actualizar las colas según el estado del proceso
         actualizarColas(proceso);
+    }
+
+    /**
+     * @return the quantum
+     */
+    public int getQuantum() {
+        return quantum;
     }
 }
 

@@ -29,9 +29,11 @@ public class Proceso extends Thread{
     public int getTiempoRestante() {
         return tiempoRestante;
     }
+    
+    
 
     public void reducirTiempo(int tiempo) {
-        this.tiempoRestante -= tiempo;
+        this.setTiempoRestante(this.tiempoRestante - tiempo);
     }
 
     public String getNombreProceso() {
@@ -84,5 +86,12 @@ public class Proceso extends Thread{
      */
     public void setCant_instrucciones(int cant_instrucciones) {
         this.cant_instrucciones = cant_instrucciones;
+    }
+
+    /**
+     * @param tiempoRestante the tiempoRestante to set
+     */
+    public void setTiempoRestante(int tiempoRestante) {
+        this.tiempoRestante = tiempoRestante;
     }
 }

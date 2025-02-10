@@ -42,6 +42,9 @@ public class CPU extends Thread {
 
     @Override
     public void run(){ //Aquí también hay que llevar el contadodor de ciclos global
+        int contadorCiclos = 0; // Contador de ciclos
+        final int quantum = planificador.getQuantum(); //Tiempo máximo (cantidad de ciclos) de ejecución por proceso
+        
         while (true){
             ProcesoCPUBOUND pr = procesoSO.copiar();
             this.setActualProceso(pr);
@@ -69,13 +72,40 @@ public class CPU extends Thread {
                         }
                     }
                         break;
-
+                        
                     case "RR":
+                        this.setActualProceso(p);
+                        if (contadorCiclos < quantum) {
+                            try {
+                                p.start();
+                                this.sleep(p.getCiclosDuracion().get() * (quantum + 1)); // Duerme el tiempo de un ciclo
+                                contadorCiclos=quantum+1; // Incrementa el contador de ciclos
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+                            }
 
+                            // Verifica si el proceso terminó
+                            if (p.getTiempoRestante() == 0) {
+                                // Si el proceso terminó, resetea el contador y sale del bucle
+                                p.getPCB_proceso().setEstado("Exit");
+                                contadorCiclos = 0;
+                                break;
+                            }
+                        }
+                        // Si se alcanzó el quantum, cambia el estado del proceso actual a "Ready"
+                        if (contadorCiclos == quantum+1) {
+                            //p.getPCB_proceso().setEstado("Ready"); //ya esto lo hace la función de abajo
+                            // Aquí va la lógica para reinsertar el proceso en la cola de listos
+                            this.planificador.expulsarProceso(p);
+                        }
+                     
+                        contadorCiclos = 0; // Resetea el contador para el próximo proceso
                         break;
+                        
                     case "SPN":
 
                         break;
+                        
                     case "SRT":
                         //srt(this.cpuDefault);
                         break;

@@ -49,6 +49,7 @@ public class ProcesoCPUBOUND extends Proceso {
                     
                     if (this.getTiempoRestante() == 0) {
                         this.getPCB_proceso().setEstado("Exit");
+                        break;
                         //llamar al planificador o importar App
                     }
 
@@ -58,6 +59,7 @@ public class ProcesoCPUBOUND extends Proceso {
             }else if ("Blocked".equals(this.getPCB_proceso().getEstado()) || "Ready".equals(this.getPCB_proceso().getEstado())){
                 //Nada
                 System.out.println("Proceso bloqueado o listo");
+                break;
             }else {
                 System.out.println("Proceso terminado");
                 break;
