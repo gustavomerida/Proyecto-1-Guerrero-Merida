@@ -42,7 +42,7 @@ public class App {
         Cola<Proceso> colaBloqueados = new Cola<>();
         Cola<Proceso> colaTerminados = new Cola<>();
         
-        int relojGlobal = 0;
+        
         
         RegistrosControlEstado environmentSO = new RegistrosControlEstado(0, 1, 0);
         PCB pcbSO = new PCB(0, "SO", "Running", environmentSO);
@@ -98,11 +98,11 @@ public class App {
         
         ////////////////////////////////////////////////////////////////////////////
         this.cpu1 = new CPU(0, null, "Activo", pSO);
-        this.planificador = new Planificador("HRRN", colaListos, colaBloqueados, colaTerminados, cpu1);
+        this.planificador = new Planificador("FCFS", colaListos, colaBloqueados, colaTerminados, cpu1);
         this.cpu1.setPlanificador(planificador);
         //////////////////////////////////////////////////////////////////////////////
         this.cpu2 = new CPU(0, null, "Activo", pSO);
-        this.planificador = new Planificador("HRRN", colaListos, colaBloqueados, colaTerminados, cpu2);
+        this.planificador = new Planificador("FCFS", colaListos, colaBloqueados, colaTerminados, cpu2);
         this.cpu2.setPlanificador(planificador);
         
         this.cpu1.start();
@@ -118,7 +118,9 @@ public class App {
 //        home.setVisible(true);
         //SO so = this.inicializarSistemaOperativo();
         
-        Simulator simulator =  new Simulator("1000", 2, "HRRN");
+        
+        
+        Simulator simulator =  new Simulator("1000", 2, "FCFS");
         simulator.setVisible(true);
         
 

@@ -21,7 +21,7 @@ public class CPU extends Thread {
     private String estado; // Ocupado o libre
     private Planificador planificador;
     private final ProcesoCPUBOUND procesoSO;
-
+    
     public CPU(int id, Proceso actualProceso, String estado, ProcesoCPUBOUND procesoSO) {
         this.id = id;
         this.actualProceso = actualProceso;

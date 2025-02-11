@@ -41,38 +41,43 @@ public class Simulator extends javax.swing.JFrame {
      */
     private final App app = App.getInstance();
 
-    private String cycleDurationSetter;
+    private String cycleDurationParameter;
     private int processorsQuantity;
     private DefaultListModel[] modelosCPU;
+    private int relojGlobal;
 
     private String currentAlgorithm;
 
     private Thread simulationThread;
 
-    public Simulator(String cycleDurationSetter, int processorsQuantity, String currentAlgorithm) {
+    public Simulator(String cycleDurationParameter, int processorsQuantity, String currentAlgorithm) {
 
         initComponents();
 
         this.processorsQuantity = processorsQuantity;
-        this.cycleDurationSetter = cycleDurationSetter;
+        this.cycleDurationParameter = cycleDurationParameter;
         // CREACION DE PROCESADORES
         this.modelosCPU = createProcessors();
 
         // SET UP DE ALGORITMO EN APP Y EN SIMULADOR (GUI)
         setAlgorithm(currentAlgorithm);
         app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
+        // setSpinnerValue();
 
         // LABELS EN LA PARTE SUPERIOR
-        updatecycleDuration();
 
         this.setResizable(false);
         this.setSize(1100, 605);
         this.setLocationRelativeTo(null);
-
+        
+        this.relojGlobal = 0;
+        
         startSimulation();
 
     }
 
+    
+    
     private void setAlgorithm(String currentAlgorithm) {
         for (int i = 0; i < currentAlgorithmComboBOX.getItemCount(); i++) {
             if (currentAlgorithmComboBOX.getItemAt(i).equals(currentAlgorithm)) {
@@ -87,13 +92,16 @@ public class Simulator extends javax.swing.JFrame {
                 try {
                     SwingUtilities.invokeLater(() -> {
                         ejecutarProcesos();
+                        updatecycleDuration();
                         actualizarInterfaz(); // Refresca la UI
                         createJScrollPaneOnReady(app.getPlanificador().ColaListos);
                         // Inicio ciclo general 1 + 2 + 3 + 4
 
                         //app.getPlanificador().setNombreAlgoritmo(currentAlgorithmComboBOX.getModel().getSelectedItem().toString());
                     });
-                    Thread.sleep(1000); // Actualiza cada segundo
+                    Thread.sleep(Integer.parseInt(this.cycleDurationParameter)); // Actualiza cada x que definio el usuario
+                    
+
                     // POSIBLE LUGAR PARA EL RELOJ GLOBAL, MODIFICAR SLEEP PARA QUE SEA LA MISMA QUE LA DURACION DEL CICLO.
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -166,7 +174,7 @@ public class Simulator extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jSpinner1 = new javax.swing.JSpinner();
+        cycleDurationSpinner = new javax.swing.JSpinner();
         currentAlgorithmComboBOX = new javax.swing.JComboBox<>();
         primaryPanelCPU = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -195,16 +203,21 @@ public class Simulator extends javax.swing.JFrame {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0, 0, 10, 1));
-        jSpinner1.setToolTipText("");
-        jSpinner1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jSpinner1.setFocusable(false);
-        jSpinner1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                jSpinner1KeyPressed(evt);
+        cycleDurationSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 10, 1));
+        cycleDurationSpinner.setToolTipText("");
+        cycleDurationSpinner.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        cycleDurationSpinner.setFocusable(false);
+        cycleDurationSpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                cycleDurationSpinnerStateChanged(evt);
             }
         });
-        jPanel1.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 110, -1, -1));
+        cycleDurationSpinner.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cycleDurationSpinnerKeyPressed(evt);
+            }
+        });
+        jPanel1.add(cycleDurationSpinner, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 110, -1, -1));
 
         currentAlgorithmComboBOX.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SPN", "ROUND ROBIN", "SRT", "HRRN" }));
         currentAlgorithmComboBOX.addActionListener(new java.awt.event.ActionListener() {
@@ -416,8 +429,9 @@ public class Simulator extends javax.swing.JFrame {
     }
 
     private void updatecycleDuration() {
-        String cycleDurationString = String.valueOf(this.cycleDurationSetter);
-        cycleDurationLabel.setText("Ciclos de reloj: " + cycleDurationString);
+        this.relojGlobal++;
+        String relojActualString = String.valueOf(this.relojGlobal);
+        cycleDurationLabel.setText("Ciclos de reloj: " + relojActualString);
     }
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
@@ -461,10 +475,20 @@ public class Simulator extends javax.swing.JFrame {
 
     }//GEN-LAST:event_currentAlgorithmComboBOXActionPerformed
 
-    private void jSpinner1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jSpinner1KeyPressed
+    private void cycleDurationSpinnerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cycleDurationSpinnerKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jSpinner1KeyPressed
+    }//GEN-LAST:event_cycleDurationSpinnerKeyPressed
 
+    private void cycleDurationSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cycleDurationSpinnerStateChanged
+       this.cycleDurationParameter = String.valueOf(this.cycleDurationSpinner.getValue());
+       
+    }//GEN-LAST:event_cycleDurationSpinnerStateChanged
+
+    
+    private void setSpinnerValue(){
+        this.cycleDurationSpinner.setValue( (int) Integer.parseInt(this.cycleDurationParameter)/1000 );
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CreateProcess;
@@ -473,6 +497,7 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> currentAlgorithmComboBOX;
     private javax.swing.JLabel currentAlgorithmLabel;
     private javax.swing.JLabel cycleDurationLabel;
+    private javax.swing.JSpinner cycleDurationSpinner;
     private javax.swing.JButton homeButton;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -489,7 +514,6 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JPanel primaryPanelCPU;
     // End of variables declaration//GEN-END:variables
 }
