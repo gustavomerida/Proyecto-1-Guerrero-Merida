@@ -54,30 +54,29 @@ public class Simulator extends javax.swing.JFrame {
 
         initComponents();
 
+        this.setResizable(false);
+        this.setSize(1100, 605);
+        this.setLocationRelativeTo(null);
+
         this.processorsQuantity = processorsQuantity;
         this.cycleDurationParameter = cycleDurationParameter;
+        this.relojGlobal = 0;
+
         // CREACION DE PROCESADORES
         this.modelosCPU = createProcessors();
 
         // SET UP DE ALGORITMO EN APP Y EN SIMULADOR (GUI)
         setAlgorithm(currentAlgorithm);
         app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
-        // setSpinnerValue();
 
-        // LABELS EN LA PARTE SUPERIOR
+        // SET UP DEL VALOR DEL SPINNER EN LA SIMULACION
+        
 
-        this.setResizable(false);
-        this.setSize(1100, 605);
-        this.setLocationRelativeTo(null);
-        
-        this.relojGlobal = 0;
-        
+        // INICIO DE SIMULACION
         startSimulation();
 
     }
 
-    
-    
     private void setAlgorithm(String currentAlgorithm) {
         for (int i = 0; i < currentAlgorithmComboBOX.getItemCount(); i++) {
             if (currentAlgorithmComboBOX.getItemAt(i).equals(currentAlgorithm)) {
@@ -91,16 +90,17 @@ public class Simulator extends javax.swing.JFrame {
             while (true) {
                 try {
                     SwingUtilities.invokeLater(() -> {
+                        
                         ejecutarProcesos();
-                        updatecycleDuration();
+                        updatecycleDurationLabel();
+                        
                         actualizarInterfaz(); // Refresca la UI
                         createJScrollPaneOnReady(app.getPlanificador().ColaListos);
                         // Inicio ciclo general 1 + 2 + 3 + 4
-
+                        
                         //app.getPlanificador().setNombreAlgoritmo(currentAlgorithmComboBOX.getModel().getSelectedItem().toString());
                     });
                     Thread.sleep(Integer.parseInt(this.cycleDurationParameter)); // Actualiza cada x que definio el usuario
-                    
 
                     // POSIBLE LUGAR PARA EL RELOJ GLOBAL, MODIFICAR SLEEP PARA QUE SEA LA MISMA QUE LA DURACION DEL CICLO.
                 } catch (InterruptedException e) {
@@ -428,11 +428,18 @@ public class Simulator extends javax.swing.JFrame {
         }
     }
 
-    private void updatecycleDuration() {
+    private void updatecycleDurationLabel() {
         this.relojGlobal++;
         String relojActualString = String.valueOf(this.relojGlobal);
         cycleDurationLabel.setText("Ciclos de reloj: " + relojActualString);
     }
+
+    private void setSpinnerValue() {
+        int spinnerValue = Integer.parseInt(this.cycleDurationParameter);
+
+        this.cycleDurationSpinner.setValue((int) (spinnerValue / 1000));
+    }
+
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         // TODO add your handling code here:
@@ -480,15 +487,10 @@ public class Simulator extends javax.swing.JFrame {
     }//GEN-LAST:event_cycleDurationSpinnerKeyPressed
 
     private void cycleDurationSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cycleDurationSpinnerStateChanged
-       this.cycleDurationParameter = String.valueOf(this.cycleDurationSpinner.getValue());
-       
+        this.cycleDurationParameter = String.valueOf(this.cycleDurationSpinner.getValue());
+
     }//GEN-LAST:event_cycleDurationSpinnerStateChanged
 
-    
-    private void setSpinnerValue(){
-        this.cycleDurationSpinner.setValue( (int) Integer.parseInt(this.cycleDurationParameter)/1000 );
-    }
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CreateProcess;

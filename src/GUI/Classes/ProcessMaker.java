@@ -396,7 +396,7 @@ public class ProcessMaker extends javax.swing.JFrame {
         ///////////////////////////////////////////////////////////////////////////////////////
         RegistrosControlEstado executionEnvironment = new RegistrosControlEstado(0, 1, 0);
 
-        PCB PCBProcess = new PCB(1, processName, "READY", executionEnvironment);
+        PCB PCBProcess = new PCB(1, processName, "Ready", executionEnvironment);
 
         ///////////////////////////////////////////////////////////////////////////////////////
         if (checkPositiveInteger(this.instructionsQuantityTextField) && checkPositiveInteger(this.cycleDurationPerInstructionTextField)) {

@@ -43,7 +43,7 @@ public class App {
         Cola<Proceso> colaTerminados = new Cola<>();
         
         
-        
+       
         RegistrosControlEstado environmentSO = new RegistrosControlEstado(0, 1, 0);
         PCB pcbSO = new PCB(0, "SO", "Running", environmentSO);
         ProcesoCPUBOUND pSO = new ProcesoCPUBOUND("SO", 3, "CPU BOUND", pcbSO, duracionCicloInstruccion);
