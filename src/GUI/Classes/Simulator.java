@@ -445,8 +445,10 @@ public class Simulator extends javax.swing.JFrame {
     }//GEN-LAST:event_homeButtonActionPerformed
 
     private void currentAlgorithmComboBOXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_currentAlgorithmComboBOXActionPerformed
+
         // Cambiar el nombre del algoritmo:
         app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
+
     }//GEN-LAST:event_currentAlgorithmComboBOXActionPerformed
 
 

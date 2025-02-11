@@ -20,7 +20,6 @@ public class ProcesoCPUBOUND extends Proceso {
 //        super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
 //        this.ciclosDuracion = ciclosDuracion;
 //    }
-
     public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, AtomicInteger ciclosDuracion) {
         super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
         this.ciclosDuracion = ciclosDuracion;
@@ -29,11 +28,13 @@ public class ProcesoCPUBOUND extends Proceso {
     @Override
     public void run() {
         while (true) {
-            if ("Running".equals(this.getPCB_proceso().getEstado())){
+            if ("Running".equals(this.getPCB_proceso().getEstado())) {
                 try {
                     // Simular duración del ciclo
                     this.sleep(this.ciclosDuracion.get());
-                    
+
+                    System.out.println("TIEMPO EN COLA " + String.valueOf(this.getTiempoEnCola()));
+
                     System.out.println("Proceso " + this.getNombreProceso() + " ejecutándose");
                     System.out.println("Cant_instrucciones: " + this.getCant_instrucciones());
                     // Actualizar MAR y PC
@@ -46,7 +47,7 @@ public class ProcesoCPUBOUND extends Proceso {
                     System.out.println("Estado: " + this.getPCB_proceso().getEstado());
                     System.out.println("");
                     this.reducirTiempo(1);
-                    
+
                     if (this.getTiempoRestante() == 0) {
                         this.getPCB_proceso().setEstado("Exit");
                         break;
@@ -56,26 +57,32 @@ public class ProcesoCPUBOUND extends Proceso {
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ProcesoCPUBOUND.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }else if ("Blocked".equals(this.getPCB_proceso().getEstado()) || "Ready".equals(this.getPCB_proceso().getEstado())){
+            } else if ("Blocked".equals(this.getPCB_proceso().getEstado()) || "Ready".equals(this.getPCB_proceso().getEstado())) {
                 //Nada
                 System.out.println("Proceso bloqueado o listo");
-                break;
-            }else {
+
+                // En ambas colas debe sumar el tiempo que esta "esperando" 
+                System.out.println("Sumando a tiempo de la cola ");
+
+                this.setTiempoEnCola(this.getTiempoEnCola() + 1);
+                // break;
+            } else {
                 System.out.println("Proceso terminado");
                 break;
-            }   
-        }    
+            }
+        }
     }
 
     public ProcesoCPUBOUND copiar() {
         return new ProcesoCPUBOUND(
-            this.getNombreProceso(),
-            this.getCant_instrucciones(),
-            "CPU BOUND", // Tipo fijo
-            this.getPCB_proceso(), // Asumiendo que PCB también tiene un método de copia
-            this.ciclosDuracion // Copia profunda de ciclosDuracion
+                this.getNombreProceso(),
+                this.getCant_instrucciones(),
+                "CPU BOUND", // Tipo fijo
+                this.getPCB_proceso(), // Asumiendo que PCB también tiene un método de copia
+                this.ciclosDuracion // Copia profunda de ciclosDuracion
         );
     }
+
     /**
      * @return the ciclosDuracion
      */

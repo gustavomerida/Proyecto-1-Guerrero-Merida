@@ -39,6 +39,9 @@ public class App {
         Cola<Proceso> colaListos = new Cola<>();
         Cola<Proceso> colaBloqueados = new Cola<>();
         Cola<Proceso> colaTerminados = new Cola<>();
+        
+        
+        
         RegistrosControlEstado environmentSO = new RegistrosControlEstado(0, 1, 0);
         PCB pcbSO = new PCB(0, "SO", "Running", environmentSO);
         ProcesoCPUBOUND pSO = new ProcesoCPUBOUND("SO", 3, "CPU BOUND", pcbSO, duracionCicloInstruccion);
@@ -56,12 +59,11 @@ public class App {
         PCB pcb3 = new PCB(0, "p3", "Ready", environment3);
         
         
-        Proceso p1 = new ProcesoCPUBOUND("p1", 10, "CPU BOUND", pcb, duracionCicloInstruccion);
-        Proceso p2 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, duracionCicloInstruccion);
-        Proceso p3 = new ProcesoCPUBOUND("p3", 6, "CPU BOUND", pcb3, duracionCicloInstruccion);
+        Proceso p1 = new ProcesoCPUBOUND("p1", 2, "CPU BOUND", pcb, duracionCicloInstruccion);
+        Proceso p2 = new ProcesoCPUBOUND("p2", 10, "CPU BOUND", pcb2, duracionCicloInstruccion);
+        Proceso p3 = new ProcesoCPUBOUND("p3", 20, "CPU BOUND", pcb3, duracionCicloInstruccion);
         
-        
-//        Proceso p4 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
+        //  Proceso p4 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
 //        Proceso p5 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
 //        Proceso p6 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
 //        Proceso p7 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
@@ -94,15 +96,17 @@ public class App {
         
         ////////////////////////////////////////////////////////////////////////////
         this.cpu1 = new CPU(0, null, "Activo", pSO);
-        this.planificador = new Planificador("RR", colaListos, colaBloqueados, colaTerminados, cpu1);
+        this.planificador = new Planificador("HRRN", colaListos, colaBloqueados, colaTerminados, cpu1);
         this.cpu1.setPlanificador(planificador);
         //////////////////////////////////////////////////////////////////////////////
         this.cpu2 = new CPU(0, null, "Activo", pSO);
-        this.planificador = new Planificador("RR", colaListos, colaBloqueados, colaTerminados, cpu2);
+        this.planificador = new Planificador("HRRN", colaListos, colaBloqueados, colaTerminados, cpu2);
         this.cpu2.setPlanificador(planificador);
         
         this.cpu1.start();
         this.cpu2.start();
+        
+        
         
         return new SO(null, null, planificador);
     }
@@ -112,7 +116,7 @@ public class App {
 //        home.setVisible(true);
         //SO so = this.inicializarSistemaOperativo();
         
-        Simulator simulator =  new Simulator("1000", 2, "RR");
+        Simulator simulator =  new Simulator("1000", 2, "HRRN");
         simulator.setVisible(true);
         
 

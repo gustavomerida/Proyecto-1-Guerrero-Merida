@@ -11,6 +11,7 @@ import MainClasses.Proceso;
 import java.util.concurrent.Semaphore;
 
 public class Planificador {
+
     private String nombreAlgoritmo;
     public Cola<Proceso> ColaListos;
     private Cola<Proceso> ColaBloqueados;
@@ -52,9 +53,11 @@ public class Planificador {
                 case "SRT":
                     //srt(this.cpuDefault);
                     break;
+                case "HRRN":
+                    System.out.println("Ejecutando HRRN");
+                    proceso = hrrn();
                 // Agregar otro caso para el algoritmo que falta
             }
-            
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -67,6 +70,61 @@ public class Planificador {
     public void despacharProceso(Proceso proceso) {
         // Lógica para ejecutar el proceso
         ejecutarProcesos(proceso);
+    }
+
+    private Proceso hrrn() {
+        System.out.println("Ejecutando política HRRN");
+
+        if (ColaListos.isEmpty()) {
+            return null; // Si no hay procesos listos, retorna null
+        }
+
+        // Calcular la tasa de respuesta para cada proceso en la cola
+        Nodo<Proceso> actual = ColaListos.getHead();
+
+        while (actual != null) {
+            calculoRadioRespuesta(actual.gettInfo());
+            actual = actual.getpNext();
+        }
+
+        ordenarColaPorRadioRespuesta(ColaListos);
+        
+        Proceso proceso = ColaListos.getHead().gettInfo();
+        ColaListos.desencolar(); 
+        
+        return proceso; 
+    }
+
+    private void calculoRadioRespuesta(Proceso proceso) {
+        int tasaRespuesta = (proceso.getTiempoEnCola() + proceso.getTiempoRestante()) / proceso.getTiempoRestante();
+        proceso.setTasaRespuesta(tasaRespuesta);
+    }
+
+    public void ordenarColaPorRadioRespuesta(Cola<Proceso> cola) {
+        if (cola.isEmpty() || cola.getHead().getpNext() == null) {
+            return; // La cola está vacía o tiene un solo elemento
+        }
+
+            boolean intercambiado;
+        do {
+            Nodo<Proceso> actual = cola.getHead();
+            Nodo<Proceso> siguiente = actual.getpNext();
+            intercambiado = false;
+
+            while (siguiente != null) {
+                // Comparar la tasa de respuesta entre los nodos
+                if (actual.gettInfo().getTasaRespuesta() < siguiente.gettInfo().getTasaRespuesta()) {
+                    // Intercambiar los datos de los nodos
+                    Proceso temp = actual.gettInfo();
+                    actual.settInfo(siguiente.gettInfo());
+                    siguiente.settInfo(temp);
+                    intercambiado = true;
+                }
+                // Avanzar a los siguientes nodos
+                actual = siguiente;
+                siguiente = siguiente.getpNext();
+            }
+        } while (intercambiado);
     }
 
     private Proceso fcfs() {
@@ -93,9 +151,7 @@ public class Planificador {
         Proceso proceso = ColaListos.getHead().gettInfo(); // Obtener el primer proceso 
         ColaListos.desencolar(); // Eliminar de la cola
         return proceso; // Retornar el proceso
-}
-    
-    
+    }
 
     private Proceso spn() {
         if (ColaListos.isEmpty()) {
@@ -113,7 +169,7 @@ public class Planificador {
         ColaListos.desencolar(); // Eliminar de la cola
 
         return procesoMasCorto; // Retornar el proceso que se ha ejecutado
-}
+    }
 
     private void srt(CPU cpuDefault) {
         if (ColaListos.isEmpty()) {
@@ -128,7 +184,7 @@ public class Planificador {
     }
 
     public void ordenarColaPorNumeroInstrucciones(Cola<Proceso> cola) {
-        
+
         if (cola.isEmpty() || cola.getHead().getpNext() == null) {
             return; // La cola está vacía o tiene un solo elemento
         }
@@ -154,7 +210,7 @@ public class Planificador {
             }
         } while (intercambiado);
     }
-    
+
     // Nuevo método para ordenar por tiempo restante
     public void ordenarColaPorTiempoRestante(Cola<Proceso> cola) {
         if (cola.isEmpty() || cola.getHead().getpNext() == null) {
@@ -189,12 +245,12 @@ public class Planificador {
             proceso.getPCB_proceso().setEstado("Ready"); // Cambiar el estado a Ready
             int tiempoRestante = proceso.getTiempoRestante();
             //Quería usar el metodo copiar pero no me deja
-            ProcesoCPUBOUND proceso2 = new ProcesoCPUBOUND( proceso.getNombreProceso(), proceso.getCant_instrucciones(), "CPU BOUND", proceso.getPCB_proceso(), proceso.getCiclosDuracion());
+            ProcesoCPUBOUND proceso2 = new ProcesoCPUBOUND(proceso.getNombreProceso(), proceso.getCant_instrucciones(), "CPU BOUND", proceso.getPCB_proceso(), proceso.getCiclosDuracion());
             System.out.println("Al hilo le fantan " + tiempoRestante + " instrucciones");
             System.out.println(proceso2.getTiempoRestante());
             proceso2.setTiempoRestante(tiempoRestante);
             proceso2.getPCB_proceso().setEstado("Ready");
-            
+
             ColaListos.encolar(proceso2); // Reencolar el proceso
 
         } catch (InterruptedException e) {
@@ -203,15 +259,16 @@ public class Planificador {
             semaphore.release(); // Liberar el permiso del semáforo (signal)
         }
     }
+
     public void ejecutarProcesos(Proceso proceso) {
         if (proceso.getTipo() == "CPU BOUND") {
-            if (nombreAlgoritmo == "FCFS"){
+            if (nombreAlgoritmo == "FCFS") {
                 this.escogerProceso();
             }
             //this.cpuDefault.setActualProceso(proceso);
             proceso.start();
-        } else if (proceso.getTipo() == "I/O BOUND"){
-            
+        } else if (proceso.getTipo() == "I/O BOUND") {
+
             proceso.start();
             // Agregar el proceso a la cola de bloqueados
             ColaBloqueados.encolar(proceso);
@@ -254,9 +311,7 @@ public class Planificador {
     public void setNombreAlgoritmo(String nombreAlgoritmo) {
         this.nombreAlgoritmo = nombreAlgoritmo;
     }
-    
-    
-    
+
     private void ejecutarFCFS(Proceso proceso) {
         // Lógica para ejecutar el proceso en FCFS
         //cpuDefault.setActualProceso(proceso);
@@ -272,4 +327,3 @@ public class Planificador {
         return quantum;
     }
 }
-

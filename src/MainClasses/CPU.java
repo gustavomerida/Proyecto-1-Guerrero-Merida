@@ -41,14 +41,14 @@ public class CPU extends Thread {
     }
 
     @Override
-    public void run(){ //Aquí también hay que llevar el contadodor de ciclos global
+    public void run() { //Aquí también hay que llevar el contadodor de ciclos global
         int contadorCiclos = 0; // Contador de ciclos
         final int quantum = planificador.getQuantum(); //Tiempo máximo (cantidad de ciclos) de ejecución por proceso
-        
-        while (true){
+
+        while (true) {
             ProcesoCPUBOUND pr = procesoSO.copiar();
             this.setActualProceso(pr);
-            try { 
+            try {
                 pr.start();
                 System.out.println("Esperando por proceso de SO a terminar...");
                 this.sleep(pr.getCant_instrucciones() * pr.getCiclosDuracion().get()); //HAY que cambiar este tiempo. 
@@ -57,29 +57,30 @@ public class CPU extends Thread {
             }
             Proceso p = this.getPlanificador().escogerProceso();
             System.out.println(p);
-            if (p!=null){
+            if (p != null) {
                 this.setEstado("Activo");
                 switch (this.getPlanificador().getNombreAlgoritmo()) {
                     case "FCFS":
                         this.setActualProceso(p);
-                        
-                    {
-                        try {
-                            p.start();
-                            this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion().get());
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+
+                         {
+                            try {
+                                p.start();
+                                this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion().get());
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                    }
                         break;
-                        
+
                     case "RR":
+                    
                         this.setActualProceso(p);
                         if (contadorCiclos < quantum) {
                             try {
                                 p.start();
                                 this.sleep(p.getCiclosDuracion().get() * (quantum + 1)); // Duerme el tiempo de un ciclo
-                                contadorCiclos=quantum+1; // Incrementa el contador de ciclos
+                                contadorCiclos = quantum + 1; // Incrementa el contador de ciclos
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -93,38 +94,51 @@ public class CPU extends Thread {
                             }
                         }
                         // Si se alcanzó el quantum, cambia el estado del proceso actual a "Ready"
-                        if (contadorCiclos == quantum+1) {
+                        if (contadorCiclos == quantum + 1) {
                             //p.getPCB_proceso().setEstado("Ready"); //ya esto lo hace la función de abajo
                             // Aquí va la lógica para reinsertar el proceso en la cola de listos
                             this.planificador.expulsarProceso(p);
                         }
-                     
+
                         contadorCiclos = 0; // Resetea el contador para el próximo proceso
                         break;
-                        
+
                     case "SPN":
 
                         break;
-                        
+
                     case "SRT":
                         //srt(this.cpuDefault);
                         break;
-                    // Agregar otro caso para el algoritmo que falta
+                    case "HRRN":
+                        this.setActualProceso(p);
+
+                         {
+                            try {
+                                p.start();
+                                this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion().get());
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                        break;
+
                 }
             } else {
                 this.setEstado("Inactivo");
                 pr = procesoSO.copiar();
                 this.setActualProceso(pr);
-                try { 
+                try {
                     pr.start();
                     System.out.println("Esperando por proceso de SO a terminar...");
                     this.sleep(pr.getCant_instrucciones() * pr.getCiclosDuracion().get()); //HAY que cambiar este tiempo. 
                 } catch (InterruptedException ex) {
                     Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }  
-        }  
-    }  
+            }
+        }
+    }
 
     /*
     private void ejecutarProcesoSO() {
@@ -149,8 +163,7 @@ public class CPU extends Thread {
 
         System.out.println("Proceso de SO finalizado en CPU " + this.id);
     }
-    */
-
+     */
     /**
      * @return the id
      */
