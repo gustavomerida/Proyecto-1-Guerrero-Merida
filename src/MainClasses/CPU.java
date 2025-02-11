@@ -63,7 +63,7 @@ public class CPU extends Thread {
                     case "FCFS":
                         this.setActualProceso(p);
 
-                         {
+                        {
                             try {
                                 p.start();
                                 this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion().get());
@@ -74,7 +74,7 @@ public class CPU extends Thread {
                         break;
 
                     case "RR":
-                    
+
                         this.setActualProceso(p);
                         if (contadorCiclos < quantum) {
                             try {
@@ -116,6 +116,8 @@ public class CPU extends Thread {
                          {
                             try {
                                 p.start();
+                                p.getPCB_proceso().setEstado("Ready");
+                                this.planificador.ColaListos.encolar(p);
                                 this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion().get());
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);

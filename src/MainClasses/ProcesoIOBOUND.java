@@ -20,6 +20,9 @@ public class ProcesoIOBOUND extends Proceso {
     private int cicloSatisfacerExcepcion;
     private int contadorCiclos;
     
+    
+    private int tiempoEnColaDeListos;
+    
     private final App app = App.getInstance();
 
     public ProcesoIOBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, AtomicInteger ciclosDuracion, int cicloGenerarExcepcion, int cicloSatisfacerExcepcion) {
@@ -79,8 +82,10 @@ public class ProcesoIOBOUND extends Proceso {
                         }
                     }
                 this.satisfacerExcepcion();
-            }else if ("Ready".equals(this.getPCB_proceso().getEstado())){
-                //Nada
+            } else if ("Ready".equals(this.getPCB_proceso().getEstado())){
+                
+                
+                // aqui iria la suma del contador de la cola de listos.
                 System.out.println("Proceso listo");
             }else {
                 System.out.println("Proceso terminado");

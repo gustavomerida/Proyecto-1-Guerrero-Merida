@@ -27,7 +27,7 @@ public class Proceso extends Thread{
         this.PCB_proceso = PCB_proceso;
         this.tipo = tipo;
         this.tiempoRestante = cant_instrucciones; // Inicialmente son iguales
-        this.tiempoEnCola = 0;
+        this.tiempoEnCola = 1;
         this.tasaRespuesta = 0;
     }
 
@@ -38,8 +38,6 @@ public class Proceso extends Thread{
     public void setTasaRespuesta(int tasaRespuesta) {
         this.tasaRespuesta = tasaRespuesta;
     }
-    
-    
     
     
     public int getTiempoRestante() {
