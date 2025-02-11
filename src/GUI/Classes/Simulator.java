@@ -89,11 +89,12 @@ public class Simulator extends javax.swing.JFrame {
                         ejecutarProcesos();
                         actualizarInterfaz(); // Refresca la UI
                         createJScrollPaneOnReady(app.getPlanificador().ColaListos);
-                        //app.getPlanificador().setNombreAlgoritmo(currentAlgorithmComboBOX.getModel().getSelectedItem().toString());
+                        // Inicio ciclo general 1 + 2 + 3 + 4
 
+                        //app.getPlanificador().setNombreAlgoritmo(currentAlgorithmComboBOX.getModel().getSelectedItem().toString());
                     });
                     Thread.sleep(1000); // Actualiza cada segundo
-
+                    // POSIBLE LUGAR PARA EL RELOJ GLOBAL, MODIFICAR SLEEP PARA QUE SEA LA MISMA QUE LA DURACION DEL CICLO.
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     break;
@@ -117,12 +118,10 @@ public class Simulator extends javax.swing.JFrame {
                 modelosCPU[i].addElement("CPU " + (i + 1) + " Vacío");
                 continue;
             }
-            
-            
 
             if (i == 0) {
                 Proceso procesoActual = currentCPU0.getActualProceso();
-                
+
                 int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
                 procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
                 procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
@@ -167,6 +166,7 @@ public class Simulator extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jSpinner1 = new javax.swing.JSpinner();
         currentAlgorithmComboBOX = new javax.swing.JComboBox<>();
         primaryPanelCPU = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -194,6 +194,17 @@ public class Simulator extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(0, 0, 10, 1));
+        jSpinner1.setToolTipText("");
+        jSpinner1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jSpinner1.setFocusable(false);
+        jSpinner1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jSpinner1KeyPressed(evt);
+            }
+        });
+        jPanel1.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 110, -1, -1));
 
         currentAlgorithmComboBOX.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SPN", "ROUND ROBIN", "SRT", "HRRN" }));
         currentAlgorithmComboBOX.addActionListener(new java.awt.event.ActionListener() {
@@ -260,7 +271,7 @@ public class Simulator extends javax.swing.JFrame {
 
         cycleDurationLabel.setForeground(new java.awt.Color(255, 215, 0));
         cycleDurationLabel.setText("Ciclos de reloj:");
-        jPanel2.add(cycleDurationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 480, 140, 30));
+        jPanel2.add(cycleDurationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 490, 140, 30));
 
         currentAlgorithmLabel.setForeground(new java.awt.Color(255, 215, 0));
         currentAlgorithmLabel.setText("Algoritmo actual:");
@@ -334,7 +345,6 @@ public class Simulator extends javax.swing.JFrame {
         jPanel4.removeAll();
         jPanel4.setLayout(new BoxLayout(jPanel4, BoxLayout.X_AXIS));
 
-        
         Nodo<Proceso> current = colaListos.getHead();
 
         while (current != null) {
@@ -451,6 +461,10 @@ public class Simulator extends javax.swing.JFrame {
 
     }//GEN-LAST:event_currentAlgorithmComboBOXActionPerformed
 
+    private void jSpinner1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jSpinner1KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jSpinner1KeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CreateProcess;
@@ -475,6 +489,7 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JPanel primaryPanelCPU;
     // End of variables declaration//GEN-END:variables
 }

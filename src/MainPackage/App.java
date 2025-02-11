@@ -24,6 +24,8 @@ public class App {
     private CPU cpu2;
     public AtomicInteger duracionCicloInstruccion = new AtomicInteger(2000); //Variable global que indica la duración de un ciclo de instrucción
     
+    
+    
     // 3. Constructor privado
     private App() {
         this.sistemaOperativo = inicializarSistemaOperativo();
@@ -40,7 +42,7 @@ public class App {
         Cola<Proceso> colaBloqueados = new Cola<>();
         Cola<Proceso> colaTerminados = new Cola<>();
         
-        
+        int relojGlobal = 0;
         
         RegistrosControlEstado environmentSO = new RegistrosControlEstado(0, 1, 0);
         PCB pcbSO = new PCB(0, "SO", "Running", environmentSO);

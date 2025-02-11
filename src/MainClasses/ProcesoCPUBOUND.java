@@ -65,7 +65,7 @@ public class ProcesoCPUBOUND extends Proceso {
                 System.out.println("Sumando a tiempo de la cola ");
 
                 this.setTiempoEnCola(this.getTiempoEnCola() + 1);
-                // break;
+                 break;
             } else {
                 System.out.println("Proceso terminado");
                 break;
