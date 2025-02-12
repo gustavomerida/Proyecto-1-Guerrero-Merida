@@ -19,6 +19,7 @@ import java.awt.Dimension;
 import java.awt.FontFormatException;
 import java.awt.Panel;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Box;
@@ -59,7 +60,7 @@ public class Simulator extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
 
         this.processorsQuantity = processorsQuantity;
-        this.cycleDurationParameter = cycleDurationParameter;
+        this.cycleDurationParameter = "1000";
         this.relojGlobal = 0;
 
         // CREACION DE PROCESADORES
@@ -70,8 +71,7 @@ public class Simulator extends javax.swing.JFrame {
         app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
 
         // SET UP DEL VALOR DEL SPINNER EN LA SIMULACION
-        
-
+        updateSpinner();
         // INICIO DE SIMULACION
         startSimulation();
 
@@ -88,16 +88,17 @@ public class Simulator extends javax.swing.JFrame {
     private void startSimulation() {
         simulationThread = new Thread(() -> {
             while (true) {
+
                 try {
                     SwingUtilities.invokeLater(() -> {
-                        
+
                         ejecutarProcesos();
                         updatecycleDurationLabel();
-                        
+
                         actualizarInterfaz(); // Refresca la UI
                         createJScrollPaneOnReady(app.getPlanificador().ColaListos);
                         // Inicio ciclo general 1 + 2 + 3 + 4
-                        
+
                         //app.getPlanificador().setNombreAlgoritmo(currentAlgorithmComboBOX.getModel().getSelectedItem().toString());
                     });
                     Thread.sleep(Integer.parseInt(this.cycleDurationParameter)); // Actualiza cada x que definio el usuario
@@ -129,6 +130,7 @@ public class Simulator extends javax.swing.JFrame {
 
             if (i == 0) {
                 Proceso procesoActual = currentCPU0.getActualProceso();
+                procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
 
                 int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
                 procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
@@ -142,6 +144,7 @@ public class Simulator extends javax.swing.JFrame {
 
             } else {
                 Proceso procesoActual = currentCPU1.getActualProceso();
+                procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
                 int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
                 procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
                 procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
@@ -203,7 +206,7 @@ public class Simulator extends javax.swing.JFrame {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        cycleDurationSpinner.setModel(new javax.swing.SpinnerNumberModel(0, 0, 10, 1));
+        cycleDurationSpinner.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
         cycleDurationSpinner.setToolTipText("");
         cycleDurationSpinner.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         cycleDurationSpinner.setFocusable(false);
@@ -217,7 +220,7 @@ public class Simulator extends javax.swing.JFrame {
                 cycleDurationSpinnerKeyPressed(evt);
             }
         });
-        jPanel1.add(cycleDurationSpinner, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 110, -1, -1));
+        jPanel1.add(cycleDurationSpinner, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 110, 80, 30));
 
         currentAlgorithmComboBOX.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SPN", "ROUND ROBIN", "SRT", "HRRN" }));
         currentAlgorithmComboBOX.addActionListener(new java.awt.event.ActionListener() {
@@ -434,10 +437,9 @@ public class Simulator extends javax.swing.JFrame {
         cycleDurationLabel.setText("Ciclos de reloj: " + relojActualString);
     }
 
-    private void setSpinnerValue() {
-        int spinnerValue = Integer.parseInt(this.cycleDurationParameter);
+    private void updateSpinner() {
+        this.cycleDurationSpinner.setValue((Integer.parseInt(this.cycleDurationParameter) / 1000));
 
-        this.cycleDurationSpinner.setValue((int) (spinnerValue / 1000));
     }
 
 
@@ -487,8 +489,7 @@ public class Simulator extends javax.swing.JFrame {
     }//GEN-LAST:event_cycleDurationSpinnerKeyPressed
 
     private void cycleDurationSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cycleDurationSpinnerStateChanged
-        this.cycleDurationParameter = String.valueOf(this.cycleDurationSpinner.getValue());
-
+        this.cycleDurationParameter = String.valueOf(((int) (this.cycleDurationSpinner.getValue()) * 1000));
     }//GEN-LAST:event_cycleDurationSpinnerStateChanged
 
 

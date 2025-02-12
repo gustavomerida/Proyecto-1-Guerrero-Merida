@@ -33,6 +33,12 @@ public class Planificador {
         this.semaphore = new Semaphore(1); // Inicializar el semáforo con un permiso disponible
     }
 
+    public Cola<Proceso> getColaBloqueados() {
+        return ColaBloqueados;
+    }
+
+    
+    
     public Proceso escogerProceso() {
         System.out.println(ColaListos.travel());
         Proceso proceso = null;

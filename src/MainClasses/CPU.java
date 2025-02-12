@@ -27,8 +27,9 @@ public class CPU extends Thread {
         this.actualProceso = actualProceso;
         this.estado = estado;
         this.procesoSO = procesoSO;
-
     }
+    
+    
 
     public Proceso getActualProceso() {
         return actualProceso;

@@ -22,7 +22,7 @@ public class App {
     private Planificador planificador;
     private CPU cpu1;
     private CPU cpu2;
-    public AtomicInteger duracionCicloInstruccion = new AtomicInteger(2000); //Variable global que indica la duración de un ciclo de instrucción
+    public AtomicInteger duracionCicloInstruccion = new AtomicInteger(1000); //Variable global que indica la duración de un ciclo de instrucción
     
     
     
@@ -65,35 +65,13 @@ public class App {
         Proceso p2 = new ProcesoCPUBOUND("p2", 10, "CPU BOUND", pcb2, duracionCicloInstruccion);
         Proceso p3 = new ProcesoCPUBOUND("p3", 20, "CPU BOUND", pcb3, duracionCicloInstruccion);
         
-        //  Proceso p4 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
-//        Proceso p5 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
-//        Proceso p6 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
-//        Proceso p7 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
-//        Proceso p8 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
-//        Proceso p9 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
-//        Proceso p10 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
-//        Proceso p11 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
-//        Proceso p12 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
-//        Proceso p13 = new ProcesoCPUBOUND("p2", 4, "CPU BOUND", pcb2, 1000);
+
 
         colaListos.encolar(p1);
         colaListos.encolar(p2);
         colaListos.encolar(p3);
         //colaListos.encolar(p4);
-        
-        
-//        colaListos.encolar(p3);
-//        colaListos.encolar(p4);
-//        colaListos.encolar(p5);
-//        colaListos.encolar(p6);
-//        colaListos.encolar(p7);
-//        colaListos.encolar(p8);
-//        colaListos.encolar(p9);
-//        colaListos.encolar(p10);
-//        colaListos.encolar(p11);
-//        colaListos.encolar(p12);
-//        colaListos.encolar(p13);
-        
+
         
         
         ////////////////////////////////////////////////////////////////////////////
