@@ -116,4 +116,34 @@ public class Proceso extends Thread{
     public void setTiempoRestante(int tiempoRestante) {
         this.tiempoRestante = tiempoRestante;
     }
+    
+    
+    //Estos solo es para q no explote la broma
+    /**
+     * @return the cicloGenerarExcepcion
+     */
+    public int getCicloGenerarExcepcion() {
+        return 0;
+    }
+
+    /**
+     * @param cicloGenerarExcepcion the cicloGenerarExcepcion to set
+     */
+    public void setCicloGenerarExcepcion(int cicloGenerarExcepcion) {
+        
+    }
+
+    /**
+     * @return the cicloSatisfacerExcepcion
+     */
+    public int getCicloSatisfacerExcepcion() {
+        return 0;
+    }
+
+    /**
+     * @param cicloSatisfacerExcepcion the cicloSatisfacerExcepcion to set
+     */
+    public void setCicloSatisfacerExcepcion(int cicloSatisfacerExcepcion) {
+       
+    }
 }

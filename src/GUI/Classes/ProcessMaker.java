@@ -439,7 +439,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         Proceso newProcess = createNewProcess();
 
-        app.getPlanificador().ColaListos.encolar(newProcess);
+        app.getPlanificador().getColaListos().encolar(newProcess);
 
         cleanTextField();
 

@@ -96,8 +96,9 @@ public class Simulator extends javax.swing.JFrame {
                         updatecycleDurationLabel();
 
                         actualizarInterfaz(); // Refresca la UI
-                        createJScrollPaneOnReady(app.getPlanificador().ColaListos);
-                        // Inicio ciclo general 1 + 2 + 3 + 4
+                        createJScrollPaneOnReady(app.getPlanificador().getColaListos());
+                        createJScrollPaneOnBlocked(app.getPlanificador().getColaBloqueados());
+
 
                         //app.getPlanificador().setNombreAlgoritmo(currentAlgorithmComboBOX.getModel().getSelectedItem().toString());
                     });
@@ -181,12 +182,13 @@ public class Simulator extends javax.swing.JFrame {
         currentAlgorithmComboBOX = new javax.swing.JComboBox<>();
         primaryPanelCPU = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        bloqueadosCPU1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -199,7 +201,6 @@ public class Simulator extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         homeButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -240,6 +241,15 @@ public class Simulator extends javax.swing.JFrame {
         jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 750, 100));
 
+        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 270, 750, 90));
+
+        jPanel5.setBackground(new java.awt.Color(56, 12, 36));
+        jPanel5.setForeground(new java.awt.Color(75, 0, 130));
+        jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.LINE_AXIS));
+        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 420, 750, 110));
+        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 430, 750, 100));
+
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 215, 0));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -263,15 +273,6 @@ public class Simulator extends javax.swing.JFrame {
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("CPU-2");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 20, 80, 40));
-
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        bloqueadosCPU1.setViewportView(jList1);
-
-        jPanel1.add(bloqueadosCPU1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 410, 120, 100));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 215, 0));
@@ -349,9 +350,6 @@ public class Simulator extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, 570));
 
-        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 270, 750, 90));
-
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
@@ -385,13 +383,48 @@ public class Simulator extends javax.swing.JFrame {
 
         jPanel4.revalidate();
         jPanel4.repaint();
-
-        // 🔹 Asegurar que `jPanel4` sigue dentro de `jPanel3`
+        
         jPanel3.removeAll();
         jPanel3.setLayout(new BorderLayout());
         jPanel3.add(new JScrollPane(jPanel4), BorderLayout.CENTER);
         jPanel3.revalidate();
         jPanel3.repaint();
+    }
+    
+    private void createJScrollPaneOnBlocked(Cola<Proceso> colaBloqueados) {
+        jPanel7.removeAll();
+        jPanel7.setLayout(new BoxLayout(jPanel7, BoxLayout.X_AXIS));
+
+        Nodo<Proceso> current = colaBloqueados.getHead();
+
+        while (current != null) {
+            DefaultListModel<Object> modeloListos = new DefaultListModel<>();
+            JList<Object> newJList = new JList<>(modeloListos);
+
+            Proceso process = current.gettInfo();
+            modeloListos.addElement("Proceso: " + process.getNombreProceso());
+            modeloListos.addElement("Instrucciones: " + process.getCant_instrucciones());
+            modeloListos.addElement("PC: " + process.getPCB_proceso().getAmbienteEjecucion().getPc());
+            modeloListos.addElement("MAR: " + process.getPCB_proceso().getAmbienteEjecucion().getMAR());
+            modeloListos.addElement("PSW: " + process.getPCB_proceso().getAmbienteEjecucion().getPsw());
+
+            JScrollPane scrollPane = new JScrollPane(newJList);
+            scrollPane.setPreferredSize(new Dimension(150, 150));
+
+            jPanel7.add(scrollPane);
+            jPanel7.add(Box.createRigidArea(new Dimension(10, 0)));
+
+            current = current.getpNext();
+        }
+
+        jPanel7.revalidate();
+        jPanel7.repaint();
+        
+        jPanel5.removeAll();
+        jPanel5.setLayout(new BorderLayout());
+        jPanel5.add(new JScrollPane(jPanel7), BorderLayout.CENTER);
+        jPanel5.revalidate();
+        jPanel5.repaint();
     }
 
     private DefaultListModel[] createProcessors() {
@@ -496,7 +529,6 @@ public class Simulator extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CreateProcess;
     private javax.swing.JButton Salir;
-    private javax.swing.JScrollPane bloqueadosCPU1;
     private javax.swing.JComboBox<String> currentAlgorithmComboBOX;
     private javax.swing.JLabel currentAlgorithmLabel;
     private javax.swing.JLabel cycleDurationLabel;
@@ -512,11 +544,12 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel primaryPanelCPU;
     // End of variables declaration//GEN-END:variables
 }
