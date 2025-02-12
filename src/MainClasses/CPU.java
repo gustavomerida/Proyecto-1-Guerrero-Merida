@@ -44,8 +44,33 @@ public class CPU extends Thread {
     public void run() { //Aquí también hay que llevar el contadodor de ciclos global
         int contadorCiclos = 0; // Contador de ciclos
         final int quantum = planificador.getQuantum(); //Tiempo máximo (cantidad de ciclos) de ejecución por proceso
-
+        //Excepcion e = new Excepcion(null, this, this.getPlanificador());
+        Proceso p = null;
         while (true) {
+            if (p!=null){
+                if (p.getPCB_proceso().getEstado()=="Blocked"){
+                    int[] ciclos;
+                    ciclos = new int[]{p.getCicloGenerarExcepcion(), p.getCicloSatisfacerExcepcion()};
+                    System.out.println("MIRAAAAAAAAAAAAAAAAA" + ciclos[0]);
+                    Excepcion e = new Excepcion(p, this, this.getPlanificador(), ciclos);
+                    //e.proceso = p;
+                    e.start();
+//                    if (p.getPCB_proceso().getEstado().equals("Blocked")) {
+//                        // Ejecutar el SO durante los ciclos necesarios
+//                        for (int i = 0; i < this.procesoSO.getCant_instrucciones(); i++) {
+//                            try {
+//                                // Lógica para ejecutar el proceso del SO
+//                                this.sleep(this.procesoSO.getCiclosDuracion().get());
+//                            } catch (InterruptedException ex) {
+//                                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+//                            }
+//                        }
+//                        // Mover el proceso de la cola de bloqueados a la cola de listos
+//                        this.planificador.desbloquearProceso(p);
+//                    }
+                }
+            }
+            
             ProcesoCPUBOUND pr = procesoSO.copiar();
             this.setActualProceso(pr);
             try {
@@ -55,17 +80,23 @@ public class CPU extends Thread {
             } catch (InterruptedException ex) {
                 Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Proceso p = this.getPlanificador().escogerProceso();
+            p = this.getPlanificador().escogerProceso();
             System.out.println(p);
             if (p != null) {
-                this.setEstado("Activo");
+//                if (p.getPCB_proceso().getEstado()=="Blocked"){
+//                   e.proceso = p;
+//                   e.start();
+//                }
+                this.setEstado("Activo"); //estado del CPU
                 switch (this.getPlanificador().getNombreAlgoritmo()) {
                     case "FCFS":
                         this.setActualProceso(p);
 
                         {
                             try {
-                                p.start();
+                                if (p.getPCB_proceso().getEstado() != "Exit" && p.getPCB_proceso().getEstado()!="Blocked") {
+                                    p.start();
+                                }
                                 this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion().get());
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
@@ -117,7 +148,7 @@ public class CPU extends Thread {
                             try {
                                 p.start();
                                 p.getPCB_proceso().setEstado("Ready");
-                                this.planificador.ColaListos.encolar(p);
+                                this.planificador.getColaListos().encolar(p);
                                 this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion().get());
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
@@ -166,6 +197,8 @@ public class CPU extends Thread {
         System.out.println("Proceso de SO finalizado en CPU " + this.id);
     }
      */
+    
+
     /**
      * @return the id
      */

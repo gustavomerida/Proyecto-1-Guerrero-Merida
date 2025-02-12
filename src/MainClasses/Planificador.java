@@ -9,11 +9,13 @@ import AuxClass.Nodo;
 import MainClasses.CPU;
 import MainClasses.Proceso;
 import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Planificador {
 
     private String nombreAlgoritmo;
-    public Cola<Proceso> ColaListos;
+    private Cola<Proceso> ColaListos;
     private Cola<Proceso> ColaBloqueados;
     private Cola<Proceso> ColaTerminados;
 
@@ -22,6 +24,8 @@ public class Planificador {
 
     private final int quantum = 5; //Quantum de tiempo de RR en ciclos
     private Semaphore semaphore; // Semáforo para garantizar exclusión mutua
+    private Semaphore semaphore2; //Semáforo para exclusión mutua de la cola de bloqueados 
+    private Semaphore semaphore3; //este es para la cola de terminados
 
     public Planificador(String nombreAlgoritmo, Cola<Proceso> ColaListos, Cola<Proceso> ColaBloqueados, Cola<Proceso> ColaTerminados, CPU cpuDefault) {
         this.nombreAlgoritmo = nombreAlgoritmo;
@@ -31,10 +35,12 @@ public class Planificador {
 
         //this.cpuDefault = cpuDefault;
         this.semaphore = new Semaphore(1); // Inicializar el semáforo con un permiso disponible
+        this.semaphore2 = new Semaphore(1); 
+        this.semaphore3 = new Semaphore(1);
     }
 
     public Proceso escogerProceso() {
-        System.out.println(ColaListos.travel());
+        System.out.println(getColaListos().travel());
         Proceso proceso = null;
         System.out.println("EScogiendo");
         try {
@@ -75,22 +81,22 @@ public class Planificador {
     private Proceso hrrn() {
         System.out.println("Ejecutando política HRRN");
 
-        if (ColaListos.isEmpty()) {
+        if (getColaListos().isEmpty()) {
             return null; // Si no hay procesos listos, retorna null
         }
 
         // Calcular la tasa de respuesta para cada proceso en la cola
-        Nodo<Proceso> actual = ColaListos.getHead();
+        Nodo<Proceso> actual = getColaListos().getHead();
 
         while (actual != null) {
             calculoRadioRespuesta(actual.gettInfo());
             actual = actual.getpNext();
         }
 
-        ordenarColaPorRadioRespuesta(ColaListos);
+        ordenarColaPorRadioRespuesta(getColaListos());
         
-        Proceso proceso = ColaListos.getHead().gettInfo();
-        ColaListos.desencolar(); 
+        Proceso proceso = getColaListos().getHead().gettInfo();
+        getColaListos().desencolar(); 
         
         return proceso; 
     }
@@ -131,12 +137,12 @@ public class Planificador {
         System.out.println("Escogiendo en fcfs");
 
         // Verifica si la cola de procesos está vacía
-        if (ColaListos.isEmpty()) {
+        if (getColaListos().isEmpty()) {
             return null; // Si no hay procesos listos, retorna null
         }
 
-        Proceso proceso = ColaListos.getHead().gettInfo(); // Obtener el primer proceso
-        ColaListos.desencolar(); // Eliminar de la cola
+        Proceso proceso = getColaListos().getHead().gettInfo(); // Obtener el primer proceso
+        getColaListos().desencolar(); // Eliminar de la cola
         System.out.println(proceso + " escogidooo");
         return proceso; // Retornar el proceso
     }
@@ -144,35 +150,35 @@ public class Planificador {
     /*La diferencia es que este se ejecuta 
     cada vez que termina el quantum de tiempo*/
     private Proceso roundRobin() {
-        if (ColaListos.isEmpty()) {
+        if (getColaListos().isEmpty()) {
             return null; // Si no hay procesos listos, retorna null
         }
 
-        Proceso proceso = ColaListos.getHead().gettInfo(); // Obtener el primer proceso 
-        ColaListos.desencolar(); // Eliminar de la cola
+        Proceso proceso = getColaListos().getHead().gettInfo(); // Obtener el primer proceso 
+        getColaListos().desencolar(); // Eliminar de la cola
         return proceso; // Retornar el proceso
     }
 
     private Proceso spn() {
-        if (ColaListos.isEmpty()) {
+        if (getColaListos().isEmpty()) {
             return null; // Si no hay procesos listos, retorna null
         }
         System.out.println("Antes de ordenar:");
-        System.out.println(ColaListos.travel());
+        System.out.println(getColaListos().travel());
 
         // Ordenar la cola por número de instrucciones antes de buscar el proceso más corto
-        ordenarColaPorNumeroInstrucciones(ColaListos); //Quizá haya que cambiar por el método que ordena por tiempo restante
+        ordenarColaPorNumeroInstrucciones(getColaListos()); //Quizá haya que cambiar por el método que ordena por tiempo restante
         System.out.println("Después de ordenar:");
-        System.out.println(ColaListos.travel());
+        System.out.println(getColaListos().travel());
         // Obtener el proceso con el menor número de instrucciones
-        Proceso procesoMasCorto = ColaListos.getHead().gettInfo();
-        ColaListos.desencolar(); // Eliminar de la cola
+        Proceso procesoMasCorto = getColaListos().getHead().gettInfo();
+        getColaListos().desencolar(); // Eliminar de la cola
 
         return procesoMasCorto; // Retornar el proceso que se ha ejecutado
     }
 
     private void srt(CPU cpuDefault) {
-        if (ColaListos.isEmpty()) {
+        if (getColaListos().isEmpty()) {
             return;
         }
         Proceso shorterProcess = spn();
@@ -251,13 +257,108 @@ public class Planificador {
             proceso2.setTiempoRestante(tiempoRestante);
             proceso2.getPCB_proceso().setEstado("Ready");
 
-            ColaListos.encolar(proceso2); // Reencolar el proceso
+            getColaListos().encolar(proceso2); // Reencolar el proceso
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             semaphore.release(); // Liberar el permiso del semáforo (signal)
         }
+    }
+
+    public void bloquearProceso(Proceso proceso, int CiclosGenerar, int CicloSatisfacer) { //realmente lo que hace es meterlo a la cola de bloqueados
+        try {
+            semaphore2.acquire(); // Adquirir el permiso del semáforo (wait)
+            proceso.getPCB_proceso().setEstado("Blocked"); // Cambiar el estado a Blocked
+            int tiempoRestante = proceso.getTiempoRestante();
+            //Quería usar el metodo copiar pero no me deja
+            ProcesoIOBOUND proceso2 = new ProcesoIOBOUND(proceso.getNombreProceso(), proceso.getCant_instrucciones(), "I/O BOUND", proceso.getPCB_proceso(), proceso.getCiclosDuracion(), CiclosGenerar, CicloSatisfacer);
+            System.out.println("Al hilo le fantan " + tiempoRestante + " instrucciones");
+            System.out.println(proceso2.getTiempoRestante());
+            proceso2.setTiempoRestante(tiempoRestante);
+            proceso2.getPCB_proceso().setEstado("Blocked");
+
+            this.getColaBloqueados().encolar(proceso2); // Encolar el proceso en bloqueados
+            
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            semaphore2.release(); // Liberar el permiso del semáforo (signal)
+        }
+    }
+    
+    public void desbloquearProceso(Proceso proceso, Proceso procesoEnEjecucion,  int CiclosGenerar, int CicloSatisfacer) { //necesitas es proceso que ya esperó por la E/S y el proceso actual en ejecución para sacarlo del cpu
+        //Sacar al proceso de la cola de bloqueados
+        try {
+            semaphore2.acquire(); // Adquirir el permiso del semáforo (wait)
+            proceso.getPCB_proceso().setEstado("Blocked"); // Cambiar el estado a Ready
+            System.out.println("sacando al proceso de la cola de bloqueados");
+            this.getColaBloqueados().desencolarEspecifico(proceso); // Desencolar el proceso
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            semaphore2.release(); // Liberar el permiso del semáforo (signal)
+        }
+        
+        //Expulsar proceso en ejecución y colocar ambos en la cola de listos
+        try {
+            semaphore.acquire(); // Adquirir el permiso del semáforo (wait)
+            procesoEnEjecucion.getPCB_proceso().setEstado("Ready"); // Cambiar el estado a Ready
+            int tiempoRestante = procesoEnEjecucion.getTiempoRestante();
+            //Quería usar el metodo copiar pero no me deja
+            
+            if (procesoEnEjecucion.getTipo()=="CPU BOUND"){
+                ProcesoCPUBOUND proceso2 = new ProcesoCPUBOUND(proceso.getNombreProceso(), proceso.getCant_instrucciones(), "CPU BOUND", proceso.getPCB_proceso(), proceso.getCiclosDuracion());
+                System.out.println("Al hilo le fantan " + tiempoRestante + " instrucciones");
+                System.out.println(proceso2.getTiempoRestante());
+                proceso2.setTiempoRestante(tiempoRestante);
+                proceso2.getPCB_proceso().setEstado("Ready");
+                if (procesoEnEjecucion.getNombreProceso() != "SO"){
+                    this.getColaListos().encolar(proceso2); // Encolar el proceso en Listos
+                }
+            }else{
+                ProcesoIOBOUND proceso2 = new ProcesoIOBOUND(procesoEnEjecucion.getNombreProceso(), procesoEnEjecucion.getCant_instrucciones(), "I/O BOUND", procesoEnEjecucion.getPCB_proceso(), procesoEnEjecucion.getCiclosDuracion(), procesoEnEjecucion.getCicloGenerarExcepcion(), procesoEnEjecucion.getCicloSatisfacerExcepcion());
+                System.out.println("Al hilo le fantan " + tiempoRestante + " instrucciones");
+                System.out.println(proceso2.getTiempoRestante());
+                proceso2.setTiempoRestante(tiempoRestante);
+                proceso2.getPCB_proceso().setEstado("Ready");
+            }
+            
+            int tiempoRestante2 = proceso.getTiempoRestante();
+            ProcesoIOBOUND procesocopia = new ProcesoIOBOUND(proceso.getNombreProceso(), proceso.getCant_instrucciones(), "I/O BOUND", proceso.getPCB_proceso(), proceso.getCiclosDuracion(), CiclosGenerar, CicloSatisfacer);
+            procesocopia.setTiempoRestante(tiempoRestante2);
+            this.getColaListos().encolar(procesocopia);
+            System.out.println("Encolados ya");
+            System.out.println("El proceso en la cola de litos es.." + ColaListos.getTail().gettInfo().getNombreProceso());
+            
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            semaphore.release(); // Liberar el permiso del semáforo (signal)
+        }
+        
+    }
+    
+    public Cola<Proceso> getColaBloqueados() {
+        return ColaBloqueados; 
+    }
+    
+    public void terminarProceso(Proceso procesoTerminado){
+        try {
+            semaphore3.acquire(); //wait
+            if (procesoTerminado.getNombreProceso() != "SO"){
+                this.ColaTerminados.encolar(procesoTerminado);// Encolar el proceso en Terminados
+            }
+            
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Planificador.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            semaphore.release(); // Liberar el permiso del semáforo (signal)
+        }
+        System.out.println(ColaTerminados.travel());
     }
 
     public void ejecutarProcesos(Proceso proceso) {
@@ -271,7 +372,7 @@ public class Planificador {
 
             proceso.start();
             // Agregar el proceso a la cola de bloqueados
-            ColaBloqueados.encolar(proceso);
+            getColaBloqueados().encolar(proceso);
             // Eliminar el proceso de la cola de listos
             //ColaListos.eliminar(proceso);
         }
@@ -301,7 +402,7 @@ public class Planificador {
     public void satisfacerExcepcion(Proceso proceso) {
         // Reactivar el proceso bloqueado
         //ColaBloqueados.eliminar(proceso);
-        ColaListos.encolar(proceso);
+        getColaListos().encolar(proceso);
     }
 
     public String getNombreAlgoritmo() {
@@ -326,4 +427,20 @@ public class Planificador {
     public int getQuantum() {
         return quantum;
     }
+
+    /**
+     * @return the ColaListos
+     */
+    public Cola<Proceso> getColaListos() {
+        return ColaListos;
+    }
+
+    /**
+     * @return the ColaTerminados
+     */
+    public Cola<Proceso> getColaTerminados() {
+        return ColaTerminados;
+    }
+    
+    
 }

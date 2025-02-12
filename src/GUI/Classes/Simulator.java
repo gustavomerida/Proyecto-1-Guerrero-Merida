@@ -73,7 +73,7 @@ public class Simulator extends javax.swing.JFrame {
         
 
         // INICIO DE SIMULACION
-        startSimulation();
+        //startSimulation();
 
     }
 
@@ -95,7 +95,7 @@ public class Simulator extends javax.swing.JFrame {
                         updatecycleDurationLabel();
                         
                         actualizarInterfaz(); // Refresca la UI
-                        createJScrollPaneOnReady(app.getPlanificador().ColaListos);
+                        createJScrollPaneOnReady(app.getPlanificador().getColaListos());
                         // Inicio ciclo general 1 + 2 + 3 + 4
                         
                         //app.getPlanificador().setNombreAlgoritmo(currentAlgorithmComboBOX.getModel().getSelectedItem().toString());

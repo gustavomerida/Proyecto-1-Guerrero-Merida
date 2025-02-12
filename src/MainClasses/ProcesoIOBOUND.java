@@ -36,6 +36,13 @@ public class ProcesoIOBOUND extends Proceso {
     private void generarExcepcion() {
         this.getPCB_proceso().setEstado("Blocked");
         System.out.println("Proceso " + this.getNombreProceso() + " bloqueado por excepción I/O");
+        //app.getPlanificador().bloquearProceso(this);
+        
+    }
+    
+    private void terminar(){
+        this.getPCB_proceso().setEstado("Exit");
+        app.getPlanificador().terminarProceso(this);
     }
 
     private void satisfacerExcepcion() {
@@ -63,7 +70,7 @@ public class ProcesoIOBOUND extends Proceso {
                 System.out.println("");
                 this.reducirTiempo(1);
                 this.contadorCiclos++;
-                if (this.contadorCiclos % this.cicloGenerarExcepcion == 0) {
+                if (this.contadorCiclos % this.getCicloGenerarExcepcion() == 0) {
                     //AQUÏ HAY QUE USAR UN SEMÁFORO PARA AGG A LA COLA DE BLOQUEADOS
                     this.generarExcepcion();
                 } else {
@@ -74,21 +81,26 @@ public class ProcesoIOBOUND extends Proceso {
                     }
                 }
             }else if ("Blocked".equals(this.getPCB_proceso().getEstado())){
-                for (int i = 0; i < this.cicloSatisfacerExcepcion; i++) {
-                        try {
-                            this.sleep(this.getCiclosDuracion().get());
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(ProcesoIOBOUND.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                this.satisfacerExcepcion();
+//                for (int i = 0; i < this.getCicloSatisfacerExcepcion(); i++) {
+//                        try {
+//                            this.sleep(this.getCiclosDuracion().get());
+//                        } catch (InterruptedException ex) {
+//                            Logger.getLogger(ProcesoIOBOUND.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//                this.satisfacerExcepcion();
+                System.out.println("proceso bloqueadito");
+                break;
             } else if ("Ready".equals(this.getPCB_proceso().getEstado())){
                 
                 
                 // aqui iria la suma del contador de la cola de listos.
                 System.out.println("Proceso listo");
+                break;
             }else {
                 System.out.println("Proceso terminado");
+                terminar();
+                break;
             } 
             if (this.getTiempoRestante() == 0) {
                 this.getPCB_proceso().setEstado("Exit");
@@ -101,6 +113,7 @@ public class ProcesoIOBOUND extends Proceso {
     /**
      * @return the ciclosDuracion
      */
+    @Override
     public AtomicInteger getCiclosDuracion() {
         return ciclosDuracion;
     }
@@ -108,8 +121,41 @@ public class ProcesoIOBOUND extends Proceso {
     /**
      * @param ciclosDuracion the ciclosDuracion to set
      */
+    @Override
     public void setCiclosDuracion(AtomicInteger ciclosDuracion) {
         this.ciclosDuracion = ciclosDuracion;
+    }
+
+    /**
+     * @return the cicloGenerarExcepcion
+     */
+    @Override
+    public int getCicloGenerarExcepcion() {
+        return cicloGenerarExcepcion;
+    }
+
+    /**
+     * @param cicloGenerarExcepcion the cicloGenerarExcepcion to set
+     */
+    @Override
+    public void setCicloGenerarExcepcion(int cicloGenerarExcepcion) {
+        this.cicloGenerarExcepcion = cicloGenerarExcepcion;
+    }
+
+    /**
+     * @return the cicloSatisfacerExcepcion
+     */
+    @Override
+    public int getCicloSatisfacerExcepcion() {
+        return cicloSatisfacerExcepcion;
+    }
+
+    /**
+     * @param cicloSatisfacerExcepcion the cicloSatisfacerExcepcion to set
+     */
+    @Override
+    public void setCicloSatisfacerExcepcion(int cicloSatisfacerExcepcion) {
+        this.cicloSatisfacerExcepcion = cicloSatisfacerExcepcion;
     }
 }
 
