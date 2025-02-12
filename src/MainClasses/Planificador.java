@@ -245,7 +245,7 @@ public class Planificador {
         } while (intercambiado);
     }
 
-    public void expulsarProceso(Proceso proceso) {
+    public void expulsarProceso(Proceso proceso) { //hay que arreglarlo para que devuelva el tipo que es
         try {
             semaphore.acquire(); // Adquirir el permiso del semáforo (wait)
             proceso.getPCB_proceso().setEstado("Ready"); // Cambiar el estado a Ready

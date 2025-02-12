@@ -82,7 +82,7 @@ public class App {
 //        
 //        ////////////////////////////////////////////////////////////////////////////
 //        this.cpu1 = new CPU(0, null, "Activo", pSO);
-        this.planificador = new Planificador("FCFS", colaListos, colaBloqueados, colaTerminados, cpu1);
+        this.planificador = new Planificador("RR", colaListos, colaBloqueados, colaTerminados, cpu1);
 //        this.cpu1.setPlanificador(planificador);
 //        //////////////////////////////////////////////////////////////////////////////
 ////        this.cpu2 = new CPU(0, null, "Activo", pSO);
@@ -128,9 +128,9 @@ public class App {
 //        Proceso p2 = new ProcesoCPUBOUND("p2", 10, "CPU BOUND", pcb2, duracionCicloInstruccion);
 //        Proceso p3 = new ProcesoCPUBOUND("p3", 20, "CPU BOUND", pcb3, duracionCicloInstruccion);
         
-          Proceso p4 = new ProcesoIOBOUND("p4", 10, "CPU BOUND", pcb, duracionCicloInstruccion, 3, 3);
+          Proceso p4 = new ProcesoIOBOUND("p4", 10, "CPU BOUND", pcb, duracionCicloInstruccion, 4, 3);
           Proceso p5 = new ProcesoIOBOUND("p5", 10, "CPU BOUND", pcb2, duracionCicloInstruccion, 3, 3);
-          Proceso p6 = new ProcesoIOBOUND("p6", 10, "CPU BOUND", pcb3, duracionCicloInstruccion, 3, 3);
+          Proceso p6 = new ProcesoIOBOUND("p6", 15, "CPU BOUND", pcb3, duracionCicloInstruccion, 5, 3);
 
 
         planificador.getColaListos().encolar(p4);
@@ -159,7 +159,7 @@ public class App {
     }
     
     public void start2(){
-        Simulator simulator =  new Simulator("1000", 2, "FCFS");
+        Simulator simulator =  new Simulator("1000", 3, "RR");
         simulator.setVisible(true);
     }
     
