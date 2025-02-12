@@ -23,6 +23,7 @@ public class Main {
         
         App app = App.getInstance();
         app.start();
+        app.start2();
 
     }
 

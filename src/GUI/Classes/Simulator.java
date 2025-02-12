@@ -73,7 +73,7 @@ public class Simulator extends javax.swing.JFrame {
         
 
         // INICIO DE SIMULACION
-        //startSimulation();
+        startSimulation();
 
     }
 

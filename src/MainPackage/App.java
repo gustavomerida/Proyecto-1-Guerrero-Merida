@@ -134,8 +134,8 @@ public class App {
 
 
         planificador.getColaListos().encolar(p4);
-        //planificador.getColaListos().encolar(p5);
-        //planificador.getColaListos().encolar(p6);
+        planificador.getColaListos().encolar(p5);
+        planificador.getColaListos().encolar(p6);
         //colaListos.encolar(p4);
         
         
@@ -147,15 +147,20 @@ public class App {
         
         this.cpu1.setPlanificador(planificador);
         //////////////////////////////////////////////////////////////////////////////
-//        this.cpu2 = new CPU(0, null, "Activo", pSO);
+        this.cpu2 = new CPU(0, null, "Activo", pSO);
 //        this.planificador = new Planificador("FCFS", colaListos, colaBloqueados, colaTerminados, cpu2);
-//        this.cpu2.setPlanificador(planificador);
+        this.cpu2.setPlanificador(planificador);
         
         this.cpu1.start();
-//        this.cpu2.start();
+        this.cpu2.start();
         
         
 
+    }
+    
+    public void start2(){
+        Simulator simulator =  new Simulator("1000", 2, "FCFS");
+        simulator.setVisible(true);
     }
     
     public void setearProcesoACPU()
