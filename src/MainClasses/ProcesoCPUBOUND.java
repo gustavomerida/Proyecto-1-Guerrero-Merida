@@ -4,6 +4,7 @@
  */
 package MainClasses;
 
+import MainPackage.App;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +16,8 @@ import java.util.logging.Logger;
 public class ProcesoCPUBOUND extends Proceso {
 
     private AtomicInteger ciclosDuracion;
+    private final App app = App.getInstance();
+
 
 //    public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, int ciclosDuracion) {
 //        super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
@@ -23,6 +26,11 @@ public class ProcesoCPUBOUND extends Proceso {
     public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, AtomicInteger ciclosDuracion) {
         super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
         this.ciclosDuracion = ciclosDuracion;
+    }
+    
+    private void terminar(){
+        this.getPCB_proceso().setEstado("Exit");
+        app.getPlanificador().terminarProceso(this);
     }
 
     @Override
@@ -68,6 +76,7 @@ public class ProcesoCPUBOUND extends Proceso {
                  break;
             } else {
                 System.out.println("Proceso terminado");
+                terminar();
                 break;
             }
         }

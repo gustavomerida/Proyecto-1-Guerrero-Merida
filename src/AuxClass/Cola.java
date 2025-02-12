@@ -65,6 +65,42 @@ public class Cola <T> {
         }
         return toPrint;
     }
+    
+    public void desencolarEspecifico(T dato) {
+    if (isEmpty()) {
+        System.out.println("La cola está vacía.");
+        return;
+    }
+
+    // Caso especial: si el nodo a eliminar es el head
+    if (this.head.gettInfo().equals(dato)) {
+        desencolar(); // Usa el método existente para desencolar el primer nodo
+        return;
+    }
+
+    Nodo<T> actual = this.head;
+    Nodo<T> anterior = null;
+
+    while (actual != null) {
+        if (actual.gettInfo().equals(dato)) {
+            // Nodo encontrado
+            if (anterior != null) {
+                anterior.setpNext(actual.getpNext()); // Salta el nodo actual
+                if (actual == this.tail) {
+                    this.tail = anterior; // Actualiza el tail si es necesario
+                }
+            }
+            this.size--; // Disminuye el tamaño
+            System.out.println("Nodo con dato " + dato + " desencolado.");
+            return;
+        }
+        anterior = actual;
+        actual = actual.getpNext();
+    }
+
+    System.out.println("Nodo con dato " + dato + " no encontrado en la cola.");
+}
+
 
     public Nodo<T> getHead() {
         return head;
