@@ -63,7 +63,7 @@ public class Planificador {
                     proceso = spn();
                     break;
                 case "SRT":
-                    //srt(this.cpuDefault);
+                    proceso = srt();
                     break;
                 case "HRRN":
                     System.out.println("Ejecutando HRRN");
@@ -183,16 +183,18 @@ public class Planificador {
         return procesoMasCorto; // Retornar el proceso que se ha ejecutado
     }
 
-    private void srt(CPU cpuDefault) {
+    private Proceso srt() {
         if (getColaListos().isEmpty()) {
-            return;
+            return null;
         }
-        Proceso shorterProcess = spn();
-        Proceso cpuCurrentProcess = cpuDefault.getActualProceso();
-
-        if (shorterProcess.getCant_instrucciones() < cpuCurrentProcess.getCant_instrucciones()) {
-            cpuDefault.setActualProceso(shorterProcess);
-        }
+        ordenarColaPorTiempoRestante(getColaListos()); 
+        Proceso shorterProcess = getColaListos().getHead().gettInfo();
+        getColaListos().desencolar(); // Eliminar de la cola
+        //Proceso cpuCurrentProcess = cpuDefault.getActualProceso();
+        return shorterProcess;
+//        if (shorterProcess.getCant_instrucciones() < cpuCurrentProcess.getCant_instrucciones()) {
+//            cpuDefault.setActualProceso(shorterProcess);
+//        }
     }
 
     public void ordenarColaPorNumeroInstrucciones(Cola<Proceso> cola) {
@@ -257,13 +259,28 @@ public class Planificador {
             proceso.getPCB_proceso().setEstado("Ready"); // Cambiar el estado a Ready
             int tiempoRestante = proceso.getTiempoRestante();
             //Quería usar el metodo copiar pero no me deja
-            ProcesoCPUBOUND proceso2 = new ProcesoCPUBOUND(proceso.getNombreProceso(), proceso.getCant_instrucciones(), "CPU BOUND", proceso.getPCB_proceso(), proceso.getCiclosDuracion());
-            System.out.println("Al hilo le fantan " + tiempoRestante + " instrucciones");
-            System.out.println(proceso2.getTiempoRestante());
-            proceso2.setTiempoRestante(tiempoRestante);
-            proceso2.getPCB_proceso().setEstado("Ready");
-
-            getColaListos().encolar(proceso2); // Reencolar el proceso
+            
+            
+            
+            if (proceso.getTipo()=="CPU BOUND"){
+                ProcesoCPUBOUND proceso2 = new ProcesoCPUBOUND(proceso.getNombreProceso(), proceso.getCant_instrucciones(), "CPU BOUND", proceso.getPCB_proceso(), proceso.getCiclosDuracion());
+                System.out.println("Al hilo le fantan " + tiempoRestante + " instrucciones");
+                System.out.println(proceso2.getTiempoRestante());
+                proceso2.setTiempoRestante(tiempoRestante);
+                proceso2.getPCB_proceso().setEstado("Ready");
+                if (proceso.getNombreProceso() != "SO"){
+                    this.getColaListos().encolar(proceso2); // Encolar el proceso en Listos
+                }
+            }else{
+                ProcesoIOBOUND proceso2 = new ProcesoIOBOUND(proceso.getNombreProceso(), proceso.getCant_instrucciones(), "I/O BOUND", proceso.getPCB_proceso(), proceso.getCiclosDuracion(), proceso.getCicloGenerarExcepcion(), proceso.getCicloSatisfacerExcepcion());
+                System.out.println("Al hilo le fantan " + tiempoRestante + " instrucciones");
+                System.out.println(proceso2.getTiempoRestante());
+                proceso2.setTiempoRestante(tiempoRestante);
+                proceso2.getPCB_proceso().setEstado("Ready");
+                if (proceso.getNombreProceso() != "SO"){
+                    this.getColaListos().encolar(proceso2); // Encolar el proceso en Listos
+                }
+            }
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -341,6 +358,9 @@ public class Planificador {
                 System.out.println(proceso2.getTiempoRestante());
                 proceso2.setTiempoRestante(tiempoRestante);
                 proceso2.getPCB_proceso().setEstado("Ready");
+//                if (proceso.getNombreProceso() != "SO"){
+//                    this.getColaListos().encolar(proceso2); // Encolar el proceso en Listos
+//                }
             }
             
             int tiempoRestante2 = proceso.getTiempoRestante();

@@ -88,7 +88,7 @@ public class App {
 //        
 //        ////////////////////////////////////////////////////////////////////////////
 //        this.cpu1 = new CPU(0, null, "Activo", pSO);
-        this.planificador = new Planificador("FCFS", colaListos, colaBloqueados, colaTerminados, cpu1);
+        this.planificador = new Planificador("SRT", colaListos, colaBloqueados, colaTerminados, cpu1);
 //        this.cpu1.setPlanificador(planificador);
 //        //////////////////////////////////////////////////////////////////////////////
 ////        this.cpu2 = new CPU(0, null, "Activo", pSO);
@@ -124,16 +124,17 @@ public class App {
         RegistrosControlEstado environment3 = new RegistrosControlEstado(0, 1, 0);
         PCB pcb3 = new PCB(0, "p6", "Ready", environment3);
 
-        Proceso p1 = new ProcesoCPUBOUND("p1", 10, "CPU BOUND", pcb, duracionCicloInstruccion);
+        Proceso p1 = new ProcesoCPUBOUND("p1", 18, "CPU BOUND", pcb, duracionCicloInstruccion);
         Proceso p2 = new ProcesoCPUBOUND("p2", 10, "CPU BOUND", pcb2, duracionCicloInstruccion);
-        Proceso p3 = new ProcesoCPUBOUND("p3", 10, "CPU BOUND", pcb3, duracionCicloInstruccion);
-//        Proceso p4 = new ProcesoIOBOUND("p4", 10, "I/O BOUND", pcb, duracionCicloInstruccion, 4, 3);
-//        Proceso p5 = new ProcesoIOBOUND("p5", 10, "I/O BOUND", pcb2, duracionCicloInstruccion, 3, 3);
+        Proceso p3 = new ProcesoCPUBOUND("p3", 7, "CPU BOUND", pcb3, duracionCicloInstruccion);
+        Proceso p4 = new ProcesoIOBOUND("p4", 6, "I/O BOUND", pcb, duracionCicloInstruccion, 3, 3);
+//        Proceso p5 = new ProcesoIOBOUND("p5", 5, "I/O BOUND", pcb2, duracionCicloInstruccion, 3, 3);
 //        Proceso p6 = new ProcesoIOBOUND("p6", 15, "I/O BOUND", pcb3, duracionCicloInstruccion, 5, 3);
 
         planificador.getColaListos().encolar(p1);
         planificador.getColaListos().encolar(p2);
         planificador.getColaListos().encolar(p3);
+        planificador.getColaListos().encolar(p4);
         //colaListos.encolar(p4);
 
         ////////////////////////////////////////////////////////////////////////////
@@ -156,11 +157,11 @@ public class App {
 
     public void start2() {
 
-        Simulator simulator = new Simulator("1000", 2, "FCFS");
+        Simulator simulator = new Simulator("1000", 2, "SRT");
         simulator.setVisible(true);
-
+//
 //        chartClass = new ChartClass(0);
-
+//
 //        Estadisticas estadistica = new Estadisticas();
 //        estadistica.setVisible(true);
     }

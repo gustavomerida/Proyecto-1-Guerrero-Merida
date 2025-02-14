@@ -155,13 +155,45 @@ public class CPU extends Thread {
                         break;
 
                     case "SPN":
+                        this.setActualProceso(p);
 
+                         {
+                            try {
+                                if (p.getPCB_proceso().getEstado() != "Exit" && p.getPCB_proceso().getEstado() != "Blocked") {
+                                    p.start();
+                                }
+                                this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion().get());
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
                         break;
 
                     case "SRT":
                         //srt(this.cpuDefault);
+                        System.out.println("Aqui taaa");
+                        this.setActualProceso(p);
+                        try {
+                            // Verificar si el proceso actual puede continuar
+                            //if (p.getPCB_proceso().getEstado() != "Exit" && p.getPCB_proceso().getEstado() != "Blocked") {
+                                p.start();
+                            //}
+
+                            // Duerme por el tiempo del proceso actual
+                            this.sleep(p.getCiclosDuracion().get() * p.getCant_instrucciones());
+
+                            // Después de dormir, verifica si hay un proceso listo con menor tiempo restante
+                            Proceso nuevoProceso = this.getPlanificador().escogerProceso();
+                            if (nuevoProceso != null && nuevoProceso.getTiempoRestante() < p.getTiempoRestante()) {
+                                // Si hay un nuevo proceso con menos tiempo restante, interrumpimos el actual
+                                this.planificador.expulsarProceso(p); // Mueve el proceso actual a la cola de listos
+                                //p = nuevoProceso; // Cambia al nuevo proceso
+                            }
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         break;
-                    case "HRRN":
+                    case "HRRN": //Creo que falta completar
                         this.setActualProceso(p);
 
                          {
