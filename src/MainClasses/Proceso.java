@@ -18,7 +18,7 @@ public class Proceso extends Thread{
     private int tiempoRestante; // Tiempo restante en ciclos
     private int tiempoEnCola; // Sea cola de listos o bloqueados
     private int tasaRespuesta;
-    
+
     private AtomicInteger ciclosDuracion;
     
     public Proceso(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso){
@@ -29,7 +29,12 @@ public class Proceso extends Thread{
         this.tiempoRestante = cant_instrucciones; // Inicialmente son iguales
         this.tiempoEnCola = 1;
         this.tasaRespuesta = 0;
+
     }
+
+
+    
+    
 
     public int getTasaRespuesta() {
         return tasaRespuesta;

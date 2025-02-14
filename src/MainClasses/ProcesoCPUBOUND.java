@@ -75,6 +75,7 @@ public class ProcesoCPUBOUND extends Proceso {
                 this.setTiempoEnCola(this.getTiempoEnCola() + 1);
                  break;
             } else {
+                // Añadir cpu a proceso
                 System.out.println("Proceso terminado");
                 terminar();
                 break;
