@@ -41,8 +41,6 @@ public class CPU extends Thread {
     public int getIOBoundCounter() {
         return IOBoundCounter;
     }
-    
-    
 
     public Proceso getActualProceso() {
         return actualProceso;
@@ -65,7 +63,7 @@ public class CPU extends Thread {
                 if (p.getPCB_proceso().getEstado() == "Blocked") {
                     int[] ciclos;
                     ciclos = new int[]{p.getCicloGenerarExcepcion(), p.getCicloSatisfacerExcepcion()};
-                    System.out.println("MIRAAAAAAAAAAAAAAAAA" + ciclos[0]);
+//                    System.out.println("MIRAAAAAAAAAAAAAAAAA" + ciclos[0]);
                     Excepcion e = new Excepcion(p, this, this.getPlanificador(), ciclos);
                     //e.proceso = p;
                     e.start();
@@ -89,13 +87,13 @@ public class CPU extends Thread {
             this.setActualProceso(pr);
             try {
                 pr.start();
-                System.out.println("Esperando por proceso de SO a terminar...");
+//                System.out.println("Esperando por proceso de SO a terminar...");
                 this.sleep(pr.getCant_instrucciones() * pr.getCiclosDuracion().get()); //HAY que cambiar este tiempo. 
             } catch (InterruptedException ex) {
                 Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
             }
             p = this.getPlanificador().escogerProceso();
-            System.out.println(p);
+//            System.out.println(p);
             if (p != null) {
 //                if (p.getPCB_proceso().getEstado()=="Blocked"){
 //                   e.proceso = p;
@@ -104,7 +102,7 @@ public class CPU extends Thread {
                 if (p.getTipo().equals("CPU BOUND")) {
                     this.CPUBoundCounter++;
                 } else {
-                    this.IOBoundCounter ++;
+                    this.IOBoundCounter++;
                 }
 
                 this.setEstado("Activo"); //estado del CPU
@@ -114,7 +112,7 @@ public class CPU extends Thread {
 
                          {
                             try {
-                                if (p.getPCB_proceso().getEstado() != "Exit" && p.getPCB_proceso().getEstado() != "Blocked") {
+                                if (!("Exit".equals(p.getPCB_proceso().getEstado())) && !("Blocked".equals(p.getPCB_proceso().getEstado()))) {
                                     p.start();
                                 }
                                 this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion().get());
@@ -159,7 +157,7 @@ public class CPU extends Thread {
 
                          {
                             try {
-                                if (p.getPCB_proceso().getEstado() != "Exit" && p.getPCB_proceso().getEstado() != "Blocked") {
+                                if (!(p.getPCB_proceso().getEstado().equals("Exit")) && !((p.getPCB_proceso().getEstado().equals("Blocked")))) {
                                     p.start();
                                 }
                                 this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion().get());
@@ -176,7 +174,7 @@ public class CPU extends Thread {
                         try {
                             // Verificar si el proceso actual puede continuar
                             //if (p.getPCB_proceso().getEstado() != "Exit" && p.getPCB_proceso().getEstado() != "Blocked") {
-                                p.start();
+                            p.start();
                             //}
 
                             // Duerme por el tiempo del proceso actual
@@ -212,15 +210,16 @@ public class CPU extends Thread {
                 }
             } else {
                 this.setEstado("Inactivo");
-                pr = procesoSO.copiar();
-                this.setActualProceso(pr);
-                try {
-                    pr.start();
-                    System.out.println("Esperando por proceso de SO a terminar...");
-                    this.sleep(pr.getCant_instrucciones() * pr.getCiclosDuracion().get()); //HAY que cambiar este tiempo. 
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
-                }
+//                pr = procesoSO.copiar();
+//                
+//                this.setActualProceso(pr);
+//                try {
+//                    pr.start();
+//                    System.out.println("Esperando por proceso de SO a terminar...");
+//                    this.sleep(pr.getCant_instrucciones() * pr.getCiclosDuracion().get()); //HAY que cambiar este tiempo. 
+//                } catch (InterruptedException ex) {
+//                    Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+//                }
             }
         }
     }

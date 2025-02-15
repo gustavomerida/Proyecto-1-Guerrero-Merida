@@ -42,6 +42,8 @@ public class Planificador {
     public Cola<Proceso> getColaBloqueados() {
         return ColaBloqueados;
     }
+    
+    
 
     
     
@@ -383,9 +385,15 @@ public class Planificador {
     
     public void terminarProceso(Proceso procesoTerminado){
         try {
+            
             semaphore3.acquire(); //wait
-            if (procesoTerminado.getNombreProceso() != "SO"){
+            System.out.println("TAMAÑO DE LA COLA DE TERMINADOS  -->" + ColaTerminados.getSize());
+            if (!(procesoTerminado.getNombreProceso().equals("SO"))){
+                
+                System.out.println("ENTRE A TERMINAR PROCESO DE PLANIFICADOR. PROXIMO A ENCOLAR");
                 this.ColaTerminados.encolar(procesoTerminado);// Encolar el proceso en Terminados
+                System.out.println("SOMOS TERMINADOS EN COLA" + this.ColaTerminados.getSize());
+                
             }
             
         } catch (InterruptedException ex) {
@@ -393,7 +401,8 @@ public class Planificador {
         }finally{
             semaphore.release(); // Liberar el permiso del semáforo (signal)
         }
-        System.out.println(ColaTerminados.travel());
+        System.out.println("ESTOY EN TERMINARPROCESO DE PLANIFICADOR");
+        
     }
 
     public void ejecutarProcesos(Proceso proceso) {

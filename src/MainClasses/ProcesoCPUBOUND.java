@@ -18,7 +18,6 @@ public class ProcesoCPUBOUND extends Proceso {
     private AtomicInteger ciclosDuracion;
     private final App app = App.getInstance();
 
-
 //    public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, int ciclosDuracion) {
 //        super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
 //        this.ciclosDuracion = ciclosDuracion;
@@ -27,10 +26,16 @@ public class ProcesoCPUBOUND extends Proceso {
         super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
         this.ciclosDuracion = ciclosDuracion;
     }
-    
-    private void terminar(){
+
+    private void terminar() {
+        System.out.println("TERMINANDO PROCESO NOMBRE PROCESO -->>>" + this.getNombreProceso());
+
         this.getPCB_proceso().setEstado("Exit");
+
         app.getPlanificador().terminarProceso(this);
+
+        System.out.println(app.getPlanificador().getColaTerminados().travel());
+
     }
 
     @Override
@@ -41,19 +46,19 @@ public class ProcesoCPUBOUND extends Proceso {
                     // Simular duración del ciclo
                     this.sleep(this.ciclosDuracion.get());
 
-                    System.out.println("TIEMPO EN COLA " + String.valueOf(this.getTiempoEnCola()));
-
-                    System.out.println("Proceso " + this.getNombreProceso() + " ejecutándose");
-                    System.out.println("Cant_instrucciones: " + this.getCant_instrucciones());
+//                    System.out.println("TIEMPO EN COLA " + String.valueOf(this.getTiempoEnCola()));
+//
+//                    System.out.println("Proceso " + this.getNombreProceso() + " ejecutándose");
+//                    System.out.println("Cant_instrucciones: " + this.getCant_instrucciones());
                     // Actualizar MAR y PC
                     int MAR_num = this.getCant_instrucciones() - this.getTiempoRestante();
                     this.getPCB_proceso().getAmbienteEjecucion().setMAR(MAR_num);
                     this.getPCB_proceso().getAmbienteEjecucion().setPc(MAR_num + 1);
                     // Mostrar MAR y PC
-                    System.out.println("MAR: " + this.getPCB_proceso().getAmbienteEjecucion().getMAR());
-                    System.out.println("PC: " + this.getPCB_proceso().getAmbienteEjecucion().getPc());
-                    System.out.println("Estado: " + this.getPCB_proceso().getEstado());
-                    System.out.println("");
+//                    System.out.println("MAR: " + this.getPCB_proceso().getAmbienteEjecucion().getMAR());
+//                    System.out.println("PC: " + this.getPCB_proceso().getAmbienteEjecucion().getPc());
+//                    System.out.println("Estado: " + this.getPCB_proceso().getEstado());
+//                    System.out.println("");
                     this.reducirTiempo(1);
 
                     if (this.getTiempoRestante() == 0) {
@@ -67,16 +72,15 @@ public class ProcesoCPUBOUND extends Proceso {
                 }
             } else if ("Blocked".equals(this.getPCB_proceso().getEstado()) || "Ready".equals(this.getPCB_proceso().getEstado())) {
                 //Nada
-                System.out.println("Proceso bloqueado o listo");
+//                System.out.println("Proceso bloqueado o listo");
 
                 // En ambas colas debe sumar el tiempo que esta "esperando" 
-                System.out.println("Sumando a tiempo de la cola ");
-
+//                System.out.println("Sumando a tiempo de la cola ");
                 this.setTiempoEnCola(this.getTiempoEnCola() + 1);
-                 break;
+                break;
             } else {
                 // Añadir cpu a proceso
-                System.out.println("Proceso terminado");
+//                System.out.println("Proceso terminado");
                 terminar();
                 break;
             }

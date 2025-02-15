@@ -32,7 +32,6 @@ public class ProcessMaker extends javax.swing.JFrame {
     private final App app = App.getInstance();
 
     public ProcessMaker() throws FontFormatException, IOException {
-
         initComponents();
         initializationWindow();
     }
@@ -106,7 +105,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        schedulerAlgorithmComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SPN", "ROUND ROBIN", "SRT", "HRRN" }));
+        schedulerAlgorithmComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SPN", "RR", "SRT", "HRRN" }));
         schedulerAlgorithmComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 schedulerAlgorithmComboBoxActionPerformed(evt);
@@ -458,7 +457,6 @@ public class ProcessMaker extends javax.swing.JFrame {
         String cycleDurationParameter = String.valueOf(cycleDurationPerInstructionTextField.getText());
         int processorsQuantity = Integer.parseInt(quantityProcessorsComboBox.getModel().getSelectedItem().toString());
         String initialAlgorithm = schedulerAlgorithmComboBox.getModel().getSelectedItem().toString();
-        
 
         Simulator simulatorWindow = new Simulator(cycleDurationParameter, processorsQuantity, initialAlgorithm);
 
