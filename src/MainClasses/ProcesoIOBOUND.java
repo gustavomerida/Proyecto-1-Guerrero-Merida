@@ -43,6 +43,8 @@ public class ProcesoIOBOUND extends Proceso {
     private void terminar(){
         this.getPCB_proceso().setEstado("Exit");
         app.getPlanificador().terminarProceso(this);
+        System.out.println("TERMINO UN PROCESO IO BOUND");
+        System.out.println(app.getPlanificador().getColaTerminados().travel());
 
     }
 
@@ -60,15 +62,15 @@ public class ProcesoIOBOUND extends Proceso {
                 this.getPCB_proceso().setEstado("Exit");
             }
             if ("Running".equals(this.getPCB_proceso().getEstado())) {
-                System.out.println("Proceso " + this.getNombreProceso() + " ejecutándose");
-                System.out.println("Cant_instrucciones: " + this.getCant_instrucciones());
+//                System.out.println("Proceso " + this.getNombreProceso() + " ejecutándose");
+//                System.out.println("Cant_instrucciones: " + this.getCant_instrucciones());
                 int MAR_num = this.getCant_instrucciones() - this.getTiempoRestante();
                 this.getPCB_proceso().getAmbienteEjecucion().setMAR(MAR_num);
                 this.getPCB_proceso().getAmbienteEjecucion().setPc(MAR_num + 1);
-                System.out.println("MAR: " + this.getPCB_proceso().getAmbienteEjecucion().getMAR());
-                System.out.println("PC: " + this.getPCB_proceso().getAmbienteEjecucion().getPc());
-                System.out.println("Estado: " + this.getPCB_proceso().getEstado());
-                System.out.println("");
+//                System.out.println("MAR: " + this.getPCB_proceso().getAmbienteEjecucion().getMAR());
+//                System.out.println("PC: " + this.getPCB_proceso().getAmbienteEjecucion().getPc());
+//                System.out.println("Estado: " + this.getPCB_proceso().getEstado());
+//                System.out.println("");
                 this.reducirTiempo(1);
                 this.contadorCiclos++;
                 if (this.contadorCiclos % this.getCicloGenerarExcepcion() == 0) {
@@ -98,6 +100,9 @@ public class ProcesoIOBOUND extends Proceso {
                 
                 
                 // aqui iria la suma del contador de la cola de listos.
+                
+                
+                
                 System.out.println("Proceso listo");
                 break;
             }else {

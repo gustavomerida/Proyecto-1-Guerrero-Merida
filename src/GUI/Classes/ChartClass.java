@@ -96,7 +96,6 @@ public class ChartClass {
     }
 
     private void updateChartData(int id) {
-
         switch (id) {
             case 0:
                 updateChartDataSystem();
@@ -107,11 +106,9 @@ public class ChartClass {
                 updateChartDataCPU2();
             case 3:
                 updateChartDataCPU3();
-
             default:
                 throw new AssertionError();
         }
-
     }
 
     public void updateChartDataSystem() {

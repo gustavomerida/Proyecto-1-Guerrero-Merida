@@ -66,6 +66,20 @@ public class Cola <T> {
         return toPrint;
     }
     
+    public List generarLista() {
+        List listaProcesos = new List("");
+        if (!isEmpty()) {
+            Nodo<T> actual = this.head;
+            while (actual != null) {
+                listaProcesos.append(actual);
+                actual = actual.getpNext();
+            }
+        }
+        return listaProcesos;
+    }
+    
+    
+    
     public void desencolarEspecifico(T dato) {
     if (isEmpty()) {
         System.out.println("La cola está vacía.");
