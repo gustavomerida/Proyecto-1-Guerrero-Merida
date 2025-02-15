@@ -42,8 +42,10 @@ public class ProcesoIOBOUND extends Proceso {
     
     private void terminar(){
         this.getPCB_proceso().setEstado("Exit");
-        app.getPlanificador().terminarProceso(this);
-
+        if (this.getNombreProceso() != "SO"){
+            System.out.println("AAAAJAAA");
+            app.getPlanificador().terminarProceso(this);// Encolar el proceso en Terminados
+        }
     }
 
     private void satisfacerExcepcion(Planificador planificador) {
@@ -58,6 +60,7 @@ public class ProcesoIOBOUND extends Proceso {
         while (true) {
             if (this.getTiempoRestante() == 0) {
                 this.getPCB_proceso().setEstado("Exit");
+                terminar();
             }
             if ("Running".equals(this.getPCB_proceso().getEstado())) {
                 System.out.println("Proceso " + this.getNombreProceso() + " ejecutándose");
@@ -109,6 +112,7 @@ public class ProcesoIOBOUND extends Proceso {
             if (this.getTiempoRestante() == 0) {
                 this.getPCB_proceso().setEstado("Exit");
                 System.out.println("Proceso terminado");
+                terminar();
                 break;
             }
         }

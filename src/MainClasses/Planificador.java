@@ -382,8 +382,11 @@ public class Planificador {
     
     
     public void terminarProceso(Proceso procesoTerminado){
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println("Tamaño de cola de terminados..." + ColaTerminados.getSize());
         try {
             semaphore3.acquire(); //wait
+            procesoTerminado.getPCB_proceso().setEstado("Exit");
             if (procesoTerminado.getNombreProceso() != "SO"){
                 this.ColaTerminados.encolar(procesoTerminado);// Encolar el proceso en Terminados
             }
@@ -391,9 +394,10 @@ public class Planificador {
         } catch (InterruptedException ex) {
             Logger.getLogger(Planificador.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
-            semaphore.release(); // Liberar el permiso del semáforo (signal)
+            semaphore3.release(); // Liberar el permiso del semáforo (signal)
         }
         System.out.println(ColaTerminados.travel());
+        System.out.println("Tamaño de cola de terminados..." + ColaTerminados.getSize());
     }
 
     public void ejecutarProcesos(Proceso proceso) {

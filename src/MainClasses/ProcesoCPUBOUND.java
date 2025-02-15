@@ -19,10 +19,7 @@ public class ProcesoCPUBOUND extends Proceso {
     private final App app = App.getInstance();
 
 
-//    public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, int ciclosDuracion) {
-//        super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
-//        this.ciclosDuracion = ciclosDuracion;
-//    }
+
     public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, AtomicInteger ciclosDuracion) {
         super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
         this.ciclosDuracion = ciclosDuracion;
@@ -30,7 +27,9 @@ public class ProcesoCPUBOUND extends Proceso {
     
     private void terminar(){
         this.getPCB_proceso().setEstado("Exit");
-        app.getPlanificador().terminarProceso(this);
+        if (this.getNombreProceso() != "SO"){
+            app.getPlanificador().terminarProceso(this);// Encolar el proceso en Terminados
+        }
     }
 
     @Override
@@ -58,6 +57,7 @@ public class ProcesoCPUBOUND extends Proceso {
 
                     if (this.getTiempoRestante() == 0) {
                         this.getPCB_proceso().setEstado("Exit");
+                        terminar();
                         break;
                         //llamar al planificador o importar App
                     }

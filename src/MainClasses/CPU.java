@@ -212,15 +212,15 @@ public class CPU extends Thread {
                 }
             } else {
                 this.setEstado("Inactivo");
-                pr = procesoSO.copiar();
-                this.setActualProceso(pr);
-                try {
-                    pr.start();
-                    System.out.println("Esperando por proceso de SO a terminar...");
-                    this.sleep(pr.getCant_instrucciones() * pr.getCiclosDuracion().get()); //HAY que cambiar este tiempo. 
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
-                }
+//                pr = procesoSO.copiar();
+//                this.setActualProceso(pr);
+//                try {
+//                    pr.start();
+//                    System.out.println("Esperando por proceso de SO a terminar...");
+//                    this.sleep(pr.getCant_instrucciones() * pr.getCiclosDuracion().get()); //HAY que cambiar este tiempo. 
+//                } catch (InterruptedException ex) {
+//                    Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+//                }
             }
         }
     }
