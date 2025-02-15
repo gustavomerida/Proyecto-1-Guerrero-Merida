@@ -466,8 +466,9 @@ public class Simulator extends javax.swing.JFrame {
 
     private void updatecycleDurationLabel() {
         this.relojGlobal++;
-        String relojActualString = String.valueOf(this.relojGlobal);
+        String relojActualString = String.valueOf(this.getRelojGlobal());
         cycleDurationLabel.setText("Ciclos de reloj: " + relojActualString);
+        app.relojGlobal = this.getRelojGlobal();
     }
 
     private void updateSpinner() {
@@ -554,4 +555,11 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel primaryPanelCPU;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * @return the relojGlobal
+     */
+    public int getRelojGlobal() {
+        return relojGlobal;
+    }
 }

@@ -17,14 +17,14 @@ public class ProcesoCPUBOUND extends Proceso {
 
     private AtomicInteger ciclosDuracion;
     private final App app = App.getInstance();
+    private int cicloEntradaListo; //último ciclo global en el que entró a la cola de listos
+    private int tiempoEnCola;
 
-//    public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, int ciclosDuracion) {
-//        super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
-//        this.ciclosDuracion = ciclosDuracion;
-//    }
     public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, AtomicInteger ciclosDuracion) {
         super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
         this.ciclosDuracion = ciclosDuracion;
+        this.cicloEntradaListo = app.getRelojGlobal();
+        this.tiempoEnCola = 1;
     }
 
     private void terminar() {
@@ -32,9 +32,9 @@ public class ProcesoCPUBOUND extends Proceso {
 
         this.getPCB_proceso().setEstado("Exit");
 
-        app.getPlanificador().terminarProceso(this);
-
-        System.out.println(app.getPlanificador().getColaTerminados().travel());
+        if (this.getNombreProceso() != "SO"){
+            app.getPlanificador().terminarProceso(this);// Encolar el proceso en Terminados
+        }
 
     }
 
@@ -63,6 +63,7 @@ public class ProcesoCPUBOUND extends Proceso {
 
                     if (this.getTiempoRestante() == 0) {
                         this.getPCB_proceso().setEstado("Exit");
+                        terminar();
                         break;
                         //llamar al planificador o importar App
                     }
@@ -110,5 +111,19 @@ public class ProcesoCPUBOUND extends Proceso {
     @Override
     public void setCiclosDuracion(AtomicInteger ciclosDuracion) {
         this.ciclosDuracion = ciclosDuracion;
+    }
+
+    /**
+     * @return the cicloEntradaListo
+     */
+    public int getCicloEntradaListo() {
+        return cicloEntradaListo;
+    }
+
+    /**
+     * @param cicloEntradaListo the cicloEntradaListo to set
+     */
+    public void setCicloEntradaListo(int cicloEntradaListo) {
+        this.cicloEntradaListo = cicloEntradaListo;
     }
 }
