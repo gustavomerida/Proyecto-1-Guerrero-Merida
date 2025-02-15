@@ -19,8 +19,9 @@ public class ProcesoIOBOUND extends Proceso {
     private int cicloGenerarExcepcion;
     private int cicloSatisfacerExcepcion;
     private int contadorCiclos;
+    private int cicloEntradaListo; //último ciclo global en el que entró a la cola de listos
 
-    private int tiempoEnColaDeListos;
+    private int tiempoEnCola;
 
     private final App app = App.getInstance();
 
@@ -30,6 +31,8 @@ public class ProcesoIOBOUND extends Proceso {
         this.cicloGenerarExcepcion = cicloGenerarExcepcion;
         this.cicloSatisfacerExcepcion = cicloSatisfacerExcepcion;
         this.contadorCiclos = 0;
+        this.cicloEntradaListo = app.getRelojGlobal();
+        this.tiempoEnCola = 1;
     }
 
     private void generarExcepcion(Planificador planificador) {
@@ -51,6 +54,7 @@ public class ProcesoIOBOUND extends Proceso {
     private void satisfacerExcepcion(Planificador planificador) {
         System.out.println("Proceso " + this.getNombreProceso() + " listo para ejecutarse nuevamente");
         this.getPCB_proceso().setEstado("Ready"); //En realidad se va a ready y hay que tener un semáforo para la cola de listos
+        this.setCicloEntradaListo(app.getRelojGlobal());
 
     }
 
@@ -164,5 +168,19 @@ public class ProcesoIOBOUND extends Proceso {
     @Override
     public void setCicloSatisfacerExcepcion(int cicloSatisfacerExcepcion) {
         this.cicloSatisfacerExcepcion = cicloSatisfacerExcepcion;
+    }
+
+    /**
+     * @return the cicloEntradaListo
+     */
+    public int getCicloEntradaListo() {
+        return cicloEntradaListo;
+    }
+
+    /**
+     * @param cicloEntradaListo the cicloEntradaListo to set
+     */
+    public void setCicloEntradaListo(int cicloEntradaListo) {
+        this.cicloEntradaListo = cicloEntradaListo;
     }
 }

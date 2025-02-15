@@ -18,6 +18,7 @@ public class Proceso extends Thread{
     private int tiempoRestante; // Tiempo restante en ciclos
     private int tiempoEnCola; // Sea cola de listos o bloqueados
     private int tasaRespuesta;
+    private int cicloEntradaListo; //último ciclo global en el que entró a la cola de listos
 
     private AtomicInteger ciclosDuracion;
     
@@ -29,6 +30,7 @@ public class Proceso extends Thread{
         this.tiempoRestante = cant_instrucciones; // Inicialmente son iguales
         this.tiempoEnCola = 1;
         this.tasaRespuesta = 0;
+        
 
     }
 
@@ -150,5 +152,19 @@ public class Proceso extends Thread{
      */
     public void setCicloSatisfacerExcepcion(int cicloSatisfacerExcepcion) {
        
+    }
+
+    /**
+     * @return the cicloEntradaListo
+     */
+    public int getCicloEntradaListo() {
+        return cicloEntradaListo;
+    }
+
+    /**
+     * @param cicloEntradaListo the cicloEntradaListo to set
+     */
+    public void setCicloEntradaListo(int cicloEntradaListo) {
+        this.cicloEntradaListo = cicloEntradaListo;
     }
 }

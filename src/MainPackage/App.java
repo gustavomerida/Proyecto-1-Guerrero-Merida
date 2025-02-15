@@ -25,8 +25,9 @@ public class App {
     private CPU cpu1;
     private CPU cpu2;
     private CPU cpu3;
-    public AtomicInteger duracionCicloInstruccion = new AtomicInteger(3000); //Variable global que indica la duración de un ciclo de instrucción
-
+    public AtomicInteger duracionCicloInstruccion = new AtomicInteger(1000); //Variable global que indica la duración de un ciclo de instrucción
+    public int relojGlobal;
+    
     private static ChartClass chartClass;
 
     // 3. Constructor privado
@@ -75,15 +76,15 @@ public class App {
         PCB pcb3 = new PCB(0, "p6", "Ready", environment3);
 
         //Proceso p1 = new ProcesoCPUBOUND("p1", 18, "CPU BOUND", pcb, duracionCicloInstruccion);
-        Proceso p2 = new ProcesoCPUBOUND("p2", 10, "CPU BOUND", pcb2, duracionCicloInstruccion);
-        //Proceso p3 = new ProcesoCPUBOUND("p3", 7, "CPU BOUND", pcb3, duracionCicloInstruccion);
-        Proceso p4 = new ProcesoIOBOUND("p4", 6, "I/O BOUND", pcb, duracionCicloInstruccion, 3, 3);
+        Proceso p2 = new ProcesoCPUBOUND("p2", 6, "CPU BOUND", pcb2, duracionCicloInstruccion);
+        Proceso p3 = new ProcesoCPUBOUND("p3", 7, "CPU BOUND", pcb3, duracionCicloInstruccion);
+        Proceso p4 = new ProcesoIOBOUND("p4", 10, "I/O BOUND", pcb, duracionCicloInstruccion, 3, 3);
 //        Proceso p5 = new ProcesoIOBOUND("p5", 5, "I/O BOUND", pcb2, duracionCicloInstruccion, 3, 3);
 //        Proceso p6 = new ProcesoIOBOUND("p6", 15, "I/O BOUND", pcb3, duracionCicloInstruccion, 5, 3);
 
         //planificador.getColaListos().encolar(p1);
         planificador.getColaListos().encolar(p2);
-        //planificador.getColaListos().encolar(p3);
+        planificador.getColaListos().encolar(p3);
         planificador.getColaListos().encolar(p4);
 
         ////////////////////////////////////////////////////////////////////////////
@@ -106,8 +107,9 @@ public class App {
 
     public void start2() {
 
-        Simulator simulator = new Simulator("3000", 2, "FCFS");
+        Simulator simulator = new Simulator("1000", 2, "FCFS");
         simulator.setVisible(true);
+        this.relojGlobal = simulator.getRelojGlobal();
 
         chartClass = new ChartClass(0);
 
@@ -116,7 +118,7 @@ public class App {
     }
 
     public void setearProcesoACPU() {
-        this.planificador.escogerProceso();
+        this.planificador.escogerProceso(getRelojGlobal());
         //this.cpu.setActualProceso(actualProceso);
     }
 
@@ -132,8 +134,12 @@ public class App {
         return cpu1;
     }
 
-    public CPU getCpu2() {
+    public CPU getCpu2() { //Falta getcpu3
         return cpu2;
+    }
+    
+    public int getRelojGlobal(){
+        return this.relojGlobal;
     }
 
 }

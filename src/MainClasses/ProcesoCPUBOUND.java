@@ -17,12 +17,15 @@ public class ProcesoCPUBOUND extends Proceso {
 
     private AtomicInteger ciclosDuracion;
     private final App app = App.getInstance();
-
+    private int cicloEntradaListo; //último ciclo global en el que entró a la cola de listos
+    private int tiempoEnCola;
 
 
     public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, AtomicInteger ciclosDuracion) {
         super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
         this.ciclosDuracion = ciclosDuracion;
+        this.cicloEntradaListo = app.getRelojGlobal();
+        this.tiempoEnCola = 1;
     }
     
     private void terminar(){
@@ -106,5 +109,19 @@ public class ProcesoCPUBOUND extends Proceso {
     @Override
     public void setCiclosDuracion(AtomicInteger ciclosDuracion) {
         this.ciclosDuracion = ciclosDuracion;
+    }
+
+    /**
+     * @return the cicloEntradaListo
+     */
+    public int getCicloEntradaListo() {
+        return cicloEntradaListo;
+    }
+
+    /**
+     * @param cicloEntradaListo the cicloEntradaListo to set
+     */
+    public void setCicloEntradaListo(int cicloEntradaListo) {
+        this.cicloEntradaListo = cicloEntradaListo;
     }
 }

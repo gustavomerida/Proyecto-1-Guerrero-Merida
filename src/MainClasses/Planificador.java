@@ -8,6 +8,7 @@ import AuxClass.Cola;
 import AuxClass.Nodo;
 import MainClasses.CPU;
 import MainClasses.Proceso;
+import MainPackage.App;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +19,7 @@ public class Planificador {
     private Cola<Proceso> ColaListos;
     private Cola<Proceso> ColaBloqueados;
     private Cola<Proceso> ColaTerminados;
+    private final App app = App.getInstance();
 
     //private CPU cpuDefault;
     private Proceso procesoEntrante;
@@ -45,7 +47,7 @@ public class Planificador {
 
     
     
-    public Proceso escogerProceso() {
+    public Proceso escogerProceso(int relojGlobal) {
         System.out.println(getColaListos().travel());
         Proceso proceso = null;
         System.out.println("EScogiendo");
@@ -67,7 +69,7 @@ public class Planificador {
                     break;
                 case "HRRN":
                     System.out.println("Ejecutando HRRN");
-                    proceso = hrrn();
+                    proceso = hrrn(relojGlobal);
                 // Agregar otro caso para el algoritmo que falta
             }
 
@@ -84,7 +86,7 @@ public class Planificador {
         ejecutarProcesos(proceso);
     }
 
-    private Proceso hrrn() {
+    private Proceso hrrn(int relojGlobal) {
         System.out.println("Ejecutando política HRRN");
 
         if (getColaListos().isEmpty()) {
@@ -95,7 +97,7 @@ public class Planificador {
         Nodo<Proceso> actual = getColaListos().getHead();
 
         while (actual != null) {
-            calculoRadioRespuesta(actual.gettInfo());
+            calculoRadioRespuesta(actual.gettInfo(), relojGlobal);
             actual = actual.getpNext();
         }
 
@@ -107,8 +109,13 @@ public class Planificador {
         return proceso; 
     }
 
-    private void calculoRadioRespuesta(Proceso proceso) {
-        int tasaRespuesta = (proceso.getTiempoEnCola() + proceso.getTiempoRestante()) / proceso.getTiempoRestante();
+    public void calculoRadioRespuesta(Proceso proceso, int relojGlobal) {
+        int aux = proceso.getTiempoRestante();
+        if (aux==0){
+            aux = 1;
+        }
+        proceso.setTiempoEnCola(proceso.getTiempoEnCola() + (relojGlobal - proceso.getCicloEntradaListo())); //tiempo en cola actualizado al momento de comparar
+        int tasaRespuesta = (proceso.getTiempoEnCola() + aux) / aux;
         proceso.setTasaRespuesta(tasaRespuesta);
     }
 
@@ -253,7 +260,7 @@ public class Planificador {
         } while (intercambiado);
     }
 
-    public void expulsarProceso(Proceso proceso) { //hay que arreglarlo para que devuelva el tipo que es
+    public void expulsarProceso(Proceso proceso) { 
         try {
             semaphore.acquire(); // Adquirir el permiso del semáforo (wait)
             proceso.getPCB_proceso().setEstado("Ready"); // Cambiar el estado a Ready
@@ -382,8 +389,8 @@ public class Planificador {
     
     
     public void terminarProceso(Proceso procesoTerminado){
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println("Tamaño de cola de terminados..." + ColaTerminados.getSize());
+        //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        //System.out.println("Tamaño de cola de terminados..." + ColaTerminados.getSize());
         try {
             semaphore3.acquire(); //wait
             procesoTerminado.getPCB_proceso().setEstado("Exit");
@@ -396,14 +403,14 @@ public class Planificador {
         }finally{
             semaphore3.release(); // Liberar el permiso del semáforo (signal)
         }
-        System.out.println(ColaTerminados.travel());
-        System.out.println("Tamaño de cola de terminados..." + ColaTerminados.getSize());
+        //System.out.println(ColaTerminados.travel());
+        //System.out.println("Tamaño de cola de terminados..." + ColaTerminados.getSize());
     }
 
     public void ejecutarProcesos(Proceso proceso) {
         if (proceso.getTipo() == "CPU BOUND") {
             if (nombreAlgoritmo == "FCFS") {
-                this.escogerProceso();
+                //this.escogerProceso();
             }
             //this.cpuDefault.setActualProceso(proceso);
             proceso.start();
