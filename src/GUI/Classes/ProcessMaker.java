@@ -394,7 +394,6 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         ///////////////////////////////////////////////////////////////////////////////////////
         RegistrosControlEstado executionEnvironment = new RegistrosControlEstado(0, 1, 0);
-
         PCB PCBProcess = new PCB(1, processName, "Ready", executionEnvironment);
 
         ///////////////////////////////////////////////////////////////////////////////////////

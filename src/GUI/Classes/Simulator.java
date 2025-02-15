@@ -54,6 +54,8 @@ public class Simulator extends javax.swing.JFrame {
     public Simulator(String cycleDurationParameter, int processorsQuantity, String currentAlgorithm) {
 
         initComponents();
+        
+        
 
         this.setResizable(false);
         this.setSize(1100, 605);
@@ -167,6 +169,9 @@ public class Simulator extends javax.swing.JFrame {
         jPanel4.revalidate();
         jPanel4.repaint();
     }
+    
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

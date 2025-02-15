@@ -9,17 +9,19 @@ import AuxClass.Nodo;
 import MainClasses.CPU;
 import MainClasses.Proceso;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Planificador {
 
     private String nombreAlgoritmo;
+    private AtomicInteger duracionCiclo;
     private Cola<Proceso> ColaListos;
     private Cola<Proceso> ColaBloqueados;
     private Cola<Proceso> ColaTerminados;
 
-    //private CPU cpuDefault;
+    private CPU cpuDefault;
     private Proceso procesoEntrante;
 
     private final int quantum = 5; //Quantum de tiempo de RR en ciclos
@@ -32,8 +34,9 @@ public class Planificador {
         this.ColaListos = ColaListos;
         this.ColaBloqueados = ColaBloqueados;
         this.ColaTerminados = ColaTerminados;
+        this.cpuDefault = null;
 
-        //this.cpuDefault = cpuDefault;
+        
         this.semaphore = new Semaphore(1); // Inicializar el semáforo con un permiso disponible
         this.semaphore2 = new Semaphore(1); 
         this.semaphore3 = new Semaphore(1);
@@ -42,10 +45,6 @@ public class Planificador {
     public Cola<Proceso> getColaBloqueados() {
         return ColaBloqueados;
     }
-    
-    
-
-    
     
     public Proceso escogerProceso() {
         System.out.println(getColaListos().travel());
@@ -380,9 +379,7 @@ public class Planificador {
         }
         
     }
-    
-    
-    
+ 
     public void terminarProceso(Proceso procesoTerminado){
         try {
             
@@ -491,6 +488,17 @@ public class Planificador {
     public Cola<Proceso> getColaTerminados() {
         return ColaTerminados;
     }
-    
-    
+
+    public void setCpuDefault(CPU cpuDefault) {
+        this.cpuDefault = cpuDefault;
+    }
+
+    public AtomicInteger getDuracionCiclo() {
+        return duracionCiclo;
+    }
+
+    public void setDuracionCiclo(AtomicInteger duracionCiclo) {
+        this.duracionCiclo = duracionCiclo;
+    }
+   
 }
