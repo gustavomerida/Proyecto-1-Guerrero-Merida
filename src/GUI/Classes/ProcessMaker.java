@@ -373,7 +373,7 @@ public class ProcessMaker extends javax.swing.JFrame {
         NECESITO RECUPERAR EL ESTADO ANTERIOR PARA SETEAR LOS PARAMETROS DEL 
         SIMULADOR. CON LA IMPLEMENTACION DEL ARCHIVO GUARDADO ESTO CAMBIARA.
          */
-       
+
         Simulator simulator = saveSimulatorParameters();
         this.setVisible(false);
         simulator.setVisible(true);
@@ -383,7 +383,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         // ATRIBUTOS GENERALES
         int instructionsQuantity = 0;
-        int cycleDurationInstruction;
+        AtomicInteger cycleDurationInstruction;
 
         // ATRIBUTOS IO
         int cycleDurationIO = 0;
@@ -397,14 +397,9 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         PCB PCBProcess = new PCB(1, processName, "Ready", executionEnvironment);
 
-        ///////////////////////////////////////////////////////////////////////////////////////
-        if (checkPositiveInteger(this.instructionsQuantityTextField) && checkPositiveInteger(this.cycleDurationPerInstructionTextField)) {
-
-            instructionsQuantity = Integer.parseInt(this.instructionsQuantityTextField.getText());
-            cycleDurationInstruction = Integer.parseInt(this.cycleDurationPerInstructionTextField.getText());
-            app.duracionCicloInstruccion.set(cycleDurationInstruction);
-
-        }
+        instructionsQuantity = Integer.parseInt(this.instructionsQuantityTextField.getText());
+        cycleDurationInstruction = new AtomicInteger(Integer.parseInt(this.cycleDurationPerInstructionTextField.getText()) * 1000);
+        app.duracionCicloInstruccion.set(cycleDurationInstruction.get());
 
         if ("CPU BOUND".equals(processType)) {
 
@@ -413,16 +408,12 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         } else {
 
-            if (checkPositiveInteger(this.cycleDurationESTextField) && checkPositiveInteger(this.cycleDurationExceptionTextField)) {
+            cycleDurationIO = Integer.parseInt(this.cycleDurationESTextField.getText()) * 1000;
+            cycleDurationExceptIO = Integer.parseInt(this.cycleDurationExceptionTextField.getText()) * 1000;
 
-                cycleDurationIO = Integer.parseInt(this.cycleDurationESTextField.getText());
-                cycleDurationExceptIO = Integer.parseInt(this.cycleDurationExceptionTextField.getText());
+            ProcesoIOBOUND newIOBoundProcess = new ProcesoIOBOUND(processName, instructionsQuantity, processType, PCBProcess, app.duracionCicloInstruccion, cycleDurationIO, cycleDurationExceptIO);
+            return newIOBoundProcess;
 
-                ProcesoIOBOUND newIOBoundProcess = new ProcesoIOBOUND(processName, instructionsQuantity, processType, PCBProcess, app.duracionCicloInstruccion, cycleDurationIO, cycleDurationExceptIO);
-                return newIOBoundProcess;
-            }
-
-            return null;
         }
     }
 
@@ -435,9 +426,9 @@ public class ProcessMaker extends javax.swing.JFrame {
     }//GEN-LAST:event_homeButtonActionPerformed
 
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
-
+        
         Proceso newProcess = createNewProcess();
-
+        
         app.getPlanificador().getColaListos().encolar(newProcess);
 
         cleanTextField();
@@ -465,7 +456,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
     private void cleanTextField() {
 
-        JTextField[] textFieldArray = {processNameTextField, instructionsQuantityTextField, cycleDurationESTextField, cycleDurationExceptionTextField, cycleDurationPerInstructionTextField};
+        JTextField[] textFieldArray = {processNameTextField, instructionsQuantityTextField, cycleDurationESTextField, cycleDurationExceptionTextField};
 
         for (JTextField currentTextField : textFieldArray) {
             currentTextField.setText("");

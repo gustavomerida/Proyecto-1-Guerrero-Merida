@@ -6,9 +6,11 @@ package MainClasses;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import AuxClass.Conjunto;
 import GUI.Classes.Simulator;
 import javax.swing.SwingUtilities;
 import MainPackage.App;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,6 +27,8 @@ public class CPU extends Thread {
 
     private int CPUBoundCounter;
     private int IOBoundCounter;
+    
+    private Conjunto conjuntoProcesos;
 
     public CPU(int id, Proceso actualProceso, String estado, ProcesoCPUBOUND procesoSO) {
         this.id = id;
@@ -33,7 +37,18 @@ public class CPU extends Thread {
         this.procesoSO = procesoSO;
         this.CPUBoundCounter = 0;
         this.IOBoundCounter = 0;
+        this.conjuntoProcesos = new Conjunto();
     }
+
+    public Conjunto getConjuntoProcesos() {
+        return conjuntoProcesos;
+    }
+
+    public void setConjuntoProcesos(Conjunto conjuntoProcesos) {
+        this.conjuntoProcesos = conjuntoProcesos;
+    }
+    
+    
 
     public int getCPUBoundCounter() {
         return CPUBoundCounter;
@@ -113,6 +128,8 @@ public class CPU extends Thread {
                 switch (this.getPlanificador().getNombreAlgoritmo()) {
                     case "FCFS":
                         this.setActualProceso(p);
+                        this.conjuntoProcesos.insertar(p);
+                        System.out.println("SE HA INSERTADO CON EXITO " + p.getNombreProceso() + "EN CPU " + this.id);
 
                          {
                             try {
@@ -129,6 +146,7 @@ public class CPU extends Thread {
                     case "RR":
 
                         this.setActualProceso(p);
+                        this.conjuntoProcesos.insertar(p);
                         if (contadorCiclos < quantum) {
                             try {
                                 p.start();
@@ -158,6 +176,7 @@ public class CPU extends Thread {
 
                     case "SPN":
                         this.setActualProceso(p);
+                        this.conjuntoProcesos.insertar(p);
 
                          {
                             try {
@@ -175,6 +194,7 @@ public class CPU extends Thread {
                         //srt(this.cpuDefault);
                         System.out.println("Aqui taaa");
                         this.setActualProceso(p);
+                        this.conjuntoProcesos.insertar(p);
                         try {
                             // Verificar si el proceso actual puede continuar
                             //if (p.getPCB_proceso().getEstado() != "Exit" && p.getPCB_proceso().getEstado() != "Blocked") {
@@ -197,6 +217,7 @@ public class CPU extends Thread {
                         break;
                     case "HRRN": //Creo que falta completar
                         this.setActualProceso(p);
+                        this.conjuntoProcesos.insertar(p);
                         
                         {
                             try {

@@ -42,6 +42,22 @@ public class ProcesoIOBOUND extends Proceso {
         //app.getPlanificador().bloquearProceso(this);
         
     }
+
+    public int getContadorCiclos() {
+        return contadorCiclos;
+    }
+
+    public void setContadorCiclos(int contadorCiclos) {
+        this.contadorCiclos = contadorCiclos;
+    }
+
+    public int getTiempoEnCola() {
+        return tiempoEnCola;
+    }
+
+    public void setTiempoEnCola(int tiempoEnCola) {
+        this.tiempoEnCola = tiempoEnCola;
+    }
     
     private void terminar(){
         this.getPCB_proceso().setEstado("Exit");

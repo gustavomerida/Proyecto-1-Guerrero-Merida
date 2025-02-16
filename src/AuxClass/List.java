@@ -20,6 +20,17 @@ public class List <T>{
         this.iN=0;
     }
     
+    public Nodo<T> obtenerNodo(Object elem) {
+        Nodo<T> actual = this.pFirst;
+        while (actual != null) {
+            if (actual.gettInfo().equals(elem)) {
+                return actual;
+            }
+            actual = actual.getpNext();
+        }
+        return null;
+    }
+    
     public int size (){
         return this.iN;
     }

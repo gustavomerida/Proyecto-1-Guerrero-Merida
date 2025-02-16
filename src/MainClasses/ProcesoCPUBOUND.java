@@ -20,6 +20,16 @@ public class ProcesoCPUBOUND extends Proceso {
     private int cicloEntradaListo; //último ciclo global en el que entró a la cola de listos
     private int tiempoEnCola;
 
+    @Override
+    public int getTiempoEnCola() {
+        return tiempoEnCola;
+    }
+
+    @Override
+    public void setTiempoEnCola(int tiempoEnCola) {
+        this.tiempoEnCola = tiempoEnCola;
+    }
+
     public ProcesoCPUBOUND(String nombre_proceso, int cant_instrucciones, String tipo, PCB PCB_proceso, AtomicInteger ciclosDuracion) {
         super(nombre_proceso, cant_instrucciones, "CPU BOUND", PCB_proceso);
         this.ciclosDuracion = ciclosDuracion;

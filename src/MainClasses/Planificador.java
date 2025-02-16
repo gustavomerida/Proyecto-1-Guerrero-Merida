@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 public class Planificador {
 
     private String nombreAlgoritmo;
+    private CPU cpuDefault;
     private Cola<Proceso> ColaListos;
     private Cola<Proceso> ColaBloqueados;
     private Cola<Proceso> ColaTerminados;
@@ -34,6 +35,7 @@ public class Planificador {
         this.ColaListos = ColaListos;
         this.ColaBloqueados = ColaBloqueados;
         this.ColaTerminados = ColaTerminados;
+        this.cpuDefault = cpuDefault;
 
         //this.cpuDefault = cpuDefault;
         this.semaphore = new Semaphore(1); // Inicializar el semáforo con un permiso disponible

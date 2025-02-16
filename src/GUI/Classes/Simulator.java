@@ -99,7 +99,6 @@ public class Simulator extends javax.swing.JFrame {
                         createJScrollPaneOnReady(app.getPlanificador().getColaListos());
                         createJScrollPaneOnBlocked(app.getPlanificador().getColaBloqueados());
 
-
                         //app.getPlanificador().setNombreAlgoritmo(currentAlgorithmComboBOX.getModel().getSelectedItem().toString());
                     });
                     Thread.sleep(Integer.parseInt(this.cycleDurationParameter)); // Actualiza cada x que definio el usuario
@@ -115,50 +114,53 @@ public class Simulator extends javax.swing.JFrame {
     }
 
     private void ejecutarProcesos() {
+        try {
+            CPU currentCPU0 = app.getCpu1();
+            CPU currentCPU1 = app.getCpu2();
 
-        CPU currentCPU0 = app.getCpu1();
+            for (int i = 0; i < modelosCPU.length; i++) {
+                if (currentCPU1 == null || currentCPU1.getActualProceso() == null) {
+                    modelosCPU[i].clear();
 
-        CPU currentCPU1 = app.getCpu2();
+                    // Posible Ejecucion del SO
+                    modelosCPU[i].addElement("CPU " + (i + 1) + " Vacío");
+                    continue;
+                }
 
-        for (int i = 0; i < modelosCPU.length; i++) {
-            if (currentCPU1.getActualProceso() == null) {
-                modelosCPU[i].clear();
+                if (i == 0) {
+                    Proceso procesoActual = currentCPU0.getActualProceso();
+                    procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
 
-                // Posible Ejecucion del SO
-                modelosCPU[i].addElement("CPU " + (i + 1) + " Vacío");
-                continue;
+                    int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
+                    procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
+                    procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
+
+                    modelosCPU[i].clear();
+                    modelosCPU[i].addElement("Proceso: " + procesoActual.getNombreProceso());
+                    modelosCPU[i].addElement("Instrucciones Restantes: " + procesoActual.getTiempoRestante());
+                    modelosCPU[i].addElement("PC: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getPc());
+                    modelosCPU[i].addElement("MAR: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getMAR());
+
+                } else {
+                    Proceso procesoActual = currentCPU1.getActualProceso();
+                    procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
+                    int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
+                    procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
+                    procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
+
+                    modelosCPU[i].clear();
+                    modelosCPU[i].addElement("Proceso: " + procesoActual.getNombreProceso());
+                    modelosCPU[i].addElement("Instrucciones Restantes: " + procesoActual.getTiempoRestante());
+                    modelosCPU[i].addElement("PC: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getPc());
+                    modelosCPU[i].addElement("MAR: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getMAR());
+                }
             }
-
-            if (i == 0) {
-                Proceso procesoActual = currentCPU0.getActualProceso();
-                procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
-
-                int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
-                procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
-                procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
-
-                modelosCPU[i].clear();
-                modelosCPU[i].addElement("Proceso: " + procesoActual.getNombreProceso());
-                modelosCPU[i].addElement("Instrucciones Restantes: " + procesoActual.getTiempoRestante());
-                modelosCPU[i].addElement("PC: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getPc());
-                modelosCPU[i].addElement("MAR: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getMAR());
-
-            } else {
-                Proceso procesoActual = currentCPU1.getActualProceso();
-                procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
-                int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
-                procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
-                procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
-
-                modelosCPU[i].clear();
-                modelosCPU[i].addElement("Proceso: " + procesoActual.getNombreProceso());
-                modelosCPU[i].addElement("Instrucciones Restantes: " + procesoActual.getTiempoRestante());
-                modelosCPU[i].addElement("PC: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getPc());
-                modelosCPU[i].addElement("MAR: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getMAR());
-            }
-
-            // Obtener el proceso en la cabeza de la cola
-            // Proceso procesoActual = currentCPU1.getActualProceso();
+        } catch (NullPointerException e) {
+            System.err.println("Error: currentCPU1 es nulo.");
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Aquí puedes manejar el error de una forma más específica si lo necesitas.
         }
     }
 
@@ -178,6 +180,7 @@ public class Simulator extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        startSimulation = new javax.swing.JButton();
         cycleDurationSpinner = new javax.swing.JSpinner();
         currentAlgorithmComboBOX = new javax.swing.JComboBox<>();
         primaryPanelCPU = new javax.swing.JPanel();
@@ -201,11 +204,20 @@ public class Simulator extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         homeButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        startSimulation.setText("Start");
+        startSimulation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startSimulationActionPerformed(evt);
+            }
+        });
+        jPanel1.add(startSimulation, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 160, 80, 30));
 
         cycleDurationSpinner.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
         cycleDurationSpinner.setToolTipText("");
@@ -350,6 +362,9 @@ public class Simulator extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 230, 570));
 
+        jButton1.setText("jButton1");
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 160, -1, -1));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
@@ -383,14 +398,14 @@ public class Simulator extends javax.swing.JFrame {
 
         jPanel4.revalidate();
         jPanel4.repaint();
-        
+
         jPanel3.removeAll();
         jPanel3.setLayout(new BorderLayout());
         jPanel3.add(new JScrollPane(jPanel4), BorderLayout.CENTER);
         jPanel3.revalidate();
         jPanel3.repaint();
     }
-    
+
     private void createJScrollPaneOnBlocked(Cola<Proceso> colaBloqueados) {
         jPanel7.removeAll();
         jPanel7.setLayout(new BoxLayout(jPanel7, BoxLayout.X_AXIS));
@@ -419,7 +434,7 @@ public class Simulator extends javax.swing.JFrame {
 
         jPanel7.revalidate();
         jPanel7.repaint();
-        
+
         jPanel5.removeAll();
         jPanel5.setLayout(new BorderLayout());
         jPanel5.add(new JScrollPane(jPanel7), BorderLayout.CENTER);
@@ -497,9 +512,9 @@ public class Simulator extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-       this.setVisible(false);
-       Estadisticas estadistica = new Estadisticas();
-       estadistica.setVisible(true);
+        this.setVisible(false);
+        Estadisticas estadistica = new Estadisticas();
+        estadistica.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -528,6 +543,10 @@ public class Simulator extends javax.swing.JFrame {
         this.cycleDurationParameter = String.valueOf(((int) (this.cycleDurationSpinner.getValue()) * 1000));
     }//GEN-LAST:event_cycleDurationSpinnerStateChanged
 
+    private void startSimulationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSimulationActionPerformed
+        app.startSimulator(this.processorsQuantity);
+    }//GEN-LAST:event_startSimulationActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CreateProcess;
@@ -537,6 +556,7 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JLabel cycleDurationLabel;
     private javax.swing.JSpinner cycleDurationSpinner;
     private javax.swing.JButton homeButton;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -554,6 +574,7 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel primaryPanelCPU;
+    private javax.swing.JButton startSimulation;
     // End of variables declaration//GEN-END:variables
 
     /**
