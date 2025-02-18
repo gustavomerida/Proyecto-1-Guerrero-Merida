@@ -337,7 +337,7 @@ public class Planificador {
         //Sacar al proceso de la cola de bloqueados
         try {
             semaphore2.acquire(); // Adquirir el permiso del semáforo (wait)
-            proceso.getPCB_proceso().setEstado("Blocked"); // Cambiar el estado a Ready
+            //proceso.getPCB_proceso().setEstado("Blocked"); // Cambiar el estado a Ready
             System.out.println("sacando al proceso de la cola de bloqueados");
             this.getColaBloqueados().desencolarEspecifico(proceso); // Desencolar el proceso
 
@@ -369,9 +369,9 @@ public class Planificador {
                 System.out.println(proceso2.getTiempoRestante());
                 proceso2.setTiempoRestante(tiempoRestante);
                 proceso2.getPCB_proceso().setEstado("Ready");
-//                if (proceso.getNombreProceso() != "SO"){
-//                    this.getColaListos().encolar(proceso2); // Encolar el proceso en Listos
-//                }
+                if (proceso.getNombreProceso() != "SO"){
+                    this.getColaListos().encolar(proceso2); // Encolar el proceso en Listos
+                }
             }
             
             int tiempoRestante2 = proceso.getTiempoRestante();
@@ -390,6 +390,22 @@ public class Planificador {
         
     }
     
+    public Proceso getShorterProcess(){
+        Proceso p = null;
+//        try {
+//            semaphore.acquire();
+        ordenarColaPorTiempoRestante(ColaListos);
+        if (ColaListos.getHead()!=null){
+            p = ColaListos.getHead().gettInfo();
+        }
+        
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(Planificador.class.getName()).log(Level.SEVERE, null, ex);
+//        }finally {
+//            semaphore.release();
+//        }
+        return p;
+    }
     
     
     public void terminarProceso(Proceso procesoTerminado){

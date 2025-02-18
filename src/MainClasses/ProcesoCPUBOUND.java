@@ -19,6 +19,7 @@ public class ProcesoCPUBOUND extends Proceso {
     private final App app = App.getInstance();
     private int cicloEntradaListo; //último ciclo global en el que entró a la cola de listos
     private int tiempoEnCola;
+    private int sleepTime; //tiempo del sleep
 
     @Override
     public int getTiempoEnCola() {
@@ -35,6 +36,7 @@ public class ProcesoCPUBOUND extends Proceso {
         this.ciclosDuracion = ciclosDuracion;
         this.cicloEntradaListo = app.getRelojGlobal();
         this.tiempoEnCola = 1;
+        this.sleepTime = cant_instrucciones; 
     }
 
     private void terminar() {
@@ -51,10 +53,14 @@ public class ProcesoCPUBOUND extends Proceso {
     @Override
     public void run() {
         while (true) {
+            if (this.getTiempoRestante() == 0) {
+                this.getPCB_proceso().setEstado("Exit");
+                terminar();
+            }
+            
             if ("Running".equals(this.getPCB_proceso().getEstado())) {
-                try {
-                    // Simular duración del ciclo
-                    this.sleep(this.ciclosDuracion.get());
+                
+                
 
 //                    System.out.println("TIEMPO EN COLA " + String.valueOf(this.getTiempoEnCola()));
 //
@@ -77,6 +83,9 @@ public class ProcesoCPUBOUND extends Proceso {
                         break;
                         //llamar al planificador o importar App
                     }
+                try {
+                    // Simular duración del ciclo
+                    this.sleep(this.ciclosDuracion.get());
 
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ProcesoCPUBOUND.class.getName()).log(Level.SEVERE, null, ex);
@@ -135,5 +144,19 @@ public class ProcesoCPUBOUND extends Proceso {
      */
     public void setCicloEntradaListo(int cicloEntradaListo) {
         this.cicloEntradaListo = cicloEntradaListo;
+    }
+
+    /**
+     * @return the sleepTime
+     */
+    public int getSleepTime() {
+        return sleepTime;
+    }
+
+    /**
+     * @param sleepTime the sleepTime to set
+     */
+    public void setSleepTime(int sleepTime) {
+        this.sleepTime = sleepTime;
     }
 }

@@ -25,7 +25,7 @@ public class App {
     private CPU cpu1;
     private CPU cpu2;
     private CPU cpu3;
-    public AtomicInteger duracionCicloInstruccion = new AtomicInteger(1000); //Variable global que indica la duración de un ciclo de instrucción
+    public AtomicInteger duracionCicloInstruccion = new AtomicInteger(); //Variable global que indica la duración de un ciclo de instrucción
 
     public int relojGlobal;
 
@@ -85,9 +85,12 @@ public class App {
         CARGA DE LOS PROCESOS EN 0, ESCRITURA DE LOS PROCESOS EN 1
          */
         GuardadoGson guardarEnvironment = new GuardadoGson(1);
+        
+        Home home = new Home();
+        home.setVisible(true);
 
-        Simulator simulator = new Simulator("1000", 3, "FCFS");
-        simulator.setVisible(true);
+//        Simulator simulator = new Simulator("1000", 2, "");
+//        simulator.setVisible(true);
 
         /*
         CREACION DE LAS GRAFICAS EN TIEMPO REAL

@@ -130,7 +130,7 @@ public class Simulator extends javax.swing.JFrame {
 
                 if (i == 0) {
                     Proceso procesoActual = currentCPU0.getActualProceso();
-                    procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
+                    //procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
 
                     int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
                     procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
@@ -144,7 +144,7 @@ public class Simulator extends javax.swing.JFrame {
 
                 } else if (i == 1) {
                     Proceso procesoActual = currentCPU1.getActualProceso();
-                    procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
+                    //procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
                     int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
                     procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
                     procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
@@ -156,7 +156,7 @@ public class Simulator extends javax.swing.JFrame {
                     modelosCPU[i].addElement("MAR: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getMAR());
                 } else {
                     Proceso procesoActual = currentCPU2.getActualProceso();
-                    procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
+                    //procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
                     int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
                     procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
                     procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
@@ -544,7 +544,11 @@ public class Simulator extends javax.swing.JFrame {
     private void currentAlgorithmComboBOXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_currentAlgorithmComboBOXActionPerformed
 
         // Cambiar el nombre del algoritmo:
-        app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
+        try {
+            app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
+        } catch (Exception e) {
+        }
+        
 
     }//GEN-LAST:event_currentAlgorithmComboBOXActionPerformed
 
@@ -554,6 +558,7 @@ public class Simulator extends javax.swing.JFrame {
 
     private void cycleDurationSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cycleDurationSpinnerStateChanged
         this.cycleDurationParameter = String.valueOf(((int) (this.cycleDurationSpinner.getValue()) * 1000));
+        app.duracionCicloInstruccion.set(Integer.parseInt(cycleDurationParameter));
     }//GEN-LAST:event_cycleDurationSpinnerStateChanged
 
     private void startSimulationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSimulationActionPerformed

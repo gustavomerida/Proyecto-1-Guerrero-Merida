@@ -19,6 +19,7 @@ public class Proceso extends Thread{
     private int tiempoEnCola; // Sea cola de listos o bloqueados
     private int tasaRespuesta;
     private int cicloEntradaListo; //último ciclo global en el que entró a la cola de listos
+    private int sleepTime;
 
     private AtomicInteger ciclosDuracion;
     
@@ -166,5 +167,19 @@ public class Proceso extends Thread{
      */
     public void setCicloEntradaListo(int cicloEntradaListo) {
         this.cicloEntradaListo = cicloEntradaListo;
+    }
+
+    /**
+     * @return the sleepTime
+     */
+    public int getSleepTime() {
+        return sleepTime;
+    }
+
+    /**
+     * @param sleepTime the sleepTime to set
+     */
+    public void setSleepTime(int sleepTime) {
+        this.sleepTime = sleepTime;
     }
 }

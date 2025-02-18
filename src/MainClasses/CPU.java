@@ -80,23 +80,8 @@ public class CPU extends Thread {
                 if (p.getPCB_proceso().getEstado() == "Blocked") {
                     int[] ciclos;
                     ciclos = new int[]{p.getCicloGenerarExcepcion(), p.getCicloSatisfacerExcepcion()};
-//                    System.out.println("MIRAAAAAAAAAAAAAAAAA" + ciclos[0]);
                     Excepcion e = new Excepcion(p, this, this.getPlanificador(), ciclos);
-                    //e.proceso = p;
                     e.start();
-//                    if (p.getPCB_proceso().getEstado().equals("Blocked")) {
-//                        // Ejecutar el SO durante los ciclos necesarios
-//                        for (int i = 0; i < this.procesoSO.getCant_instrucciones(); i++) {
-//                            try {
-//                                // Lógica para ejecutar el proceso del SO
-//                                this.sleep(this.procesoSO.getCiclosDuracion().get());
-//                            } catch (InterruptedException ex) {
-//                                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
-//                            }
-//                        }
-//                        // Mover el proceso de la cola de bloqueados a la cola de listos
-//                        this.planificador.desbloquearProceso(p);
-//                    }
                 }
             }
 
@@ -135,8 +120,9 @@ public class CPU extends Thread {
                             try {
                                 if (!("Exit".equals(p.getPCB_proceso().getEstado())) && !("Blocked".equals(p.getPCB_proceso().getEstado()))) {
                                     p.start();
+                                    this.sleep(p.getSleepTime() * p.getCiclosDuracion().get());
                                 }
-                                this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion().get());
+                                
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -147,31 +133,27 @@ public class CPU extends Thread {
 
                         this.setActualProceso(p);
                         this.conjuntoProcesos.insertar(p);
-                        if (contadorCiclos < quantum) {
-                            try {
-                                p.start();
-                                this.sleep(p.getCiclosDuracion().get() * (quantum + 1)); // Duerme el tiempo de un ciclo
-                                contadorCiclos = quantum + 1; // Incrementa el contador de ciclos
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+                        contadorCiclos = 0; // Resetea el contador al iniciar el proceso
+                        
+                        try {
+                            p.start();
+                            while (contadorCiclos < quantum  && !("Exit".equals(p.getPCB_proceso().getEstado())) && !("Blocked".equals(p.getPCB_proceso().getEstado()))) {
+                                this.sleep(p.getCiclosDuracion().get()); // Duerme el tiempo de un ciclo
+                                contadorCiclos++; // Incrementa el contador de ciclos
                             }
-
-                            // Verifica si el proceso terminó
-                            if (p.getTiempoRestante() == 0) {
-                                // Si el proceso terminó, resetea el contador y sale del bucle
-                                p.getPCB_proceso().setEstado("Exit");
-                                contadorCiclos = 0;
-                                break;
-                            }
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        // Si se alcanzó el quantum, cambia el estado del proceso actual a "Ready"
-                        if (contadorCiclos == quantum + 1) {
-                            //p.getPCB_proceso().setEstado("Ready"); //ya esto lo hace la función de abajo
-                            // Aquí va la lógica para reinsertar el proceso en la cola de listos
+                        
+
+                        // Verifica si el proceso terminó
+                        if (p.getTiempoRestante() == 0) {
+                            p.getPCB_proceso().setEstado("Exit");
+                        } else {
+                            System.out.println("El proceso " + p.getNombreProceso() + "está por ser expulsado");
+                            // Si no terminó, reinsertar en la cola de listos
                             this.planificador.expulsarProceso(p);
                         }
-
-                        contadorCiclos = 0; // Resetea el contador para el próximo proceso
                         break;
 
                     case "SPN":
@@ -183,7 +165,7 @@ public class CPU extends Thread {
                                 if (!(p.getPCB_proceso().getEstado().equals("Exit")) && !((p.getPCB_proceso().getEstado().equals("Blocked")))) {
                                     p.start();
                                 }
-                                this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion().get());
+                                this.sleep(p.getSleepTime() * p.getCiclosDuracion().get());
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -195,24 +177,30 @@ public class CPU extends Thread {
                         System.out.println("Aqui taaa");
                         this.setActualProceso(p);
                         this.conjuntoProcesos.insertar(p);
+                        Proceso nuevoP = this.getPlanificador().getShorterProcess();
+                        int shortestRT = (nuevoP == null) ? (p.getTiempoRestante()+10) : nuevoP.getTiempoRestante(); //el valor del tiempo restante más corto depende de si hay procesos en la cola de listos
                         try {
-                            // Verificar si el proceso actual puede continuar
-                            //if (p.getPCB_proceso().getEstado() != "Exit" && p.getPCB_proceso().getEstado() != "Blocked") {
                             p.start();
-                            //}
-
-                            // Duerme por el tiempo del proceso actual
-                            this.sleep(p.getCiclosDuracion().get() * p.getCant_instrucciones());
-
-                            // Después de dormir, verifica si hay un proceso listo con menor tiempo restante
-                            Proceso nuevoProceso = this.getPlanificador().escogerProceso(app.getRelojGlobal());
-                            if (nuevoProceso != null && nuevoProceso.getTiempoRestante() < p.getTiempoRestante()) {
-                                // Si hay un nuevo proceso con menos tiempo restante, interrumpimos el actual
-                                this.planificador.expulsarProceso(p); // Mueve el proceso actual a la cola de listos
-                                //p = nuevoProceso; // Cambia al nuevo proceso
+                            
+                            while (shortestRT > p.getTiempoRestante()  && !("Exit".equals(p.getPCB_proceso().getEstado())) && !("Blocked".equals(p.getPCB_proceso().getEstado()))) {
+                                this.sleep(p.getCiclosDuracion().get()); // Duerme el tiempo de un ciclo
+                                nuevoP = this.getPlanificador().getShorterProcess();
+                                shortestRT = (nuevoP == null) ? (p.getTiempoRestante()+10) : nuevoP.getTiempoRestante();
                             }
                         } catch (InterruptedException ex) {
                             Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+
+                        // Verifica si el proceso terminó
+                        if (p.getTiempoRestante() == 0) {
+                            p.getPCB_proceso().setEstado("Exit");
+                        } else {
+                            System.out.println("El proceso " + p.getNombreProceso() + "está por ser expulsado");
+                            if (!("Blocked".equals(p.getPCB_proceso().getEstado()))){
+                                // Si no terminó, reinsertar en la cola de listos
+                                this.planificador.expulsarProceso(p);
+                            }
                         }
                         break;
                     case "HRRN": //Creo que falta completar
@@ -289,16 +277,16 @@ public class CPU extends Thread {
                 }
             } else {
                 this.setEstado("Inactivo");
-//                pr = procesoSO.copiar();
+                pr = procesoSO.copiar();
 
-//                this.setActualProceso(pr);
-//                try {
-//                    pr.start();
-//                    System.out.println("Esperando por proceso de SO a terminar...");
-//                    this.sleep(pr.getCant_instrucciones() * pr.getCiclosDuracion().get()); //HAY que cambiar este tiempo. 
-//                } catch (InterruptedException ex) {
-//                    Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
-//                }
+                this.setActualProceso(pr);
+                try {
+                    pr.start();
+                    System.out.println("Esperando por proceso de SO a terminar...");
+                    this.sleep(pr.getCant_instrucciones() * pr.getCiclosDuracion().get()); //HAY que cambiar este tiempo. 
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
