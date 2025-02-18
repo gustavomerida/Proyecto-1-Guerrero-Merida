@@ -117,6 +117,7 @@ public class Simulator extends javax.swing.JFrame {
         try {
             CPU currentCPU0 = app.getCpu1();
             CPU currentCPU1 = app.getCpu2();
+            CPU currentCPU2 = app.getCpu3();
 
             for (int i = 0; i < modelosCPU.length; i++) {
                 if (currentCPU1 == null || currentCPU1.getActualProceso() == null) {
@@ -141,8 +142,20 @@ public class Simulator extends javax.swing.JFrame {
                     modelosCPU[i].addElement("PC: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getPc());
                     modelosCPU[i].addElement("MAR: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getMAR());
 
-                } else {
+                } else if (i == 1) {
                     Proceso procesoActual = currentCPU1.getActualProceso();
+                    procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
+                    int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
+                    procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
+                    procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
+
+                    modelosCPU[i].clear();
+                    modelosCPU[i].addElement("Proceso: " + procesoActual.getNombreProceso());
+                    modelosCPU[i].addElement("Instrucciones Restantes: " + procesoActual.getTiempoRestante());
+                    modelosCPU[i].addElement("PC: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getPc());
+                    modelosCPU[i].addElement("MAR: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getMAR());
+                } else {
+                    Proceso procesoActual = currentCPU2.getActualProceso();
                     procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
                     int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
                     procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);

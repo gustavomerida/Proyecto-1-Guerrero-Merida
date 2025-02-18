@@ -102,6 +102,7 @@ public class Estadisticas extends javax.swing.JFrame {
     private void initComponents() {
 
         stadisticsButtons = new javax.swing.ButtonGroup();
+        jLabel4 = new javax.swing.JLabel();
         jPanelChartSystem = new javax.swing.JPanel();
         jPanelChartCPU1 = new javax.swing.JPanel();
         jPanelChartCPU3 = new javax.swing.JPanel();
@@ -121,6 +122,11 @@ public class Estadisticas extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel4.setBackground(new java.awt.Color(255, 255, 51));
+        jLabel4.setForeground(new java.awt.Color(255, 215, 0));
+        jLabel4.setText("SISTEMA");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 70, 60, -1));
         getContentPane().add(jPanelChartSystem, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, 370, 190));
         getContentPane().add(jPanelChartCPU1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 90, 370, 190));
         getContentPane().add(jPanelChartCPU3, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 310, 370, 190));
@@ -257,6 +263,7 @@ public class Estadisticas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelChartCPU1;
     private javax.swing.JPanel jPanelChartCPU2;

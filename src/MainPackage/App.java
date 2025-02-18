@@ -12,9 +12,7 @@ import MainClasses.Proceso;
 import MainClasses.ProcesoCPUBOUND;
 import MainClasses.ProcesoIOBOUND;
 import MainClasses.RegistrosControlEstado;
-import FileFunctions.ExtractData;
 import FileFunctions.GuardadoGson;
-import FileFunctions.ReadData;
 import AuxClass.Conjunto;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -81,28 +79,19 @@ public class App {
 //        planificador.getColaListos().encolar(p4);
     }
 
-    public static ChartClass getChartClassSystem() {
-        return chartClassSystem;
-    }
-
-    public static ChartClass getChartClassCPU1() {
-        return chartClassCPU1;
-    }
-
-    public static ChartClass getChartClassCPU2() {
-        return chartClassCPU2;
-    }
-
-    public static ChartClass getChartClassCPU3() {
-        return chartClassCPU3;
-    }
-
     public void start2() {
 
+        /*
+        CARGA DE LOS PROCESOS EN 0, ESCRITURA DE LOS PROCESOS EN 1
+         */
         GuardadoGson guardarEnvironment = new GuardadoGson(1);
 
-        Simulator simulator = new Simulator("1000", 2, "FCFS");
+        Simulator simulator = new Simulator("1000", 3, "FCFS");
         simulator.setVisible(true);
+
+        /*
+        CREACION DE LAS GRAFICAS EN TIEMPO REAL
+         */
         chartClassSystem = new ChartClass(0);
         chartClassCPU1 = new ChartClass(1);
         chartClassCPU2 = new ChartClass(2);
@@ -110,7 +99,7 @@ public class App {
 
 //        Estadisticas estadistica = new Estadisticas();
 //        estadistica.setVisible(true);
-        // this.relojGlobal = simulator.getRelojGlobal();
+        //this.relojGlobal = simulator.getRelojGlobal();
     }
 
     public void startSimulator(int cpuQuantity) {
@@ -167,4 +156,19 @@ public class App {
         return this.relojGlobal;
     }
 
+    public static ChartClass getChartClassSystem() {
+        return chartClassSystem;
+    }
+
+    public static ChartClass getChartClassCPU1() {
+        return chartClassCPU1;
+    }
+
+    public static ChartClass getChartClassCPU2() {
+        return chartClassCPU2;
+    }
+
+    public static ChartClass getChartClassCPU3() {
+        return chartClassCPU3;
+    }
 }

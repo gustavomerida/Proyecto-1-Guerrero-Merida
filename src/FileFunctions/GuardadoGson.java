@@ -34,11 +34,9 @@ public class GuardadoGson {
         if (guardarOcargar == 0) {
             //GUARDAMOS
             GuardadoGson();
-        }
-        else {
+        } else {
             CargarDatosGson();
         }
-
     }
 
     public void GuardadoGson() {
@@ -79,7 +77,7 @@ public class GuardadoGson {
         }
         // creacion de json padre
         JsonObject root = new JsonObject();
-        
+
         // union de ambos json
         root.add("parametrosGenerales", parametrosGenerales);
         root.add("colaListos", colaListosArray);
@@ -127,15 +125,15 @@ public class GuardadoGson {
 
                 // Creamos el PCB
                 RegistrosControlEstado environment = new RegistrosControlEstado(0, PC, MAR);
-                PCB pcb = new PCB(idPcb, nombre, estado, environment); 
+                PCB pcb = new PCB(idPcb, nombre, estado, environment);
 
                 Proceso proceso = null;
 
                 if (tipo.equalsIgnoreCase("CPU BOUND")) {
-                    
+
                     proceso = new ProcesoCPUBOUND(nombre, cantidadInstrucciones, tipo, pcb, ciclosDuracion);
                 } else if (tipo.equalsIgnoreCase("I/O BOUND")) {
-                    
+
                     int cicloGenerarExcepcion = procesoJson.get("cicloGenerarExcepcion").getAsInt();
                     int cicloSatisfacerExcepcion = procesoJson.get("cicloSatisfacerExcepcion").getAsInt();
                     proceso = new ProcesoIOBOUND(nombre, cantidadInstrucciones, tipo, pcb, ciclosDuracion,

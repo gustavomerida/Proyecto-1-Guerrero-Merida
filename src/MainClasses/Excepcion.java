@@ -11,31 +11,31 @@ import java.util.logging.Logger;
  *
  * @author Gustavo
  */
-public class Excepcion extends Thread{
+public class Excepcion extends Thread {
+
     public Proceso proceso;
     int[] ciclos;
     public CPU cpu;
     public Planificador planificador;
-    
-    public Excepcion (Proceso proceso, CPU cpu, Planificador planificador, int[] ciclos){
+
+    public Excepcion(Proceso proceso, CPU cpu, Planificador planificador, int[] ciclos) {
         this.proceso = proceso;
         this.cpu = cpu;
         this.planificador = planificador;
         this.ciclos = ciclos;
     }
-    
+
     @Override
-    public void run(){
+    public void run() {
         planificador.bloquearProceso(proceso, ciclos[0], ciclos[1]);
         try {
             proceso.sleep(proceso.getCiclosDuracion().get() * ciclos[1]);
         } catch (InterruptedException ex) {
             Logger.getLogger(ProcesoIOBOUND.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         //ProcesoIOBOUND procesocopia = new ProcesoIOBOUND(proceso.getNombreProceso(), proceso.getCant_instrucciones(), "I/O BOUND", proceso.getPCB_proceso(), proceso.getCiclosDuracion(), ciclos[0], ciclos[1]);
-        
         planificador.desbloquearProceso(proceso, cpu.getActualProceso(), ciclos[0], ciclos[1]);
-              
+
     }
 }
