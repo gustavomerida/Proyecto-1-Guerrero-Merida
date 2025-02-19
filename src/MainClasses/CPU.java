@@ -207,73 +207,32 @@ public class CPU extends Thread {
                         this.setActualProceso(p);
                         this.conjuntoProcesos.insertar(p);
                         
-                        {
-                            try {
-                                p.start();
-                                for (int i = 0; i < p.getCant_instrucciones(); i++) {
-                                    
-                                    // Verifica si el proceso terminó
-                                    if (p.getTiempoRestante() == 0) {
-                                        // Si el proceso terminó sale del bucle
-                                        p.getPCB_proceso().setEstado("Exit");
-                                        //contadorCiclos = 0;
-                                        break;
-                                    }
+                        Proceso nuevoPHRRN = this.getPlanificador().getHighestRatioProcess();
+                        int highestRatio = (nuevoPHRRN == null) ? (p.getTasaRespuesta()-10) : nuevoPHRRN.getTasaRespuesta(); //el valor del radio respuesta más corto depende de si hay procesos en la cola de listos
+                        try {
+                            p.start();
+                            
+                            while (highestRatio < p.getTasaRespuesta()  && !("Exit".equals(p.getPCB_proceso().getEstado())) && !("Blocked".equals(p.getPCB_proceso().getEstado()))) {
+                                this.sleep(p.getCiclosDuracion().get()); // Duerme el tiempo de un ciclo
+                                nuevoPHRRN = this.getPlanificador().getHighestRatioProcess();
+                                highestRatio = (nuevoPHRRN == null) ? (p.getTasaRespuesta()-10) : nuevoPHRRN.getTasaRespuesta();
+                            }
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
 
-                                    // Después de dormir, verifica si hay un proceso listo con menor tiempo restante
-                                    Proceso nuevoProceso = this.getPlanificador().getColaListos().getHead().gettInfo();
-                                    
-                                    if (nuevoProceso != null) {
-                                        this.planificador.calculoRadioRespuesta(nuevoProceso, app.getRelojGlobal());
-                                        this.planificador.calculoRadioRespuesta(p, app.getRelojGlobal());
-                                        if (nuevoProceso.getTasaRespuesta() < p.getTasaRespuesta()){
-                                            // Si hay un nuevo proceso con menos tiempo restante, interrumpimos el actual
-                                            this.planificador.expulsarProceso(p);
-                                            break;// Mueve el proceso actual a la cola de listos
-                                            //p = nuevoProceso; // Cambia al nuevo proceso
-                                        }
-                                    }
-                                    this.sleep(p.getCiclosDuracion().get());
-                                }
-                                
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
+                        // Verifica si el proceso terminó
+                        if (p.getTiempoRestante() == 0) {
+                            p.getPCB_proceso().setEstado("Exit");
+                        } else {
+                            System.out.println("El proceso " + p.getNombreProceso() + "está por ser expulsado");
+                            if (!("Blocked".equals(p.getPCB_proceso().getEstado()))){
+                                // Si no terminó, reinsertar en la cola de listos
+                                this.planificador.expulsarProceso(p);
                             }
                         }
                         break;
-                        
-                        
-//                        while (true){
-//                            if (this.getPlanificador().getColaListos().getSize()>0){
-//                                this.getPlanificador().ordenarColaPorRadioRespuesta(this.getPlanificador().getColaListos());
-//                                Proceso n = this.getPlanificador().getColaListos().getHead().gettInfo();
-//                                this.planificador.calculoRadioRespuesta(p, app.getRelojGlobal());
-//                                this.planificador.calculoRadioRespuesta(n, app.getRelojGlobal());
-//                                if (n.getTasaRespuesta()>p.getTasaRespuesta()){
-//                                    this.planificador.expulsarProceso(p); 
-//                                    break;
-//                                }
-//                            }else if (!(p.getPCB_proceso().getEstado().equals("Running")) || p.getTiempoRestante()==0){
-//                                break;
-//                                
-//                            }
-//                        }
-
-                        
-//                         {
-//                            try {
-//                                p.start();
-//                                p.getPCB_proceso().setEstado("Ready");
-//                                this.planificador.getColaListos().encolar(p);
-//                                this.sleep(p.getCant_instrucciones() * p.getCiclosDuracion().get());
-//                            } catch (InterruptedException ex) {
-//                                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
-//                            }
-//                        }
-
-                       // break;
-
-
                 }
             } else {
                 this.setEstado("Inactivo");

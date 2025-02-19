@@ -407,6 +407,23 @@ public class Planificador {
         return p;
     }
     
+    public Proceso getHighestRatioProcess(){
+        Proceso p = null;
+//        try {
+//            semaphore.acquire();
+        ordenarColaPorRadioRespuesta(ColaListos);
+        if (ColaListos.getHead()!=null){
+            p = ColaListos.getHead().gettInfo();
+        }
+        
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(Planificador.class.getName()).log(Level.SEVERE, null, ex);
+//        }finally {
+//            semaphore.release();
+//        }
+        return p;
+    }
+    
     
     public void terminarProceso(Proceso procesoTerminado){
         //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
