@@ -76,7 +76,7 @@
               <StringArray count="5">
                 <StringItem index="0" value="FCFS"/>
                 <StringItem index="1" value="SPN"/>
-                <StringItem index="2" value="ROUND ROBIN"/>
+                <StringItem index="2" value="RR"/>
                 <StringItem index="3" value="SRT"/>
                 <StringItem index="4" value="HRRN"/>
               </StringArray>

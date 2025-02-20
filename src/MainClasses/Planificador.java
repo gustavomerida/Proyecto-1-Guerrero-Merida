@@ -292,6 +292,8 @@ public class Planificador {
                     this.getColaListos().encolar(proceso2); // Encolar el proceso en Listos
                 }
             }
+            
+            System.out.println("Proceso: " + proceso.getNombreProceso() + "expulsado de CPU");
 
         } catch (InterruptedException e) {
             e.printStackTrace();

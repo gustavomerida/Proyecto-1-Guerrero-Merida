@@ -118,6 +118,7 @@ public class Simulator extends javax.swing.JFrame {
             CPU currentCPU0 = app.getCpu1();
             CPU currentCPU1 = app.getCpu2();
             CPU currentCPU2 = app.getCpu3();
+            
 
             for (int i = 0; i < modelosCPU.length; i++) {
                 if (currentCPU1 == null || currentCPU1.getActualProceso() == null) {
@@ -248,7 +249,7 @@ public class Simulator extends javax.swing.JFrame {
         });
         jPanel1.add(cycleDurationSpinner, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 110, 80, 30));
 
-        currentAlgorithmComboBOX.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SPN", "ROUND ROBIN", "SRT", "HRRN" }));
+        currentAlgorithmComboBOX.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SPN", "RR", "SRT", "HRRN" }));
         currentAlgorithmComboBOX.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 currentAlgorithmComboBOXActionPerformed(evt);
@@ -550,9 +551,9 @@ public class Simulator extends javax.swing.JFrame {
 //            }
             //Esto hay que modificarlo para que modifique los CPUs que estén activos, ya sean 2 o 3. Quizá pasarle una lista de CPUs como atributo a la clase.
             this.currentAlgorithm = currentAlgorithmComboBOX.getModel().getSelectedItem().toString();
-            app.getPlanificador().expulsarProceso(app.getCpu1().getActualProceso());
-            app.getPlanificador().expulsarProceso(app.getCpu2().getActualProceso());
             app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
+            app.flagCambio = true;
+            
             
         } catch (Exception e) {
         }

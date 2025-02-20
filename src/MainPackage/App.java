@@ -26,6 +26,7 @@ public class App {
     private CPU cpu2;
     private CPU cpu3;
     public AtomicInteger duracionCicloInstruccion = new AtomicInteger(); //Variable global que indica la duración de un ciclo de instrucción
+    public boolean flagCambio = false;
 
     public int relojGlobal;
 
@@ -110,15 +111,15 @@ public class App {
         PCB pcbSO = new PCB(0, "SO", "Running", environmentSO);
         ProcesoCPUBOUND pSO = new ProcesoCPUBOUND("SO", 3, "CPU BOUND", pcbSO, duracionCicloInstruccion);
 
-        this.cpu1 = new CPU(0, null, "Activo", pSO);
+        this.setCpu1(new CPU(0, null, "Activo", pSO));
 
         this.cpu1.setPlanificador(planificador);
 
-        this.cpu2 = new CPU(1, null, "Activo", pSO);
+        this.setCpu2(new CPU(1, null, "Activo", pSO));
 
         this.cpu2.setPlanificador(planificador);
 
-        this.cpu3 = new CPU(2, null, "Activo", pSO);
+        this.setCpu3(new CPU(2, null, "Activo", pSO));
 
         this.cpu3.setPlanificador(planificador);
 
@@ -154,6 +155,8 @@ public class App {
     public CPU getCpu3() {
         return cpu3;
     }
+    
+    
 
     public int getRelojGlobal() {
         return this.relojGlobal;
@@ -173,5 +176,26 @@ public class App {
 
     public static ChartClass getChartClassCPU3() {
         return chartClassCPU3;
+    }
+
+    /**
+     * @param cpu1 the cpu1 to set
+     */
+    public void setCpu1(CPU cpu1) {
+        this.cpu1 = cpu1;
+    }
+
+    /**
+     * @param cpu2 the cpu2 to set
+     */
+    public void setCpu2(CPU cpu2) {
+        this.cpu2 = cpu2;
+    }
+
+    /**
+     * @param cpu3 the cpu3 to set
+     */
+    public void setCpu3(CPU cpu3) {
+        this.cpu3 = cpu3;
     }
 }

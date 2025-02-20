@@ -112,15 +112,22 @@ public class CPU extends Thread {
                 this.setEstado("Activo"); //estado del CPU
                 switch (this.getPlanificador().getNombreAlgoritmo()) {
                     case "FCFS":
+                        System.out.println("EJECUTANDO EN FCFSSSSSSSSSSSSSSSSSS");
                         this.setActualProceso(p);
                         this.conjuntoProcesos.insertar(p);
                         System.out.println("SE HA INSERTADO CON EXITO " + p.getNombreProceso() + "EN CPU " + this.id);
 
                          {
                             try {
-                                if (!("Exit".equals(p.getPCB_proceso().getEstado())) && !("Blocked".equals(p.getPCB_proceso().getEstado()))) {
-                                    p.start();
-                                    this.sleep(p.getSleepTime() * p.getCiclosDuracion().get());
+                                p.start();
+                                while (p.getTiempoRestante()>0 && !("Exit".equals(p.getPCB_proceso().getEstado())) && !("Blocked".equals(p.getPCB_proceso().getEstado()))) {
+                                    
+                                    this.sleep(p.getCiclosDuracion().get());
+                                    if (app.flagCambio==true){
+                                        this.planificador.expulsarProceso(p);
+                                        app.flagCambio = false;
+                                        break;
+                                    }
                                 }
                                 
                             } catch (InterruptedException ex) {
@@ -130,7 +137,7 @@ public class CPU extends Thread {
                         break;
 
                     case "RR":
-
+                        System.out.println("EJECUTANDO EN ROUND ROBIIIIIN");
                         this.setActualProceso(p);
                         this.conjuntoProcesos.insertar(p);
                         contadorCiclos = 0; // Resetea el contador al iniciar el proceso
@@ -140,6 +147,11 @@ public class CPU extends Thread {
                             while (contadorCiclos < quantum  && !("Exit".equals(p.getPCB_proceso().getEstado())) && !("Blocked".equals(p.getPCB_proceso().getEstado()))) {
                                 this.sleep(p.getCiclosDuracion().get()); // Duerme el tiempo de un ciclo
                                 contadorCiclos++; // Incrementa el contador de ciclos
+                                if (app.flagCambio==true || contadorCiclos == quantum){
+                                    this.planificador.expulsarProceso(p);
+                                    app.flagCambio = false;
+                                    break;
+                                }
                             }
                         } catch (InterruptedException ex) {
                             Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
@@ -149,11 +161,12 @@ public class CPU extends Thread {
                         // Verifica si el proceso terminó
                         if (p.getTiempoRestante() == 0) {
                             p.getPCB_proceso().setEstado("Exit");
-                        } else {
-                            System.out.println("El proceso " + p.getNombreProceso() + "está por ser expulsado");
-                            // Si no terminó, reinsertar en la cola de listos
-                            this.planificador.expulsarProceso(p);
-                        }
+                        } 
+//                        else {
+//                            System.out.println("El proceso " + p.getNombreProceso() + "está por ser expulsado");
+//                            // Si no terminó, reinsertar en la cola de listos
+//                            this.planificador.expulsarProceso(p);
+//                        }
                         break;
 
                     case "SPN":
@@ -162,10 +175,16 @@ public class CPU extends Thread {
 
                          {
                             try {
-                                if (!(p.getPCB_proceso().getEstado().equals("Exit")) && !((p.getPCB_proceso().getEstado().equals("Blocked")))) {
-                                    p.start();
+                                p.start();
+                                while (p.getTiempoRestante()> 0 && !(p.getPCB_proceso().getEstado().equals("Exit")) && !((p.getPCB_proceso().getEstado().equals("Blocked")))) {
+                                    this.sleep(p.getCiclosDuracion().get());
+                                    if (app.flagCambio==true){
+                                        this.planificador.expulsarProceso(p);
+                                        app.flagCambio = false;
+                                        break;
+                                    }
                                 }
-                                this.sleep(p.getSleepTime() * p.getCiclosDuracion().get());
+                                
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -186,6 +205,11 @@ public class CPU extends Thread {
                                 this.sleep(p.getCiclosDuracion().get()); // Duerme el tiempo de un ciclo
                                 nuevoP = this.getPlanificador().getShorterProcess();
                                 shortestRT = (nuevoP == null) ? (p.getTiempoRestante()+10) : nuevoP.getTiempoRestante();
+                                if (app.flagCambio==true || !(shortestRT > p.getTiempoRestante())){
+                                    this.planificador.expulsarProceso(p);
+                                    app.flagCambio = false;
+                                    break;
+                                }
                             }
                         } catch (InterruptedException ex) {
                             Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
@@ -195,13 +219,14 @@ public class CPU extends Thread {
                         // Verifica si el proceso terminó
                         if (p.getTiempoRestante() == 0) {
                             p.getPCB_proceso().setEstado("Exit");
-                        } else {
-                            System.out.println("El proceso " + p.getNombreProceso() + "está por ser expulsado");
-                            if (!("Blocked".equals(p.getPCB_proceso().getEstado()))){
-                                // Si no terminó, reinsertar en la cola de listos
-                                this.planificador.expulsarProceso(p);
-                            }
-                        }
+                        } 
+//                        else {
+//                            System.out.println("El proceso " + p.getNombreProceso() + "está por ser expulsado");
+//                            if (!("Blocked".equals(p.getPCB_proceso().getEstado()))){
+//                                // Si no terminó, reinsertar en la cola de listos
+//                                this.planificador.expulsarProceso(p);
+//                            }
+//                        }
                         break;
                     case "HRRN": //Creo que falta completar
                         this.setActualProceso(p);
@@ -216,6 +241,11 @@ public class CPU extends Thread {
                                 this.sleep(p.getCiclosDuracion().get()); // Duerme el tiempo de un ciclo
                                 nuevoPHRRN = this.getPlanificador().getHighestRatioProcess();
                                 highestRatio = (nuevoPHRRN == null) ? (p.getTasaRespuesta()-10) : nuevoPHRRN.getTasaRespuesta();
+                                if (app.flagCambio==true || !(highestRatio < p.getTasaRespuesta())){
+                                    this.planificador.expulsarProceso(p);
+                                    app.flagCambio = false;
+                                    break;
+                                }
                             }
                         } catch (InterruptedException ex) {
                             Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
@@ -225,13 +255,14 @@ public class CPU extends Thread {
                         // Verifica si el proceso terminó
                         if (p.getTiempoRestante() == 0) {
                             p.getPCB_proceso().setEstado("Exit");
-                        } else {
-                            System.out.println("El proceso " + p.getNombreProceso() + "está por ser expulsado");
-                            if (!("Blocked".equals(p.getPCB_proceso().getEstado()))){
-                                // Si no terminó, reinsertar en la cola de listos
-                                this.planificador.expulsarProceso(p);
-                            }
-                        }
+                        } 
+//                        else {
+//                            System.out.println("El proceso " + p.getNombreProceso() + "está por ser expulsado");
+//                            if (!("Blocked".equals(p.getPCB_proceso().getEstado()))){
+//                                // Si no terminó, reinsertar en la cola de listos
+//                                this.planificador.expulsarProceso(p);
+//                            }
+//                        }
                         break;
                 }
             } else {
@@ -315,4 +346,10 @@ public class CPU extends Thread {
     public void setPlanificador(Planificador planificador) {
         this.planificador = planificador;
     }
+    
+//    public CPU  copiar(){
+//        System.out.println("CPU ES NULL? " + this);
+//        return new CPU(this.id, procesoSO, this.getEstado(), this.procesoSO);
+////        cpucopia.start();
+//    }
 }
