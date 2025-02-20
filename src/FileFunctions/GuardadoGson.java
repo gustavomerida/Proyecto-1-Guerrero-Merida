@@ -45,6 +45,7 @@ public class GuardadoGson {
 
         parametrosGenerales.addProperty("cicloDuracion", app.duracionCicloInstruccion);
         parametrosGenerales.addProperty("nombreAlgoritmo", app.getPlanificador().getNombreAlgoritmo());
+        parametrosGenerales.addProperty("cantidadProcesadores", app.getCPUsActivos());
 
         JsonArray colaListosArray = new JsonArray();
         Cola<Proceso> colaListos = app.getPlanificador().getColaListos();
@@ -101,11 +102,11 @@ public class GuardadoGson {
             JsonObject parametrosGenerales = root.getAsJsonObject("parametrosGenerales");
             int cicloDuracion = parametrosGenerales.get("cicloDuracion").getAsInt();
             String nombreAlgoritmo = parametrosGenerales.get("nombreAlgoritmo").getAsString();
+            int cantidadProcesadores = parametrosGenerales.get("cantidadProcesadores").getAsInt();
 
             app.duracionCicloInstruccion = new AtomicInteger(cicloDuracion);
             app.getPlanificador().setNombreAlgoritmo(nombreAlgoritmo);
-            System.out.println("Ciclo de duración: " + cicloDuracion);
-            System.out.println("Nombre del algoritmo: " + nombreAlgoritmo);
+            app.setCPUsActivos(cantidadProcesadores);
 
             // Cola de listos (array plano)
             JsonArray colaListosArray = root.getAsJsonArray("colaListos");
@@ -117,7 +118,7 @@ public class GuardadoGson {
                 String nombre = procesoJson.get("nombre").getAsString();
                 int cantidadInstrucciones = procesoJson.get("cantidadInstrucciones").getAsInt();
                 String estado = procesoJson.get("estado").getAsString();
-                int idPcb = procesoJson.get("idPCB").getAsInt();
+                String idPcb = procesoJson.get("idPCB").getAsString();
                 int PC = procesoJson.get("PC").getAsInt();
                 int MAR = procesoJson.get("MAR").getAsInt();
                 String tipo = procesoJson.get("tipo").getAsString();

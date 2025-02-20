@@ -50,15 +50,15 @@ public class Estadisticas extends javax.swing.JFrame {
         jPanelChartSystem.setLayout(new java.awt.BorderLayout());
         jPanelChartSystem.add(app.getChartClassSystem().getChartClass(), java.awt.BorderLayout.CENTER);
         jPanelChartSystem.validate();
-        
+
         jPanelChartCPU1.setLayout(new java.awt.BorderLayout());
         jPanelChartCPU1.add(app.getChartClassCPU1().getChartClass(), java.awt.BorderLayout.CENTER);
         jPanelChartCPU1.validate();
-        
+
         jPanelChartCPU2.setLayout(new java.awt.BorderLayout());
         jPanelChartCPU2.add(app.getChartClassCPU2().getChartClass(), java.awt.BorderLayout.CENTER);
         jPanelChartCPU2.validate();
-        
+
         jPanelChartCPU3.setLayout(new java.awt.BorderLayout());
         jPanelChartCPU3.add(app.getChartClassCPU3().getChartClass(), java.awt.BorderLayout.CENTER);
         jPanelChartCPU3.validate();
@@ -71,7 +71,7 @@ public class Estadisticas extends javax.swing.JFrame {
             public void run() {
                 while (true) {
                     try {
-                        
+
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
                             public void run() {
@@ -213,7 +213,7 @@ public class Estadisticas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_SalirActionPerformed
 
     private void CreateProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateProcessActionPerformed
@@ -230,7 +230,16 @@ public class Estadisticas extends javax.swing.JFrame {
     }//GEN-LAST:event_CreateProcessActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        // QUIZA PUEDA FALLAR AQUIIIII
+        
+        String CycleDuration = String.valueOf(app.duracionCicloInstruccion.get());
+        String currentAlgorithm = app.getPlanificador().getNombreAlgoritmo();
+        int cantidadProcesadores = app.getCPUsActivos();
+
+        Simulator simulatorWindow = new Simulator(CycleDuration, cantidadProcesadores, currentAlgorithm);
+        this.setVisible(false);
+
+        simulatorWindow.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -247,7 +256,7 @@ public class Estadisticas extends javax.swing.JFrame {
         this.setVisible(false);
         home.setVisible(true);
     }//GEN-LAST:event_homeButtonActionPerformed
-   /**
+    /**
      * @param args the command line arguments
      */
 

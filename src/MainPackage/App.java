@@ -20,15 +20,17 @@ public class App {
 
     private static final App uniqueApp = new App();
 
-    //private final SO sistemaOperativo;
     private Planificador planificador;
     private CPU cpu1;
     private CPU cpu2;
     private CPU cpu3;
+    private GuardadoGson guardadoGson;
+    private int CPUsActivos;
     public AtomicInteger duracionCicloInstruccion = new AtomicInteger(); //Variable global que indica la duración de un ciclo de instrucción
     public boolean flagCambio = false;
 
-    public int relojGlobal;
+    // POSIBLE FALLO
+    public int relojGlobal = 0;
 
     private static ChartClass chartClassSystem;
     private static ChartClass chartClassCPU1;
@@ -85,14 +87,11 @@ public class App {
         /*
         CARGA DE LOS PROCESOS EN 0, ESCRITURA DE LOS PROCESOS EN 1
          */
-        GuardadoGson guardarEnvironment = new GuardadoGson(1);
-        
+        this.guardadoGson = new GuardadoGson(1);
+
         Home home = new Home();
         home.setVisible(true);
-
-//        Simulator simulator = new Simulator("1000", 2, "");
-//        simulator.setVisible(true);
-
+        
         /*
         CREACION DE LAS GRAFICAS EN TIEMPO REAL
          */
@@ -101,14 +100,11 @@ public class App {
         chartClassCPU2 = new ChartClass(2);
         chartClassCPU3 = new ChartClass(3);
 
-//        Estadisticas estadistica = new Estadisticas();
-//        estadistica.setVisible(true);
-        //this.relojGlobal = simulator.getRelojGlobal();
     }
 
     public void startSimulator(int cpuQuantity) {
         RegistrosControlEstado environmentSO = new RegistrosControlEstado(0, 1, 0);
-        PCB pcbSO = new PCB(0, "SO", "Running", environmentSO);
+        PCB pcbSO = new PCB("SO", "SO", "Running", environmentSO);
         ProcesoCPUBOUND pSO = new ProcesoCPUBOUND("SO", 3, "CPU BOUND", pcbSO, duracionCicloInstruccion);
 
         this.setCpu1(new CPU(0, null, "Activo", pSO));
@@ -124,15 +120,25 @@ public class App {
         this.cpu3.setPlanificador(planificador);
 
         if (cpuQuantity == 3) {
+            this.CPUsActivos = 3;
             this.cpu1.start();
             this.cpu2.start();
             this.cpu3.start();
         } else {
+            this.CPUsActivos = 2;
             this.cpu1.start();
             this.cpu2.start();
 
         }
 
+    }
+
+    public GuardadoGson getGuardadoGson() {
+        return guardadoGson;
+    }
+
+    public void setGuardadoGson(GuardadoGson guardadoGson) {
+        this.guardadoGson = guardadoGson;
     }
 
     public void setearProcesoACPU() {
@@ -155,8 +161,6 @@ public class App {
     public CPU getCpu3() {
         return cpu3;
     }
-    
-    
 
     public int getRelojGlobal() {
         return this.relojGlobal;
@@ -197,5 +201,13 @@ public class App {
      */
     public void setCpu3(CPU cpu3) {
         this.cpu3 = cpu3;
+    }
+
+    public int getCPUsActivos() {
+        return CPUsActivos;
+    }
+
+    public void setCPUsActivos(int CPUsActivos) {
+        this.CPUsActivos = CPUsActivos;
     }
 }

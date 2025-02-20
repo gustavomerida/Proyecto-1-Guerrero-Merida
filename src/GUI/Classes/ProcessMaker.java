@@ -51,7 +51,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         ebGaramondFont = Font.createFont(Font.TRUETYPE_FONT, new File("src/GUI/Assets/Font/EBGaramond-Bold.ttf")).deriveFont(Font.PLAIN, 16);
 
-        JLabel[] labelArrayParameters = {jLabel7, jLabel4, jLabel5, label1IOEXTRA, label2IOEXTRA, activeProcessorsLabel, cycleDurationLabel, schedulerAlgorithmLabel};
+        JLabel[] labelArrayParameters = {jLabel7, jLabel4, jLabel5, label1IOEXTRA, label2IOEXTRA, activeProcessorsLabel, cycleDurationLabel, schedulerAlgorithmLabel, segundosLabel};
 
         for (JLabel currentLabel : labelArrayParameters) {
             currentLabel.setFont(ebGaramondFont);
@@ -71,6 +71,7 @@ public class ProcessMaker extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        segundosLabel = new javax.swing.JLabel();
         schedulerAlgorithmComboBox = new javax.swing.JComboBox<>();
         quantityProcessorsComboBox = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
@@ -104,6 +105,11 @@ public class ProcessMaker extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        segundosLabel.setForeground(new java.awt.Color(255, 255, 255));
+        segundosLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        segundosLabel.setText("(en segundos)");
+        jPanel1.add(segundosLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 430, 120, 30));
 
         schedulerAlgorithmComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SPN", "RR", "SRT", "HRRN" }));
         schedulerAlgorithmComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -269,7 +275,7 @@ public class ProcessMaker extends javax.swing.JFrame {
                 cycleDurationPerInstructionTextFieldActionPerformed(evt);
             }
         });
-        jPanel1.add(cycleDurationPerInstructionTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 430, 240, -1));
+        jPanel1.add(cycleDurationPerInstructionTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 430, 70, -1));
 
         guardar.setText("Guardar");
         guardar.addActionListener(new java.awt.event.ActionListener() {
@@ -297,11 +303,13 @@ public class ProcessMaker extends javax.swing.JFrame {
     }//GEN-LAST:event_CreateProcessActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        this.setVisible(false);
+        Estadisticas estadistica = new Estadisticas();
+        estadistica.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        app.getGuardadoGson().GuardadoGson();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void cycleDurationExceptionTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cycleDurationExceptionTextFieldActionPerformed
@@ -325,31 +333,6 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_processTypeComboBoxActionPerformed
-
-    private boolean checkPositiveInteger(JTextField jTextField) {
-        String valueAsString = jTextField.getText().trim();
-
-        if (valueAsString.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "El campo no puede estar vacío", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        try {
-            int value = Integer.parseInt(valueAsString);
-            if (value > 0) {
-                return true;
-
-            } else {
-
-                JOptionPane.showMessageDialog(null, "El valor ingresado debe ser un número positivo", "Error", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El valor ingresado no es un número positivo", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-    }
 
 
     private void instructionsQuantityTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_instructionsQuantityTextFieldActionPerformed
@@ -380,42 +363,93 @@ public class ProcessMaker extends javax.swing.JFrame {
     }//GEN-LAST:event_simulatorButtonActionPerformed
 
     private Proceso createNewProcess() {
+        // VARIABLES GENERALES
+        String processName;
+        String processType;
+        int instructionsQuantity;
+        int cycleDurationInstructionValue;
 
-        // ATRIBUTOS GENERALES
-        int instructionsQuantity = 0;
-        AtomicInteger cycleDurationInstruction;
+        // VARIABLES I/O
+        int cycleDurationIO;
+        int cycleDurationExceptIO;
 
-        // ATRIBUTOS IO
-        int cycleDurationIO = 0;
-        int cycleDurationExceptIO = 0;
+        try {
+            processName = this.processNameTextField.getText().trim();
 
-        String processName = this.processNameTextField.getText();
-        String processType = this.processTypeComboBox.getModel().getSelectedItem().toString();
+            if (processName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El nombre del proceso está vacío.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                return null; // Se cancela la creación
+            }
 
-        ///////////////////////////////////////////////////////////////////////////////////////
-        RegistrosControlEstado executionEnvironment = new RegistrosControlEstado(0, 1, 0);
+            String instructionsQuantityText = this.instructionsQuantityTextField.getText().trim();
+            if (instructionsQuantityText.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "La cantidad de instrucciones está vacía.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
 
-        PCB PCBProcess = new PCB(1, processName, "Ready", executionEnvironment);
+            instructionsQuantity = Integer.parseInt(instructionsQuantityText);
+            if (instructionsQuantity <= 0) {
+                JOptionPane.showMessageDialog(this, "La cantidad de instrucciones debe ser mayor que 0.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
 
-        instructionsQuantity = Integer.parseInt(this.instructionsQuantityTextField.getText());
-        cycleDurationInstruction = new AtomicInteger(Integer.parseInt(this.cycleDurationPerInstructionTextField.getText()) * 1000);
-        app.duracionCicloInstruccion.set(cycleDurationInstruction.get());
+            String cycleDurationInstructionText = this.cycleDurationPerInstructionTextField.getText().trim();
+            if (cycleDurationInstructionText.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "La duración de cada instrucción está vacía.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
 
-        if ("CPU BOUND".equals(processType)) {
+            cycleDurationInstructionValue = Integer.parseInt(cycleDurationInstructionText);
+            if (cycleDurationInstructionValue <= 0) {
+                JOptionPane.showMessageDialog(this, "La duración de cada instrucción debe ser mayor que 0.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
 
-            ProcesoCPUBOUND newCPUBoundProcess = new ProcesoCPUBOUND(processName, instructionsQuantity, processType, PCBProcess, app.duracionCicloInstruccion);
-            return newCPUBoundProcess;
+            processType = this.processTypeComboBox.getModel().getSelectedItem().toString();
 
-        } else {
+            RegistrosControlEstado executionEnvironment = new RegistrosControlEstado(0, 1, 0);
+            PCB PCBProcess = new PCB(processName, processName, "Ready", executionEnvironment);
 
-            cycleDurationIO = Integer.parseInt(this.cycleDurationESTextField.getText());
-            cycleDurationExceptIO = Integer.parseInt(this.cycleDurationExceptionTextField.getText());
+            AtomicInteger cycleDurationInstruction = new AtomicInteger(cycleDurationInstructionValue * 1000);
+            app.duracionCicloInstruccion.set(cycleDurationInstruction.get());
 
-            ProcesoIOBOUND newIOBoundProcess = new ProcesoIOBOUND(processName, instructionsQuantity, processType, PCBProcess, app.duracionCicloInstruccion, cycleDurationIO, cycleDurationExceptIO);
-            return newIOBoundProcess;
+            if ("CPU BOUND".equals(processType)) {
+                ProcesoCPUBOUND newCPUBoundProcess = new ProcesoCPUBOUND(processName, instructionsQuantity, processType, PCBProcess, app.duracionCicloInstruccion);
+                return newCPUBoundProcess;
+            } else {
+                String cycleDurationIOText = this.cycleDurationESTextField.getText().trim();
+                if (cycleDurationIOText.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "La duración del ciclo de E/S está vacía.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                    return null;
+                }
 
+                cycleDurationIO = Integer.parseInt(cycleDurationIOText);
+                if (cycleDurationIO <= 0) {
+                    JOptionPane.showMessageDialog(this, "La duración del ciclo de E/S debe ser mayor que 0.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                    return null;
+                }
+
+                String cycleDurationExceptIOText = this.cycleDurationExceptionTextField.getText().trim();
+                if (cycleDurationExceptIOText.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "La duración de excepción de E/S está vacía.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                    return null;
+                }
+
+                cycleDurationExceptIO = Integer.parseInt(cycleDurationExceptIOText);
+                if (cycleDurationExceptIO <= 0) {
+                    JOptionPane.showMessageDialog(this, "La duración de excepción de E/S debe ser mayor que 0.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                    return null;
+                }
+
+                ProcesoIOBOUND newIOBoundProcess = new ProcesoIOBOUND(processName, instructionsQuantity, processType, PCBProcess, app.duracionCicloInstruccion, cycleDurationIO, cycleDurationExceptIO);
+                return newIOBoundProcess;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa únicamente números válidos en los campos numéricos.\n" + e.getMessage(), "Error de formato numérico", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
     }
+
 
     private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
 
@@ -426,9 +460,9 @@ public class ProcessMaker extends javax.swing.JFrame {
     }//GEN-LAST:event_homeButtonActionPerformed
 
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
-        
+
         Proceso newProcess = createNewProcess();
-        
+
         app.getPlanificador().getColaListos().encolar(newProcess);
 
         cleanTextField();
@@ -444,8 +478,13 @@ public class ProcessMaker extends javax.swing.JFrame {
     }//GEN-LAST:event_quantityProcessorsComboBoxActionPerformed
 
     private Simulator saveSimulatorParameters() {
-        // PREGUNTAR A GUSTAVINHO
-        String cycleDurationParameter = String.valueOf(cycleDurationPerInstructionTextField.getText());
+        /*
+        
+        QUIZA PUEDE FALLAR POR AQUIIIII
+        
+         */
+
+        String cycleDurationParameter = (cycleDurationPerInstructionTextField.getText());
         int processorsQuantity = Integer.parseInt(quantityProcessorsComboBox.getModel().getSelectedItem().toString());
         String initialAlgorithm = schedulerAlgorithmComboBox.getModel().getSelectedItem().toString();
 
@@ -457,6 +496,11 @@ public class ProcessMaker extends javax.swing.JFrame {
     private void cleanTextField() {
 
         JTextField[] textFieldArray = {processNameTextField, instructionsQuantityTextField, cycleDurationESTextField, cycleDurationExceptionTextField};
+        int DuracionCiclo = Integer.parseInt(this.cycleDurationPerInstructionTextField.getText().trim());
+
+        if (DuracionCiclo <= 0) {
+            this.cycleDurationPerInstructionTextField.setText("");
+        }
 
         for (JTextField currentTextField : textFieldArray) {
             currentTextField.setText("");
@@ -535,6 +579,7 @@ public class ProcessMaker extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> quantityProcessorsComboBox;
     private javax.swing.JComboBox<String> schedulerAlgorithmComboBox;
     private javax.swing.JLabel schedulerAlgorithmLabel;
+    private javax.swing.JLabel segundosLabel;
     private javax.swing.JButton simulatorButton;
     // End of variables declaration//GEN-END:variables
 }
