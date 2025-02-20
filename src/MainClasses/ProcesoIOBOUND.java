@@ -22,6 +22,7 @@ public class ProcesoIOBOUND extends Proceso {
     private int cicloEntradaListo; //último ciclo global en el que entró a la cola de listos
 
     private int tiempoEnCola;
+    private int sleepTime; //tiempo del sleep
 
     private final App app = App.getInstance();
 
@@ -33,6 +34,7 @@ public class ProcesoIOBOUND extends Proceso {
         this.contadorCiclos = 0;
         this.cicloEntradaListo = app.getRelojGlobal();
         this.tiempoEnCola = 1;
+        this.sleepTime = cicloGenerarExcepcion;
     }
 
     private void generarExcepcion(Planificador planificador) {
@@ -73,7 +75,7 @@ public class ProcesoIOBOUND extends Proceso {
     private void satisfacerExcepcion(Planificador planificador) {
         System.out.println("Proceso " + this.getNombreProceso() + " listo para ejecutarse nuevamente");
         this.getPCB_proceso().setEstado("Ready"); //En realidad se va a ready y hay que tener un semáforo para la cola de listos
-        this.setCicloEntradaListo(app.getRelojGlobal());
+        this.setCicloEntradaListo(app.getRelojGlobal()); 
 
     }
 
@@ -86,8 +88,8 @@ public class ProcesoIOBOUND extends Proceso {
                 terminar();
             }
             if ("Running".equals(this.getPCB_proceso().getEstado())) {
-//                System.out.println("Proceso " + this.getNombreProceso() + " ejecutándose");
-//                System.out.println("Cant_instrucciones: " + this.getCant_instrucciones());
+                System.out.println("Proceso " + this.getNombreProceso() + " ejecutándose");
+                System.out.println("Cant_instrucciones: " + this.getCant_instrucciones());
                 int MAR_num = this.getCant_instrucciones() - this.getTiempoRestante();
                 this.getPCB_proceso().getAmbienteEjecucion().setMAR(MAR_num);
                 this.getPCB_proceso().getAmbienteEjecucion().setPc(MAR_num + 1);
@@ -99,6 +101,7 @@ public class ProcesoIOBOUND extends Proceso {
                 this.contadorCiclos++;
                 if (this.contadorCiclos % this.getCicloGenerarExcepcion() == 0) {
                     //AQUÏ HAY QUE USAR UN SEMÁFORO PARA AGG A LA COLA DE BLOQUEADOS
+                    System.out.println("ESTE PROOCESO ENTRO A LA CONDICION MODULO --> " + this.getNombreProceso());
                     this.generarExcepcion(app.getPlanificador());
                 } else {
                     try {
@@ -204,5 +207,19 @@ public class ProcesoIOBOUND extends Proceso {
      */
     public void setCicloEntradaListo(int cicloEntradaListo) {
         this.cicloEntradaListo = cicloEntradaListo;
+    }
+
+    /**
+     * @return the sleepTime
+     */
+    public int getSleepTime() {
+        return sleepTime;
+    }
+
+    /**
+     * @param sleepTime the sleepTime to set
+     */
+    public void setSleepTime(int sleepTime) {
+        this.sleepTime = sleepTime;
     }
 }

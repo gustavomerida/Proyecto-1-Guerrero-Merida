@@ -45,11 +45,13 @@ public class Simulator extends javax.swing.JFrame {
     private String cycleDurationParameter;
     private int processorsQuantity;
     private DefaultListModel[] modelosCPU;
-    private int relojGlobal;
+    // private int relojGlobal;
 
     private String currentAlgorithm;
 
     private Thread simulationThread;
+    private boolean flagLabel;
+    private int relojGlobalSimulator;
 
     public Simulator(String cycleDurationParameter, int processorsQuantity, String currentAlgorithm) {
 
@@ -60,11 +62,14 @@ public class Simulator extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
 
         this.processorsQuantity = processorsQuantity;
-        this.cycleDurationParameter = "1000";
-        this.relojGlobal = 0;
+        this.cycleDurationParameter = cycleDurationParameter;
+        this.relojGlobalSimulator = app.relojGlobal;
+        this.currentAlgorithm = currentAlgorithm;
 
         // CREACION DE PROCESADORES
         this.modelosCPU = createProcessors();
+
+        flagLabel = false;
 
         // SET UP DE ALGORITMO EN APP Y EN SIMULADOR (GUI)
         setAlgorithm(currentAlgorithm);
@@ -75,6 +80,10 @@ public class Simulator extends javax.swing.JFrame {
         // INICIO DE SIMULACION
         startSimulation();
 
+    }
+
+    public int getProcessorsQuantity() {
+        return processorsQuantity;
     }
 
     private void setAlgorithm(String currentAlgorithm) {
@@ -92,8 +101,11 @@ public class Simulator extends javax.swing.JFrame {
                 try {
                     SwingUtilities.invokeLater(() -> {
 
+                        if (flagLabel) {
+                            updatecycleDurationLabel();
+                        }
+
                         ejecutarProcesos();
-                        updatecycleDurationLabel();
 
                         actualizarInterfaz(); // Refresca la UI
                         createJScrollPaneOnReady(app.getPlanificador().getColaListos());
@@ -102,8 +114,6 @@ public class Simulator extends javax.swing.JFrame {
                         //app.getPlanificador().setNombreAlgoritmo(currentAlgorithmComboBOX.getModel().getSelectedItem().toString());
                     });
                     Thread.sleep(Integer.parseInt(this.cycleDurationParameter)); // Actualiza cada x que definio el usuario
-
-                    // POSIBLE LUGAR PARA EL RELOJ GLOBAL, MODIFICAR SLEEP PARA QUE SEA LA MISMA QUE LA DURACION DEL CICLO.
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     break;
@@ -115,6 +125,7 @@ public class Simulator extends javax.swing.JFrame {
 
     private void ejecutarProcesos() {
         try {
+
             CPU currentCPU0 = app.getCpu1();
             CPU currentCPU1 = app.getCpu2();
             CPU currentCPU2 = app.getCpu3();
@@ -130,7 +141,7 @@ public class Simulator extends javax.swing.JFrame {
 
                 if (i == 0) {
                     Proceso procesoActual = currentCPU0.getActualProceso();
-                    procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
+                    //procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
 
                     int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
                     procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
@@ -144,7 +155,7 @@ public class Simulator extends javax.swing.JFrame {
 
                 } else if (i == 1) {
                     Proceso procesoActual = currentCPU1.getActualProceso();
-                    procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
+                    //procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
                     int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
                     procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
                     procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
@@ -156,7 +167,7 @@ public class Simulator extends javax.swing.JFrame {
                     modelosCPU[i].addElement("MAR: " + procesoActual.getPCB_proceso().getAmbienteEjecucion().getMAR());
                 } else {
                     Proceso procesoActual = currentCPU2.getActualProceso();
-                    procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
+                    //procesoActual.setCiclosDuracion(new AtomicInteger(Integer.parseInt(this.cycleDurationParameter)));
                     int marValue = procesoActual.getCant_instrucciones() - procesoActual.getTiempoRestante();
                     procesoActual.getPCB_proceso().getAmbienteEjecucion().setMAR(marValue);
                     procesoActual.getPCB_proceso().getAmbienteEjecucion().setPc(marValue + 1);
@@ -493,10 +504,12 @@ public class Simulator extends javax.swing.JFrame {
     }
 
     private void updatecycleDurationLabel() {
-        this.relojGlobal++;
-        String relojActualString = String.valueOf(this.getRelojGlobal());
+        this.relojGlobalSimulator++;
+        app.relojGlobal = this.relojGlobalSimulator;
+        System.out.println(app.relojGlobal);
+        String relojActualString = String.valueOf(this.relojGlobalSimulator);
         cycleDurationLabel.setText("Ciclos de reloj: " + relojActualString);
-        app.relojGlobal = this.getRelojGlobal();
+        app.relojGlobal = relojGlobalSimulator;
     }
 
     private void updateSpinner() {
@@ -543,8 +556,12 @@ public class Simulator extends javax.swing.JFrame {
 
     private void currentAlgorithmComboBOXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_currentAlgorithmComboBOXActionPerformed
 
-        // Cambiar el nombre del algoritmo:
-        app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
+        try {
+
+            app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
+        } catch (Exception e) {
+        }
+
 
     }//GEN-LAST:event_currentAlgorithmComboBOXActionPerformed
 
@@ -554,10 +571,12 @@ public class Simulator extends javax.swing.JFrame {
 
     private void cycleDurationSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cycleDurationSpinnerStateChanged
         this.cycleDurationParameter = String.valueOf(((int) (this.cycleDurationSpinner.getValue()) * 1000));
+        app.duracionCicloInstruccion.set(Integer.parseInt(cycleDurationParameter));
     }//GEN-LAST:event_cycleDurationSpinnerStateChanged
 
     private void startSimulationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSimulationActionPerformed
         app.startSimulator(this.processorsQuantity);
+        this.flagLabel = true;
     }//GEN-LAST:event_startSimulationActionPerformed
 
 
@@ -593,7 +612,4 @@ public class Simulator extends javax.swing.JFrame {
     /**
      * @return the relojGlobal
      */
-    public int getRelojGlobal() {
-        return relojGlobal;
-    }
 }

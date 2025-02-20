@@ -71,7 +71,8 @@ public class Cola<T> {
         }
         return toPrint;
     }
-
+    
+    
     public List generarLista() {
         List listaProcesos = new List("");
         if (!isEmpty()) {

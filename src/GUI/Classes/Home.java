@@ -19,16 +19,15 @@ public class Home extends javax.swing.JFrame {
     /**
      * Creates new form Home2
      */
-    
     // Principal y unica instancia app
-    private final App app =  App.getInstance();
-   
+    private final App app = App.getInstance();
+
     public Home() {
         initComponents();
         this.setResizable(false);
         this.setSize(1100, 625);
         this.setLocationRelativeTo(null);
-        
+       
     }
 
     /**
@@ -132,33 +131,35 @@ public class Home extends javax.swing.JFrame {
 
     private void CreateProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateProcessActionPerformed
         try {
-            
+
             ProcessMaker ProcessMakerWindow = new ProcessMaker();
             this.setVisible(false);
             ProcessMakerWindow.setVisible(true);
-            
+
         } catch (FontFormatException | IOException ex) {
             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_CreateProcessActionPerformed
 
     private void simulatorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simulatorButtonActionPerformed
-        /*
-        SE DEBE MODIFICAR LOS VALORES DEL SIMULADOR EN FUNCION A LO QUE SE TENGA GUARDADO.
-        */
-        
-        Simulator simulatorWindow = new Simulator(null, 0 ,null);
+        String CycleDuration = String.valueOf(app.duracionCicloInstruccion.get());
+        String currentAlgorithm = app.getPlanificador().getNombreAlgoritmo();
+        int cantidadProcesadores = app.getCPUsActivos();
+
+        Simulator simulatorWindow = new Simulator(CycleDuration, cantidadProcesadores, currentAlgorithm);
         this.setVisible(false);
-        
+
         simulatorWindow.setVisible(true);
     }//GEN-LAST:event_simulatorButtonActionPerformed
 
     private void stadisticsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stadisticsButtonActionPerformed
-        // TODO add your handling code here:
+        this.setVisible(false);
+        Estadisticas estadistica = new Estadisticas();
+        estadistica.setVisible(true);
     }//GEN-LAST:event_stadisticsButtonActionPerformed
 
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        // TODO add your handling code here:
+        app.getGuardadoGson().GuardadoGson();
     }//GEN-LAST:event_saveButtonActionPerformed
 
     /**

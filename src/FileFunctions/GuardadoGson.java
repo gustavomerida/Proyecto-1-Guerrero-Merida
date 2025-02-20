@@ -29,9 +29,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GuardadoGson {
 
     private final App app = App.getInstance();
+    private int guardarOcargar;
 
     public GuardadoGson(int guardarOcargar) {
-        if (guardarOcargar == 0) {
+        this.guardarOcargar = guardarOcargar;
+
+        if (this.guardarOcargar == 0) {
             //GUARDAMOS
             GuardadoGson();
         } else {
@@ -39,15 +42,21 @@ public class GuardadoGson {
         }
     }
 
+    public void setGuardarOcargar(int guardarOcargar) {
+        this.guardarOcargar = guardarOcargar;
+    }
+    
     public void GuardadoGson() {
 
         JsonObject parametrosGenerales = new JsonObject();
 
         parametrosGenerales.addProperty("cicloDuracion", app.duracionCicloInstruccion);
         parametrosGenerales.addProperty("nombreAlgoritmo", app.getPlanificador().getNombreAlgoritmo());
+        parametrosGenerales.addProperty("cantidadProcesadores", app.getCPUsActivos());
 
         JsonArray colaListosArray = new JsonArray();
         Cola<Proceso> colaListos = app.getPlanificador().getColaListos();
+        
         Nodo<Proceso> currentProcess = colaListos.getHead();
 
         while (currentProcess != null) {
@@ -101,11 +110,15 @@ public class GuardadoGson {
             JsonObject parametrosGenerales = root.getAsJsonObject("parametrosGenerales");
             int cicloDuracion = parametrosGenerales.get("cicloDuracion").getAsInt();
             String nombreAlgoritmo = parametrosGenerales.get("nombreAlgoritmo").getAsString();
+            int cantidadProcesadores = parametrosGenerales.get("cantidadProcesadores").getAsInt();
 
             app.duracionCicloInstruccion = new AtomicInteger(cicloDuracion);
             app.getPlanificador().setNombreAlgoritmo(nombreAlgoritmo);
+            app.setCPUsActivos(cantidadProcesadores);
+            
             System.out.println("Ciclo de duración: " + cicloDuracion);
             System.out.println("Nombre del algoritmo: " + nombreAlgoritmo);
+            System.out.println("Cantidad de Procesadores: " + cantidadProcesadores);
 
             // Cola de listos (array plano)
             JsonArray colaListosArray = root.getAsJsonArray("colaListos");
@@ -117,7 +130,7 @@ public class GuardadoGson {
                 String nombre = procesoJson.get("nombre").getAsString();
                 int cantidadInstrucciones = procesoJson.get("cantidadInstrucciones").getAsInt();
                 String estado = procesoJson.get("estado").getAsString();
-                int idPcb = procesoJson.get("idPCB").getAsInt();
+                String idPcb = procesoJson.get("idPCB").getAsString();
                 int PC = procesoJson.get("PC").getAsInt();
                 int MAR = procesoJson.get("MAR").getAsInt();
                 String tipo = procesoJson.get("tipo").getAsString();

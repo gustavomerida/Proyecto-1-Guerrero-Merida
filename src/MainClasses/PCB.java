@@ -16,7 +16,7 @@ public class PCB {
     /* 
         Es posible usar un id tipo hash?
     */
-    private int id; 
+    private String id; 
     private String nombre_proceso;
     /* 
         Posibles estados: Running, Blocked, Ready
@@ -25,7 +25,7 @@ public class PCB {
     private String estado;
     private RegistrosControlEstado ambienteEjecucion;
 
-    public PCB(int id, String nombre_proceso, String estado, RegistrosControlEstado ambienteEjecucion) {
+    public PCB(String id, String nombre_proceso, String estado, RegistrosControlEstado ambienteEjecucion) {
         this.id = id;
         this.nombre_proceso = nombre_proceso;
         this.estado = estado;
@@ -39,14 +39,14 @@ public class PCB {
     /**
      * @return the id
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

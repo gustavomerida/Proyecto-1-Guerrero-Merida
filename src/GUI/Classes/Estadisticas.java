@@ -50,15 +50,15 @@ public class Estadisticas extends javax.swing.JFrame {
         jPanelChartSystem.setLayout(new java.awt.BorderLayout());
         jPanelChartSystem.add(app.getChartClassSystem().getChartClass(), java.awt.BorderLayout.CENTER);
         jPanelChartSystem.validate();
-        
+
         jPanelChartCPU1.setLayout(new java.awt.BorderLayout());
         jPanelChartCPU1.add(app.getChartClassCPU1().getChartClass(), java.awt.BorderLayout.CENTER);
         jPanelChartCPU1.validate();
-        
+
         jPanelChartCPU2.setLayout(new java.awt.BorderLayout());
         jPanelChartCPU2.add(app.getChartClassCPU2().getChartClass(), java.awt.BorderLayout.CENTER);
         jPanelChartCPU2.validate();
-        
+
         jPanelChartCPU3.setLayout(new java.awt.BorderLayout());
         jPanelChartCPU3.add(app.getChartClassCPU3().getChartClass(), java.awt.BorderLayout.CENTER);
         jPanelChartCPU3.validate();
@@ -71,7 +71,7 @@ public class Estadisticas extends javax.swing.JFrame {
             public void run() {
                 while (true) {
                     try {
-                        
+
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
                             public void run() {
@@ -110,7 +110,6 @@ public class Estadisticas extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        cycleDurationLabel = new javax.swing.JLabel();
         currentAlgorithmLabel = new javax.swing.JLabel();
         Salir = new javax.swing.JButton();
         CreateProcess = new javax.swing.JButton();
@@ -145,13 +144,9 @@ public class Estadisticas extends javax.swing.JFrame {
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        cycleDurationLabel.setForeground(new java.awt.Color(255, 215, 0));
-        cycleDurationLabel.setText("Ciclos de reloj:");
-        jPanel2.add(cycleDurationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 490, 140, 30));
-
         currentAlgorithmLabel.setForeground(new java.awt.Color(255, 215, 0));
         currentAlgorithmLabel.setText("Algoritmo actual:");
-        jPanel2.add(currentAlgorithmLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 520, 130, 20));
+        jPanel2.add(currentAlgorithmLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 500, 130, 20));
 
         Salir.setText("Salir");
         Salir.addActionListener(new java.awt.event.ActionListener() {
@@ -213,7 +208,7 @@ public class Estadisticas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_SalirActionPerformed
 
     private void CreateProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateProcessActionPerformed
@@ -230,7 +225,14 @@ public class Estadisticas extends javax.swing.JFrame {
     }//GEN-LAST:event_CreateProcessActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        String CycleDuration = String.valueOf(app.duracionCicloInstruccion.get());
+        String currentAlgorithm = app.getPlanificador().getNombreAlgoritmo();
+        int cantidadProcesadores = app.getCPUsActivos();
+
+        Simulator simulatorWindow = new Simulator(CycleDuration, cantidadProcesadores, currentAlgorithm);
+        this.setVisible(false);
+
+        simulatorWindow.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -242,12 +244,11 @@ public class Estadisticas extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
-
         Home home = new Home();
         this.setVisible(false);
         home.setVisible(true);
     }//GEN-LAST:event_homeButtonActionPerformed
-   /**
+    /**
      * @param args the command line arguments
      */
 
@@ -255,7 +256,6 @@ public class Estadisticas extends javax.swing.JFrame {
     private javax.swing.JButton CreateProcess;
     private javax.swing.JButton Salir;
     private javax.swing.JLabel currentAlgorithmLabel;
-    private javax.swing.JLabel cycleDurationLabel;
     private javax.swing.JButton homeButton;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
