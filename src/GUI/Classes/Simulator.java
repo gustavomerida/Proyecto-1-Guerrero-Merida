@@ -62,7 +62,7 @@ public class Simulator extends javax.swing.JFrame {
         this.processorsQuantity = processorsQuantity;
         this.cycleDurationParameter = "1000";
         this.relojGlobal = 0;
-
+        this.currentAlgorithm = currentAlgorithm;
         // CREACION DE PROCESADORES
         this.modelosCPU = createProcessors();
 
@@ -545,7 +545,15 @@ public class Simulator extends javax.swing.JFrame {
 
         // Cambiar el nombre del algoritmo:
         try {
+//            for (int i=0; i<this.processorsQuantity; i++){
+//            
+//            }
+            //Esto hay que modificarlo para que modifique los CPUs que estén activos, ya sean 2 o 3. Quizá pasarle una lista de CPUs como atributo a la clase.
+            this.currentAlgorithm = currentAlgorithmComboBOX.getModel().getSelectedItem().toString();
+            app.getPlanificador().expulsarProceso(app.getCpu1().getActualProceso());
+            app.getPlanificador().expulsarProceso(app.getCpu2().getActualProceso());
             app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
+            
         } catch (Exception e) {
         }
         

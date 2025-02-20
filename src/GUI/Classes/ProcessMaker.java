@@ -408,8 +408,8 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         } else {
 
-            cycleDurationIO = Integer.parseInt(this.cycleDurationESTextField.getText()) * 1000;
-            cycleDurationExceptIO = Integer.parseInt(this.cycleDurationExceptionTextField.getText()) * 1000;
+            cycleDurationIO = Integer.parseInt(this.cycleDurationESTextField.getText());
+            cycleDurationExceptIO = Integer.parseInt(this.cycleDurationExceptionTextField.getText());
 
             ProcesoIOBOUND newIOBoundProcess = new ProcesoIOBOUND(processName, instructionsQuantity, processType, PCBProcess, app.duracionCicloInstruccion, cycleDurationIO, cycleDurationExceptIO);
             return newIOBoundProcess;
