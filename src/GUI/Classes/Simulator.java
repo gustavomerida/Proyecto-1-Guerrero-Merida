@@ -42,7 +42,7 @@ public class Simulator extends javax.swing.JFrame {
      */
     private final App app = App.getInstance();
 
-    private String cycleDurationParameter;
+    private AtomicInteger cycleDurationParameter;
     private int processorsQuantity;
     private DefaultListModel[] modelosCPU;
     private int relojGlobalSimulator;
@@ -52,7 +52,7 @@ public class Simulator extends javax.swing.JFrame {
 
     private Thread simulationThread;
 
-    public Simulator(String cycleDurationParameter, int processorsQuantity, String currentAlgorithm) {
+    public Simulator(AtomicInteger cycleDurationParameter, int processorsQuantity, String currentAlgorithm) {
 
         initComponents();
 
@@ -109,7 +109,7 @@ public class Simulator extends javax.swing.JFrame {
 
                         //app.getPlanificador().setNombreAlgoritmo(currentAlgorithmComboBOX.getModel().getSelectedItem().toString());
                     });
-                    Thread.sleep(Integer.parseInt(this.cycleDurationParameter)); // Actualiza cada x que definio el usuario
+                    Thread.sleep(this.cycleDurationParameter.get()); // Actualiza cada x que definio el usuario
 
                     // POSIBLE LUGAR PARA EL RELOJ GLOBAL, MODIFICAR SLEEP PARA QUE SEA LA MISMA QUE LA DURACION DEL CICLO.
                 } catch (InterruptedException e) {
@@ -499,13 +499,13 @@ public class Simulator extends javax.swing.JFrame {
     }
 
     private void updateSpinner() {
-        this.cycleDurationSpinner.setValue((Integer.parseInt(this.cycleDurationParameter) / 1000));
+        this.cycleDurationSpinner.setValue( (int) (this.cycleDurationParameter.get()/ 1000));
 
     }
 
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_SalirActionPerformed
 
 
@@ -557,8 +557,9 @@ public class Simulator extends javax.swing.JFrame {
     }//GEN-LAST:event_cycleDurationSpinnerKeyPressed
 
     private void cycleDurationSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cycleDurationSpinnerStateChanged
-        this.cycleDurationParameter = String.valueOf(((int) (this.cycleDurationSpinner.getValue()) * 1000));
-        app.duracionCicloInstruccion.set(Integer.parseInt(cycleDurationParameter));
+        this.cycleDurationParameter.set((int) (this.cycleDurationSpinner.getValue()) * 1000);
+        
+        app.duracionCicloInstruccion = (this.cycleDurationParameter);
     }//GEN-LAST:event_cycleDurationSpinnerStateChanged
 
     private void startSimulationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSimulationActionPerformed

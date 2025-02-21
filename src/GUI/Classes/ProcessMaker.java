@@ -318,31 +318,6 @@ public class ProcessMaker extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_processTypeComboBoxActionPerformed
 
-    private boolean checkPositiveInteger(JTextField jTextField) {
-        String valueAsString = jTextField.getText().trim();
-
-        if (valueAsString.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "El campo no puede estar vacío", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-
-        try {
-            int value = Integer.parseInt(valueAsString);
-            if (value > 0) {
-                return true;
-
-            } else {
-
-                JOptionPane.showMessageDialog(null, "El valor ingresado debe ser un número positivo", "Error", JOptionPane.ERROR_MESSAGE);
-                return false;
-            }
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El valor ingresado no es un número positivo", "Error", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-    }
-
 
     private void instructionsQuantityTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_instructionsQuantityTextFieldActionPerformed
 
@@ -478,8 +453,13 @@ public class ProcessMaker extends javax.swing.JFrame {
     }//GEN-LAST:event_quantityProcessorsComboBoxActionPerformed
 
     private Simulator saveSimulatorParameters() {
-        // PREGUNTAR A GUSTAVINHO
-        String cycleDurationParameter = cycleDurationPerInstructionTextField.getText();
+        AtomicInteger cycleDurationParameter;
+        if (cycleDurationPerInstructionTextField.getText().equals("")) {
+            cycleDurationParameter = app.duracionCicloInstruccion;
+        } else {
+            cycleDurationParameter = new AtomicInteger(Integer.parseInt(cycleDurationPerInstructionTextField.getText()));
+        }
+
         int processorsQuantity = Integer.parseInt(quantityProcessorsComboBox.getModel().getSelectedItem().toString());
         String initialAlgorithm = schedulerAlgorithmComboBox.getModel().getSelectedItem().toString();
 
