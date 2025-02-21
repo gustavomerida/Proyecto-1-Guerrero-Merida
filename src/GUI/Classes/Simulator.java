@@ -219,7 +219,6 @@ public class Simulator extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         cycleDurationLabel = new javax.swing.JLabel();
-        currentAlgorithmLabel = new javax.swing.JLabel();
         Salir = new javax.swing.JButton();
         CreateProcess = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -267,16 +266,16 @@ public class Simulator extends javax.swing.JFrame {
 
         primaryPanelCPU.setBackground(new java.awt.Color(56, 12, 36));
         primaryPanelCPU.setLayout(new javax.swing.BoxLayout(primaryPanelCPU, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel1.add(primaryPanelCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 70, 470, 160));
+        jPanel1.add(primaryPanelCPU, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 60, 550, 170));
 
         jPanel3.setBackground(new java.awt.Color(56, 12, 36));
         jPanel3.setForeground(new java.awt.Color(75, 0, 130));
         jPanel3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 750, 100));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 750, 120));
 
         jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
-        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 270, 750, 90));
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 260, 750, 120));
 
         jPanel5.setBackground(new java.awt.Color(56, 12, 36));
         jPanel5.setForeground(new java.awt.Color(75, 0, 130));
@@ -323,10 +322,6 @@ public class Simulator extends javax.swing.JFrame {
         cycleDurationLabel.setForeground(new java.awt.Color(255, 215, 0));
         cycleDurationLabel.setText("Ciclos de reloj:");
         jPanel2.add(cycleDurationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 490, 140, 30));
-
-        currentAlgorithmLabel.setForeground(new java.awt.Color(255, 215, 0));
-        currentAlgorithmLabel.setText("Algoritmo actual:");
-        jPanel2.add(currentAlgorithmLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 520, 130, 20));
 
         Salir.setText("Salir");
         Salir.addActionListener(new java.awt.event.ActionListener() {
@@ -402,7 +397,7 @@ public class Simulator extends javax.swing.JFrame {
             modeloListos.addElement("PSW: " + process.getPCB_proceso().getAmbienteEjecucion().getPsw());
 
             JScrollPane scrollPane = new JScrollPane(newJList);
-            scrollPane.setPreferredSize(new Dimension(150, 150));
+            scrollPane.setPreferredSize(new Dimension(150, 100));
 
             jPanel4.add(scrollPane);
             jPanel4.add(Box.createRigidArea(new Dimension(10, 0)));
@@ -438,7 +433,7 @@ public class Simulator extends javax.swing.JFrame {
             modeloListos.addElement("PSW: " + process.getPCB_proceso().getAmbienteEjecucion().getPsw());
 
             JScrollPane scrollPane = new JScrollPane(newJList);
-            scrollPane.setPreferredSize(new Dimension(150, 150));
+            scrollPane.setPreferredSize(new Dimension(150, 100));
 
             jPanel7.add(scrollPane);
             jPanel7.add(Box.createRigidArea(new Dimension(10, 0)));
@@ -572,7 +567,6 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JButton CreateProcess;
     private javax.swing.JButton Salir;
     private javax.swing.JComboBox<String> currentAlgorithmComboBOX;
-    private javax.swing.JLabel currentAlgorithmLabel;
     private javax.swing.JLabel cycleDurationLabel;
     private javax.swing.JSpinner cycleDurationSpinner;
     private javax.swing.JButton jButton1;

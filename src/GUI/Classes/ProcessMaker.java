@@ -475,16 +475,18 @@ public class ProcessMaker extends javax.swing.JFrame {
     }
 
     private void cleanTextField() {
+        try {
+            JTextField[] textFieldArray = {processNameTextField, instructionsQuantityTextField, cycleDurationESTextField, cycleDurationExceptionTextField};
+            int DuracionCiclo = Integer.parseInt(this.cycleDurationPerInstructionTextField.getText().trim());
 
-        JTextField[] textFieldArray = {processNameTextField, instructionsQuantityTextField, cycleDurationESTextField, cycleDurationExceptionTextField};
-        int DuracionCiclo = Integer.parseInt(this.cycleDurationPerInstructionTextField.getText().trim());
+            if (DuracionCiclo <= 0) {
+                this.cycleDurationPerInstructionTextField.setText("");
+            }
 
-        if (DuracionCiclo <= 0) {
-            this.cycleDurationPerInstructionTextField.setText("");
-        }
-
-        for (JTextField currentTextField : textFieldArray) {
-            currentTextField.setText("");
+            for (JTextField currentTextField : textFieldArray) {
+                currentTextField.setText("");
+            }
+        } catch (Exception e) {
         }
 
     }
