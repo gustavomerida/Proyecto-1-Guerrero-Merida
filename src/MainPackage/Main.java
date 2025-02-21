@@ -4,6 +4,13 @@
  */
 package MainPackage;
 
+import MainClasses.Planificador;
+import AuxClass.*;
+import MainClasses.*;
+import java.awt.FontFormatException;
+import java.io.IOException;
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author Angelo
@@ -13,8 +20,13 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public static void main(String[] args) throws FontFormatException, IOException {
+        
+        App app = App.getInstance();
+        
+        app.start();
+        app.start2();
+
     }
-    
+
 }

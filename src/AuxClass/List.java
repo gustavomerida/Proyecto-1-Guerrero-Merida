@@ -20,6 +20,17 @@ public class List <T>{
         this.iN=0;
     }
     
+    public Nodo<T> obtenerNodo(Object elem) {
+        Nodo<T> actual = this.pFirst;
+        while (actual != null) {
+            if (actual.gettInfo().equals(elem)) {
+                return actual;
+            }
+            actual = actual.getpNext();
+        }
+        return null;
+    }
+    
     public int size (){
         return this.iN;
     }
@@ -48,6 +59,18 @@ public class List <T>{
         }
     }
     
+    public T get(int index) {
+        if (index < 0 || index >= iN) {
+            throw new IndexOutOfBoundsException("index overflow");
+        }
+
+        Nodo<T> current = pFirst;
+        for (int i = 0; i < index; i++) {
+            current = current.getpNext();
+        }
+        return current.gettInfo();
+    }
+    
     public void insert(T x, Nodo <T> pValor){
      // postinsertar.   
         Nodo <T> pNew= new Nodo <>(x);
@@ -73,6 +96,20 @@ public class List <T>{
             
         }
         return result;
+    }
+    
+    public void append(T data) {
+        Nodo<T> newNode = new Nodo<>(data);
+        if (pFirst == null) {
+            pFirst = newNode;
+        } else {
+            Nodo<T> temp = pFirst;
+            while (temp.getpNext()!= null) {
+                temp = temp.getpNext();
+            }
+            temp.setpNext(newNode);
+        }
+        iN++;
     }
     
     
