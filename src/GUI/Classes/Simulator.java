@@ -63,15 +63,15 @@ public class Simulator extends javax.swing.JFrame {
         this.processorsQuantity = processorsQuantity;
         this.cycleDurationParameter = cycleDurationParameter;
         // OJITOSSS
-        
+
         this.relojGlobalSimulator = app.relojGlobal;
-        
+
         this.flagLabel = false;
-        
+
         this.currentAlgorithm = currentAlgorithm;
         // CREACION DE PROCESADORES
         this.modelosCPU = createProcessors();
-        
+
         // SET UP DE ALGORITMO EN APP Y EN SIMULADOR (GUI)
         setAlgorithm(currentAlgorithm);
         app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
@@ -98,12 +98,10 @@ public class Simulator extends javax.swing.JFrame {
                 try {
                     SwingUtilities.invokeLater(() -> {
 
-                        
                         if (flagLabel) {
                             updatecycleDurationLabel();
                         }
                         ejecutarProcesos();
-                        
 
                         actualizarInterfaz(); // Refresca la UI
                         createJScrollPaneOnReady(app.getPlanificador().getColaListos());
@@ -128,7 +126,6 @@ public class Simulator extends javax.swing.JFrame {
             CPU currentCPU0 = app.getCpu1();
             CPU currentCPU1 = app.getCpu2();
             CPU currentCPU2 = app.getCpu3();
-            
 
             for (int i = 0; i < modelosCPU.length; i++) {
                 if (currentCPU1 == null || currentCPU1.getActualProceso() == null) {
@@ -527,13 +524,14 @@ public class Simulator extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        this.setVisible(false);
+
         Estadisticas estadistica = new Estadisticas();
         estadistica.setVisible(true);
+        
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        app.getGuardadoGson().GuardadoGson();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void currentAlgorithmComboBOXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_currentAlgorithmComboBOXActionPerformed
@@ -547,11 +545,10 @@ public class Simulator extends javax.swing.JFrame {
             this.currentAlgorithm = currentAlgorithmComboBOX.getModel().getSelectedItem().toString();
             app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
             app.flagCambio = true;
-            
-            
+
         } catch (Exception e) {
         }
-        
+
 
     }//GEN-LAST:event_currentAlgorithmComboBOXActionPerformed
 
@@ -601,5 +598,4 @@ public class Simulator extends javax.swing.JFrame {
     /**
      * @return the relojGlobal
      */
-    
 }

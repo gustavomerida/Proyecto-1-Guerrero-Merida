@@ -288,13 +288,12 @@ public class ProcessMaker extends javax.swing.JFrame {
     }//GEN-LAST:event_CreateProcessActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        this.setVisible(false);
         Estadisticas estadistica = new Estadisticas();
         estadistica.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        app.getGuardadoGson().GuardadoGson();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void cycleDurationExceptionTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cycleDurationExceptionTextFieldActionPerformed

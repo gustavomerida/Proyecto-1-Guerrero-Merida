@@ -30,6 +30,7 @@ public class App {
     private CPU cpu3;
     public AtomicInteger duracionCicloInstruccion = new AtomicInteger(); //Variable global que indica la duración de un ciclo de instrucción
     public boolean flagCambio = false;
+    private GuardadoGson guardadoGson;
 
     public int relojGlobal;
 
@@ -88,7 +89,8 @@ public class App {
         /*
         CARGA DE LOS PROCESOS EN 0, ESCRITURA DE LOS PROCESOS EN 1
          */
-        GuardadoGson guardarEnvironment = new GuardadoGson(1);
+        this.guardadoGson = new GuardadoGson(1);
+        
         
         ProcessMaker processMaker = new ProcessMaker();
         processMaker.setVisible(true);
@@ -135,7 +137,14 @@ public class App {
             this.cpu2.start();
 
         }
+    }
 
+    public GuardadoGson getGuardadoGson() {
+        return guardadoGson;
+    }
+
+    public void setGuardadoGson(GuardadoGson guardadoGson) {
+        this.guardadoGson = guardadoGson;
     }
 
     public void setearProcesoACPU() {
@@ -158,8 +167,6 @@ public class App {
     public CPU getCpu3() {
         return cpu3;
     }
-    
-    
 
     public int getRelojGlobal() {
         return this.relojGlobal;
