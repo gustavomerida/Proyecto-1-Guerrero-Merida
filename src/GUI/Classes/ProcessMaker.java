@@ -71,6 +71,7 @@ public class ProcessMaker extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        cycleDurationLabel1 = new javax.swing.JLabel();
         schedulerAlgorithmComboBox = new javax.swing.JComboBox<>();
         quantityProcessorsComboBox = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
@@ -103,6 +104,11 @@ public class ProcessMaker extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        cycleDurationLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        cycleDurationLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        cycleDurationLabel1.setText("(en milisegundos)");
+        jPanel1.add(cycleDurationLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 420, 130, 40));
 
         schedulerAlgorithmComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SPN", "RR", "SRT", "HRRN" }));
         schedulerAlgorithmComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -471,6 +477,11 @@ public class ProcessMaker extends javax.swing.JFrame {
     private void cleanTextField() {
 
         JTextField[] textFieldArray = {processNameTextField, instructionsQuantityTextField, cycleDurationESTextField, cycleDurationExceptionTextField};
+        int DuracionCiclo = Integer.parseInt(this.cycleDurationPerInstructionTextField.getText().trim());
+
+        if (DuracionCiclo <= 0) {
+            this.cycleDurationPerInstructionTextField.setText("");
+        }
 
         for (JTextField currentTextField : textFieldArray) {
             currentTextField.setText("");
@@ -528,6 +539,7 @@ public class ProcessMaker extends javax.swing.JFrame {
     private javax.swing.JTextField cycleDurationESTextField;
     private javax.swing.JTextField cycleDurationExceptionTextField;
     private javax.swing.JLabel cycleDurationLabel;
+    private javax.swing.JLabel cycleDurationLabel1;
     private javax.swing.JTextField cycleDurationPerInstructionTextField;
     private javax.swing.JButton guardar;
     private javax.swing.JTextField instructionsQuantityTextField;
