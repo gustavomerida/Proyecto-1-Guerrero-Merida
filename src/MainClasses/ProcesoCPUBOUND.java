@@ -60,20 +60,12 @@ public class ProcesoCPUBOUND extends Proceso {
             }
 
             if ("Running".equals(this.getPCB_proceso().getEstado())) {
-
-//                    System.out.println("TIEMPO EN COLA " + String.valueOf(this.getTiempoEnCola()));
-//
-//                    System.out.println("Proceso " + this.getNombreProceso() + " ejecutándose");
-//                    System.out.println("Cant_instrucciones: " + this.getCant_instrucciones());
                 // Actualizar MAR y PC
                 int MAR_num = this.getCant_instrucciones() - this.getTiempoRestante();
                 this.getPCB_proceso().getAmbienteEjecucion().setMAR(MAR_num);
                 this.getPCB_proceso().getAmbienteEjecucion().setPc(MAR_num + 1);
+
                 // Mostrar MAR y PC
-//                    System.out.println("MAR: " + this.getPCB_proceso().getAmbienteEjecucion().getMAR());
-//                    System.out.println("PC: " + this.getPCB_proceso().getAmbienteEjecucion().getPc());
-//                    System.out.println("Estado: " + this.getPCB_proceso().getEstado());
-//                    System.out.println("");
                 this.reducirTiempo(1);
 
                 if (this.getTiempoRestante() == 0) {
