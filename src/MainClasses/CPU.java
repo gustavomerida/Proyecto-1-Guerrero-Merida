@@ -70,26 +70,29 @@ public class CPU extends Thread {
 
     @Override
     public void run() { //Aquí también hay que llevar el contadodor de ciclos global
-        int contadorCiclos = 0; // Contador de ciclos
+        int contadorCiclos = 0; // Contador de ciclos para RR
         final int quantum = planificador.getQuantum(); //Tiempo máximo (cantidad de ciclos) de ejecución por proceso
-        //Excepcion e = new Excepcion(null, this, this.getPlanificador());
         Proceso p = null;
         while (true) {
+            
             if (p != null) {
+                
                 p.setTiempoEnCola(p.getTiempoEnCola() + (app.getRelojGlobal()-p.getCicloEntradaListo()));
                 if (p.getPCB_proceso().getEstado() == "Blocked") {
                     int[] ciclos;
                     ciclos = new int[]{p.getCicloGenerarExcepcion(), p.getCicloSatisfacerExcepcion()};
                     Excepcion e = new Excepcion(p, this, this.getPlanificador(), ciclos);
                     e.start();
+                    
                 }
+                
             }
 
             ProcesoCPUBOUND pr = procesoSO.copiar();
             this.setActualProceso(pr);
             try {
+                
                 pr.start();
-//                System.out.println("Esperando por proceso de SO a terminar...");
                 this.sleep(pr.getCant_instrucciones() * pr.getCiclosDuracion().get()); //HAY que cambiar este tiempo. 
             } catch (InterruptedException ex) {
                 Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
@@ -99,20 +102,11 @@ public class CPU extends Thread {
             System.out.println(p);
 
             if (p != null) {
-//                if (p.getPCB_proceso().getEstado()=="Blocked"){
-//                   e.proceso = p;
-//                   e.start();
-//                }
-                if (p.getTipo().equals("CPU BOUND")) {
-                    this.CPUBoundCounter++;
-                } else {
-                    this.IOBoundCounter++;
-                }
 
-                this.setEstado("Activo"); //estado del CPU
+                this.setEstado("Activo"); 
                 switch (this.getPlanificador().getNombreAlgoritmo()) {
                     case "FCFS":
-                        System.out.println("EJECUTANDO EN FCFSSSSSSSSSSSSSSSSSS");
+                        System.out.println("EJECUTANDO EN FCFS");
                         this.setActualProceso(p);
                         this.conjuntoProcesos.insertar(p);
                         System.out.println("SE HA INSERTADO CON EXITO " + p.getNombreProceso() + "EN CPU " + this.id);
@@ -120,7 +114,8 @@ public class CPU extends Thread {
                          {
                             try {
                                 p.start();
-                                while (p.getTiempoRestante()>0 && !("Exit".equals(p.getPCB_proceso().getEstado())) && !("Blocked".equals(p.getPCB_proceso().getEstado()))) {
+                                //AQUI HUBO UN CAMBIO >=  ANTES:p.getTiempoRestante()>0
+                                while (p.getTiempoRestante()>=0 && !("Exit".equals(p.getPCB_proceso().getEstado())) && !("Blocked".equals(p.getPCB_proceso().getEstado()))) {
                                     
                                     this.sleep(p.getCiclosDuracion().get());
                                     if (app.flagCambio==true){

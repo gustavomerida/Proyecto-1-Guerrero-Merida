@@ -66,7 +66,6 @@ public class ProcesoIOBOUND extends Proceso {
 
         if (this.getNombreProceso() != "SO"){
             System.out.println("TERMINO UN PROCESO IO BOUND");
-            System.out.println(app.getPlanificador().getColaTerminados().travel());
             app.getPlanificador().terminarProceso(this);// Encolar el proceso en Terminados
         }
 

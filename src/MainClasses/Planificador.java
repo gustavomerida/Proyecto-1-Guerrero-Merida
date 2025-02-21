@@ -275,8 +275,6 @@ public class Planificador {
             
             if (proceso.getTipo()=="CPU BOUND"){
                 ProcesoCPUBOUND proceso2 = new ProcesoCPUBOUND(proceso.getNombreProceso(), proceso.getCant_instrucciones(), "CPU BOUND", proceso.getPCB_proceso(), proceso.getCiclosDuracion());
-                System.out.println("Al hilo le fantan " + tiempoRestante + " instrucciones");
-                System.out.println(proceso2.getTiempoRestante());
                 proceso2.setTiempoRestante(tiempoRestante);
                 proceso2.getPCB_proceso().setEstado("Ready");
                 if (proceso.getNombreProceso() != "SO"){

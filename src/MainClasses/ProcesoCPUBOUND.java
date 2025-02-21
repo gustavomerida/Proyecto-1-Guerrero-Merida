@@ -36,7 +36,7 @@ public class ProcesoCPUBOUND extends Proceso {
         this.ciclosDuracion = ciclosDuracion;
         this.cicloEntradaListo = app.getRelojGlobal();
         this.tiempoEnCola = 1;
-        this.sleepTime = cant_instrucciones; 
+        this.sleepTime = cant_instrucciones;
     }
 
     private void terminar() {
@@ -44,7 +44,7 @@ public class ProcesoCPUBOUND extends Proceso {
 
         this.getPCB_proceso().setEstado("Exit");
 
-        if (this.getNombreProceso() != "SO"){
+        if (this.getNombreProceso() != "SO") {
             app.getPlanificador().terminarProceso(this);// Encolar el proceso en Terminados
         }
 
@@ -53,36 +53,35 @@ public class ProcesoCPUBOUND extends Proceso {
     @Override
     public void run() {
         while (true) {
+            this.getPCB_proceso().setEstado("Running");
             if (this.getTiempoRestante() == 0) {
                 this.getPCB_proceso().setEstado("Exit");
                 terminar();
             }
-            
+
             if ("Running".equals(this.getPCB_proceso().getEstado())) {
-                
-                
 
 //                    System.out.println("TIEMPO EN COLA " + String.valueOf(this.getTiempoEnCola()));
 //
 //                    System.out.println("Proceso " + this.getNombreProceso() + " ejecutándose");
 //                    System.out.println("Cant_instrucciones: " + this.getCant_instrucciones());
-                    // Actualizar MAR y PC
-                    int MAR_num = this.getCant_instrucciones() - this.getTiempoRestante();
-                    this.getPCB_proceso().getAmbienteEjecucion().setMAR(MAR_num);
-                    this.getPCB_proceso().getAmbienteEjecucion().setPc(MAR_num + 1);
-                    // Mostrar MAR y PC
+                // Actualizar MAR y PC
+                int MAR_num = this.getCant_instrucciones() - this.getTiempoRestante();
+                this.getPCB_proceso().getAmbienteEjecucion().setMAR(MAR_num);
+                this.getPCB_proceso().getAmbienteEjecucion().setPc(MAR_num + 1);
+                // Mostrar MAR y PC
 //                    System.out.println("MAR: " + this.getPCB_proceso().getAmbienteEjecucion().getMAR());
 //                    System.out.println("PC: " + this.getPCB_proceso().getAmbienteEjecucion().getPc());
 //                    System.out.println("Estado: " + this.getPCB_proceso().getEstado());
 //                    System.out.println("");
-                    this.reducirTiempo(1);
+                this.reducirTiempo(1);
 
-                    if (this.getTiempoRestante() == 0) {
-                        this.getPCB_proceso().setEstado("Exit");
-                        terminar();
-                        break;
-                        //llamar al planificador o importar App
-                    }
+                if (this.getTiempoRestante() == 0) {
+                    this.getPCB_proceso().setEstado("Exit");
+                    terminar();
+                    break;
+                    //llamar al planificador o importar App
+                }
                 try {
                     // Simular duración del ciclo
                     this.sleep(this.ciclosDuracion.get());
@@ -90,12 +89,9 @@ public class ProcesoCPUBOUND extends Proceso {
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ProcesoCPUBOUND.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } else if ("Blocked".equals(this.getPCB_proceso().getEstado()) || "Ready".equals(this.getPCB_proceso().getEstado())) {
-                //Nada
-//                System.out.println("Proceso bloqueado o listo");
+                // ANTES CONSIDERAMOS "Blocked".equals(this.getPCB_proceso().getEstado()) || 
+            } else if ("Ready".equals(this.getPCB_proceso().getEstado())) {
 
-                // En ambas colas debe sumar el tiempo que esta "esperando" 
-//                System.out.println("Sumando a tiempo de la cola ");
                 this.setTiempoEnCola(this.getTiempoEnCola() + 1);
                 break;
             } else {
