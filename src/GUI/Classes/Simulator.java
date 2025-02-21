@@ -73,7 +73,7 @@ public class Simulator extends javax.swing.JFrame {
         this.modelosCPU = createProcessors();
 
         // SET UP DE ALGORITMO EN APP Y EN SIMULADOR (GUI)
-        setAlgorithm(currentAlgorithm);
+        // setAlgorithm(currentAlgorithm);
         app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
 
         // SET UP DEL VALOR DEL SPINNER EN LA SIMULACION
@@ -82,6 +82,8 @@ public class Simulator extends javax.swing.JFrame {
         startSimulation();
 
     }
+    
+    /*
 
     private void setAlgorithm(String currentAlgorithm) {
         for (int i = 0; i < currentAlgorithmComboBOX.getItemCount(); i++) {
@@ -90,7 +92,7 @@ public class Simulator extends javax.swing.JFrame {
             }
         }
     }
-
+*/
     private void startSimulation() {
         simulationThread = new Thread(() -> {
             while (true) {
@@ -499,7 +501,7 @@ public class Simulator extends javax.swing.JFrame {
     }
 
     private void updateSpinner() {
-        this.cycleDurationSpinner.setValue( (int) (this.cycleDurationParameter.get()/ 1000));
+        this.cycleDurationSpinner.setValue((int) (this.cycleDurationParameter.get() / 1000));
 
     }
 
@@ -527,27 +529,25 @@ public class Simulator extends javax.swing.JFrame {
 
         Estadisticas estadistica = new Estadisticas();
         estadistica.setVisible(true);
-        
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         app.getGuardadoGson().GuardadoGson();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+
     private void currentAlgorithmComboBOXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_currentAlgorithmComboBOXActionPerformed
 
         // Cambiar el nombre del algoritmo:
         try {
-//            for (int i=0; i<this.processorsQuantity; i++){
-//            
-//            }
             //Esto hay que modificarlo para que modifique los CPUs que estén activos, ya sean 2 o 3. Quizá pasarle una lista de CPUs como atributo a la clase.
             this.currentAlgorithm = currentAlgorithmComboBOX.getModel().getSelectedItem().toString();
             app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
             app.flagCambio = true;
 
         } catch (Exception e) {
-        }
+    }
 
 
     }//GEN-LAST:event_currentAlgorithmComboBOXActionPerformed
@@ -558,7 +558,7 @@ public class Simulator extends javax.swing.JFrame {
 
     private void cycleDurationSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_cycleDurationSpinnerStateChanged
         this.cycleDurationParameter.set((int) (this.cycleDurationSpinner.getValue()) * 1000);
-        
+
         app.duracionCicloInstruccion = (this.cycleDurationParameter);
     }//GEN-LAST:event_cycleDurationSpinnerStateChanged
 
