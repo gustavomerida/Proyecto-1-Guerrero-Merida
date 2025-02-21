@@ -60,7 +60,7 @@ public class Simulator extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
 
         this.processorsQuantity = processorsQuantity;
-        this.cycleDurationParameter = "1000";
+        this.cycleDurationParameter = cycleDurationParameter;
         this.relojGlobal = 0;
         this.currentAlgorithm = currentAlgorithm;
         // CREACION DE PROCESADORES
@@ -216,7 +216,6 @@ public class Simulator extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        homeButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
@@ -361,14 +360,6 @@ public class Simulator extends javax.swing.JFrame {
             }
         });
         jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, 110, 40));
-
-        homeButton.setText("Home");
-        homeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                homeButtonActionPerformed(evt);
-            }
-        });
-        jPanel2.add(homeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 110, 40));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Assets/background2.png"))); // NOI18N
         jLabel3.setText("jLabel3");
@@ -535,13 +526,6 @@ public class Simulator extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
-
-        Home home = new Home();
-        this.setVisible(false);
-        home.setVisible(true);
-    }//GEN-LAST:event_homeButtonActionPerformed
-
     private void currentAlgorithmComboBOXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_currentAlgorithmComboBOXActionPerformed
 
         // Cambiar el nombre del algoritmo:
@@ -582,7 +566,6 @@ public class Simulator extends javax.swing.JFrame {
     private javax.swing.JLabel currentAlgorithmLabel;
     private javax.swing.JLabel cycleDurationLabel;
     private javax.swing.JSpinner cycleDurationSpinner;
-    private javax.swing.JButton homeButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;

@@ -110,14 +110,11 @@ public class Estadisticas extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        cycleDurationLabel = new javax.swing.JLabel();
-        currentAlgorithmLabel = new javax.swing.JLabel();
         Salir = new javax.swing.JButton();
         CreateProcess = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        homeButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -144,14 +141,6 @@ public class Estadisticas extends javax.swing.JFrame {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 0, 890, 580));
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        cycleDurationLabel.setForeground(new java.awt.Color(255, 215, 0));
-        cycleDurationLabel.setText("Ciclos de reloj:");
-        jPanel2.add(cycleDurationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 490, 140, 30));
-
-        currentAlgorithmLabel.setForeground(new java.awt.Color(255, 215, 0));
-        currentAlgorithmLabel.setText("Algoritmo actual:");
-        jPanel2.add(currentAlgorithmLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 520, 130, 20));
 
         Salir.setText("Salir");
         Salir.addActionListener(new java.awt.event.ActionListener() {
@@ -195,14 +184,6 @@ public class Estadisticas extends javax.swing.JFrame {
         });
         jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, 110, 40));
 
-        homeButton.setText("Home");
-        homeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                homeButtonActionPerformed(evt);
-            }
-        });
-        jPanel2.add(homeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 110, 40));
-
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Assets/background2.png"))); // NOI18N
         jLabel3.setText("jLabel3");
         jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1110, 640));
@@ -240,13 +221,6 @@ public class Estadisticas extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
-
-        Home home = new Home();
-        this.setVisible(false);
-        home.setVisible(true);
-    }//GEN-LAST:event_homeButtonActionPerformed
    /**
      * @param args the command line arguments
      */
@@ -254,9 +228,6 @@ public class Estadisticas extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton CreateProcess;
     private javax.swing.JButton Salir;
-    private javax.swing.JLabel currentAlgorithmLabel;
-    private javax.swing.JLabel cycleDurationLabel;
-    private javax.swing.JButton homeButton;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;

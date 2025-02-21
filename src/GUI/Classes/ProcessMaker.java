@@ -79,7 +79,6 @@ public class ProcessMaker extends javax.swing.JFrame {
         simulatorButton = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        homeButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         label2IOEXTRA = new javax.swing.JLabel();
         cycleDurationExceptionTextField = new javax.swing.JTextField();
@@ -164,14 +163,6 @@ public class ProcessMaker extends javax.swing.JFrame {
             }
         });
         jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, 110, 40));
-
-        homeButton.setText("Home");
-        homeButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                homeButtonActionPerformed(evt);
-            }
-        });
-        jPanel2.add(homeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 180, 110, 40));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Assets/background2.png"))); // NOI18N
         jLabel3.setText("jLabel3");
@@ -269,7 +260,7 @@ public class ProcessMaker extends javax.swing.JFrame {
                 cycleDurationPerInstructionTextFieldActionPerformed(evt);
             }
         });
-        jPanel1.add(cycleDurationPerInstructionTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 430, 240, -1));
+        jPanel1.add(cycleDurationPerInstructionTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 430, 70, -1));
 
         guardar.setText("Guardar");
         guardar.addActionListener(new java.awt.event.ActionListener() {
@@ -297,7 +288,9 @@ public class ProcessMaker extends javax.swing.JFrame {
     }//GEN-LAST:event_CreateProcessActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        this.setVisible(false);
+        Estadisticas estadistica = new Estadisticas();
+        estadistica.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -380,55 +373,97 @@ public class ProcessMaker extends javax.swing.JFrame {
     }//GEN-LAST:event_simulatorButtonActionPerformed
 
     private Proceso createNewProcess() {
+        // VARIABLES GENERALES
+        String processName;
+        String processType;
+        int instructionsQuantity;
+        int cycleDurationInstructionValue;
 
-        // ATRIBUTOS GENERALES
-        int instructionsQuantity = 0;
-        AtomicInteger cycleDurationInstruction;
+        // VARIABLES I/O
+        int cycleDurationIO;
+        int cycleDurationExceptIO;
 
-        // ATRIBUTOS IO
-        int cycleDurationIO = 0;
-        int cycleDurationExceptIO = 0;
+        try {
+            processName = this.processNameTextField.getText().trim();
 
-        String processName = this.processNameTextField.getText();
-        String processType = this.processTypeComboBox.getModel().getSelectedItem().toString();
+            if (processName.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El nombre del proceso está vacío.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                return null; // Se cancela la creación
+            }
 
-        ///////////////////////////////////////////////////////////////////////////////////////
-        RegistrosControlEstado executionEnvironment = new RegistrosControlEstado(0, 1, 0);
+            String instructionsQuantityText = this.instructionsQuantityTextField.getText().trim();
+            if (instructionsQuantityText.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "La cantidad de instrucciones está vacía.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
 
-        PCB PCBProcess = new PCB(1, processName, "Ready", executionEnvironment);
+            instructionsQuantity = Integer.parseInt(instructionsQuantityText);
+            if (instructionsQuantity <= 0) {
+                JOptionPane.showMessageDialog(this, "La cantidad de instrucciones debe ser mayor que 0.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
 
-        instructionsQuantity = Integer.parseInt(this.instructionsQuantityTextField.getText());
-        cycleDurationInstruction = new AtomicInteger(Integer.parseInt(this.cycleDurationPerInstructionTextField.getText()) * 1000);
-        app.duracionCicloInstruccion.set(cycleDurationInstruction.get());
+            String cycleDurationInstructionText = this.cycleDurationPerInstructionTextField.getText().trim();
+            if (cycleDurationInstructionText.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "La duración de cada instrucción está vacía.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
 
-        if ("CPU BOUND".equals(processType)) {
+            cycleDurationInstructionValue = Integer.parseInt(cycleDurationInstructionText);
+            if (cycleDurationInstructionValue <= 0) {
+                JOptionPane.showMessageDialog(this, "La duración de cada instrucción debe ser mayor que 0.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
 
-            ProcesoCPUBOUND newCPUBoundProcess = new ProcesoCPUBOUND(processName, instructionsQuantity, processType, PCBProcess, app.duracionCicloInstruccion);
-            return newCPUBoundProcess;
+            processType = this.processTypeComboBox.getModel().getSelectedItem().toString();
 
-        } else {
+            RegistrosControlEstado executionEnvironment = new RegistrosControlEstado(0, 1, 0);
+            PCB PCBProcess = new PCB(0, processName, "Ready", executionEnvironment);
 
-            cycleDurationIO = Integer.parseInt(this.cycleDurationESTextField.getText());
-            cycleDurationExceptIO = Integer.parseInt(this.cycleDurationExceptionTextField.getText());
+            AtomicInteger cycleDurationInstruction = new AtomicInteger(cycleDurationInstructionValue);
+            app.duracionCicloInstruccion.set(cycleDurationInstruction.get());
 
-            ProcesoIOBOUND newIOBoundProcess = new ProcesoIOBOUND(processName, instructionsQuantity, processType, PCBProcess, app.duracionCicloInstruccion, cycleDurationIO, cycleDurationExceptIO);
-            return newIOBoundProcess;
+            if ("CPU BOUND".equals(processType)) {
+                ProcesoCPUBOUND newCPUBoundProcess = new ProcesoCPUBOUND(processName, instructionsQuantity, processType, PCBProcess, app.duracionCicloInstruccion);
+                return newCPUBoundProcess;
+            } else {
+                String cycleDurationIOText = this.cycleDurationESTextField.getText().trim();
+                if (cycleDurationIOText.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "La duración del ciclo de E/S está vacía.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                    return null;
+                }
 
+                cycleDurationIO = Integer.parseInt(cycleDurationIOText);
+                if (cycleDurationIO <= 0) {
+                    JOptionPane.showMessageDialog(this, "La duración del ciclo de E/S debe ser mayor que 0.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                    return null;
+                }
+
+                String cycleDurationExceptIOText = this.cycleDurationExceptionTextField.getText().trim();
+                if (cycleDurationExceptIOText.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "La duración de excepción de E/S está vacía.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                    return null;
+                }
+
+                cycleDurationExceptIO = Integer.parseInt(cycleDurationExceptIOText);
+                if (cycleDurationExceptIO <= 0) {
+                    JOptionPane.showMessageDialog(this, "La duración de excepción de E/S debe ser mayor que 0.", "Error de validación", JOptionPane.ERROR_MESSAGE);
+                    return null;
+                }
+
+                ProcesoIOBOUND newIOBoundProcess = new ProcesoIOBOUND(processName, instructionsQuantity, processType, PCBProcess, app.duracionCicloInstruccion, cycleDurationIO, cycleDurationExceptIO);
+                return newIOBoundProcess;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor, ingresa únicamente números válidos en los campos numéricos.\n" + e.getMessage(), "Error de formato numérico", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
     }
 
-    private void homeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeButtonActionPerformed
-
-        Home home = new Home();
-        this.setVisible(false);
-        home.setVisible(true);
-
-    }//GEN-LAST:event_homeButtonActionPerformed
-
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
-        
+
         Proceso newProcess = createNewProcess();
-        
+
         app.getPlanificador().getColaListos().encolar(newProcess);
 
         cleanTextField();
@@ -445,7 +480,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
     private Simulator saveSimulatorParameters() {
         // PREGUNTAR A GUSTAVINHO
-        String cycleDurationParameter = String.valueOf(cycleDurationPerInstructionTextField.getText());
+        String cycleDurationParameter = cycleDurationPerInstructionTextField.getText();
         int processorsQuantity = Integer.parseInt(quantityProcessorsComboBox.getModel().getSelectedItem().toString());
         String initialAlgorithm = schedulerAlgorithmComboBox.getModel().getSelectedItem().toString();
 
@@ -516,7 +551,6 @@ public class ProcessMaker extends javax.swing.JFrame {
     private javax.swing.JLabel cycleDurationLabel;
     private javax.swing.JTextField cycleDurationPerInstructionTextField;
     private javax.swing.JButton guardar;
-    private javax.swing.JButton homeButton;
     private javax.swing.JTextField instructionsQuantityTextField;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;

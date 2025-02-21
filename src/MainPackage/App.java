@@ -3,8 +3,9 @@ package MainPackage;
 import GUI.Classes.ChartClass;
 import AuxClass.Cola;
 import GUI.Classes.Estadisticas;
-import GUI.Classes.Home;
+
 import GUI.Classes.Simulator;
+import GUI.Classes.ProcessMaker;
 import MainClasses.CPU;
 import MainClasses.PCB;
 import MainClasses.Planificador;
@@ -14,6 +15,8 @@ import MainClasses.ProcesoIOBOUND;
 import MainClasses.RegistrosControlEstado;
 import FileFunctions.GuardadoGson;
 import AuxClass.Conjunto;
+import java.awt.FontFormatException;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class App {
@@ -80,15 +83,15 @@ public class App {
 //        planificador.getColaListos().encolar(p4);
     }
 
-    public void start2() {
+    public void start2() throws FontFormatException, IOException {
 
         /*
         CARGA DE LOS PROCESOS EN 0, ESCRITURA DE LOS PROCESOS EN 1
          */
         GuardadoGson guardarEnvironment = new GuardadoGson(1);
         
-        Home home = new Home();
-        home.setVisible(true);
+        ProcessMaker processMaker = new ProcessMaker();
+        processMaker.setVisible(true);
 
 //        Simulator simulator = new Simulator("1000", 2, "");
 //        simulator.setVisible(true);
