@@ -156,12 +156,7 @@ public class CPU extends Thread {
                         // Verifica si el proceso terminó
                         if (p.getTiempoRestante() == 0) {
                             p.getPCB_proceso().setEstado("Exit");
-                        } 
-//                        else {
-//                            System.out.println("El proceso " + p.getNombreProceso() + "está por ser expulsado");
-//                            // Si no terminó, reinsertar en la cola de listos
-//                            this.planificador.expulsarProceso(p);
-//                        }
+                        }
                         break;
 
                     case "SPN":
@@ -276,30 +271,6 @@ public class CPU extends Thread {
         }
     }
 
-    /*
-    private void ejecutarProcesoSO() {
-        System.out.println("CPU " + this.id + " ejecutando proceso del Sistema Operativo...");
-
-        // Crear un proceso de SO temporal
-        RegistrosControlEstado environment = new RegistrosControlEstado(0, 1, 0);
-        PCB pcb = new PCB(0, "Proceso de SO", "Running", environment);
-        Proceso procesoSO = new ProcesoCPUBOUND("Proceso de SO", 3, "CPU BOUND", pcb, 500); 
-
-        procesoSO.start();
-
-        // Simular ejecución del proceso de SO
-        while (procesoSO.getTiempoRestante() > 0) {
-            try {
-                Thread.sleep(procesoSO.getCiclosDuracion());
-                procesoSO.reducirTiempo(1);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(CPU.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        System.out.println("Proceso de SO finalizado en CPU " + this.id);
-    }
-     */
     /**
      * @return the id
      */
