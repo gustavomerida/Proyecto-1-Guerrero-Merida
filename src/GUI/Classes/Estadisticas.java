@@ -102,7 +102,10 @@ public class Estadisticas extends javax.swing.JFrame {
     private void initComponents() {
 
         stadisticsButtons = new javax.swing.ButtonGroup();
+        jLabel6 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jPanelChartSystem = new javax.swing.JPanel();
         jPanelChartCPU1 = new javax.swing.JPanel();
         jPanelChartCPU3 = new javax.swing.JPanel();
@@ -116,20 +119,39 @@ public class Estadisticas extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel6.setBackground(new java.awt.Color(255, 255, 51));
+        jLabel6.setForeground(new java.awt.Color(255, 215, 0));
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("CPU-3");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 300, 60, -1));
+
         jLabel4.setBackground(new java.awt.Color(255, 255, 51));
         jLabel4.setForeground(new java.awt.Color(255, 215, 0));
-        jLabel4.setText("SISTEMA");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 70, 60, -1));
-        getContentPane().add(jPanelChartSystem, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, 370, 190));
-        getContentPane().add(jPanelChartCPU1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 90, 370, 190));
-        getContentPane().add(jPanelChartCPU3, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 310, 370, 190));
-        getContentPane().add(jPanelChartCPU2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 310, 370, 190));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("CPU-1");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 60, 60, -1));
+
+        jLabel5.setBackground(new java.awt.Color(255, 255, 51));
+        jLabel5.setForeground(new java.awt.Color(255, 215, 0));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("SISTEMA");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 60, 60, -1));
+
+        jLabel7.setBackground(new java.awt.Color(255, 255, 51));
+        jLabel7.setForeground(new java.awt.Color(255, 215, 0));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("CPU-2");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 300, 60, -1));
+        getContentPane().add(jPanelChartSystem, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 80, 390, 200));
+        getContentPane().add(jPanelChartCPU1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 80, 390, 200));
+        getContentPane().add(jPanelChartCPU3, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 320, 390, 200));
+        getContentPane().add(jPanelChartCPU2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 320, 390, 200));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 215, 0));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("GRAFICO ESTADISTICO");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 0, 420, 60));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 0, 420, 60));
 
         jLabel1.setForeground(new java.awt.Color(255, 215, 0));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Assets/solid-background-color.png"))); // NOI18N
@@ -168,6 +190,9 @@ public class Estadisticas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanelChartCPU1;
     private javax.swing.JPanel jPanelChartCPU2;
