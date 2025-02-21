@@ -5,6 +5,7 @@ package GUI.Classes;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 import AuxClass.Cola;
+import AuxClass.Conjunto;
 import AuxClass.Nodo;
 import MainClasses.Proceso;
 import MainClasses.Proceso;
@@ -96,19 +97,26 @@ public class ChartClass {
     }
 
     private void updateChartData(int id) {
-        switch (id) {
-            case 0:
-                updateChartDataSystem();
-                break;
-            case 1:
-                updateChartDataCPU1();
-            case 2:
-                updateChartDataCPU2();
-            case 3:
-                updateChartDataCPU3();
-            default:
-                throw new AssertionError();
+        try {
+            switch (id) {
+                case 0:
+                    updateChartDataSystem();
+                    break;
+                case 1:
+                    updateChartDataCPU1();
+                    break;
+                case 2:
+                    updateChartDataCPU2();
+                    break;
+                case 3:
+                    updateChartDataCPU3();
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+        } catch (Exception e) {
         }
+
     }
 
     public void updateChartDataSystem() {
@@ -135,36 +143,68 @@ public class ChartClass {
     }
 
     public void updateChartDataCPU1() {
-
+        int contadorCPUBOUND = 0;
+        int contadorIOBOUND = 0;
         int tiempoActual = seriesCpuBound.getItemCount() + 1;
+        try {
+            Conjunto<Proceso> conjuntoCPU = app.getCpu1().getConjuntoProcesos();
+            for (int i = 0; i < conjuntoCPU.getLista().size(); i++) {
+                if (conjuntoCPU.getLista().get(i).getTipo().equals("CPU BOUND")) {
+                    contadorCPUBOUND++;
+                } else {
+                    contadorIOBOUND++;
+                }
+            }
 
-        int contadorCPUBOUND = app.getCpu1().getCPUBoundCounter();
-        int contadorIOBOUND = app.getCpu1().getIOBoundCounter();
+            seriesCpuBound.addOrUpdate(tiempoActual, contadorCPUBOUND);
+            seriesIoBound.addOrUpdate(tiempoActual, contadorIOBOUND);
+        } catch (Exception e) {
+        }
 
-        seriesCpuBound.addOrUpdate(tiempoActual, contadorCPUBOUND);
-        seriesIoBound.addOrUpdate(tiempoActual, contadorIOBOUND);
     }
 
     public void updateChartDataCPU2() {
 
+        int contadorCPUBOUND = 0;
+        int contadorIOBOUND = 0;
         int tiempoActual = seriesCpuBound.getItemCount() + 1;
+        try {
+            Conjunto<Proceso> conjuntoCPU = app.getCpu2().getConjuntoProcesos();
+            for (int i = 0; i < conjuntoCPU.getLista().size(); i++) {
+                if (conjuntoCPU.getLista().get(i).getTipo().equals("CPU BOUND")) {
+                    contadorCPUBOUND++;
+                } else {
+                    contadorIOBOUND++;
+                }
+            }
 
-        int contadorCPUBOUND = app.getCpu2().getCPUBoundCounter();
-        int contadorIOBOUND = app.getCpu2().getIOBoundCounter();
+            seriesCpuBound.addOrUpdate(tiempoActual, contadorCPUBOUND);
+            seriesIoBound.addOrUpdate(tiempoActual, contadorIOBOUND);
+        } catch (Exception e) {
+        }
 
-        seriesCpuBound.addOrUpdate(tiempoActual, contadorCPUBOUND);
-        seriesIoBound.addOrUpdate(tiempoActual, contadorIOBOUND);
     }
 
     public void updateChartDataCPU3() {
 
+        int contadorCPUBOUND = 0;
+        int contadorIOBOUND = 0;
         int tiempoActual = seriesCpuBound.getItemCount() + 1;
+        try {
+            Conjunto<Proceso> conjuntoCPU = app.getCpu3().getConjuntoProcesos();
+            for (int i = 0; i < conjuntoCPU.getLista().size(); i++) {
+                if (conjuntoCPU.getLista().get(i).getTipo().equals("CPU BOUND")) {
+                    contadorCPUBOUND++;
+                } else {
+                    contadorIOBOUND++;
+                }
+            }
 
-        int contadorCPUBOUND = app.getCpu3().getCPUBoundCounter();
-        int contadorIOBOUND = app.getCpu3().getIOBoundCounter();
+            seriesCpuBound.addOrUpdate(tiempoActual, contadorCPUBOUND);
+            seriesIoBound.addOrUpdate(tiempoActual, contadorIOBOUND);
+        } catch (Exception e) {
+        }
 
-        seriesCpuBound.addOrUpdate(tiempoActual, contadorCPUBOUND);
-        seriesIoBound.addOrUpdate(tiempoActual, contadorIOBOUND);
     }
 
     public void clearChartData() {

@@ -22,6 +22,7 @@ public class ProcesoIOBOUND extends Proceso {
     private int cicloEntradaListo; //último ciclo global en el que entró a la cola de listos
 
     private int tiempoEnCola;
+    private int sleepTime; //tiempo del sleep
 
     private final App app = App.getInstance();
 
@@ -33,14 +34,31 @@ public class ProcesoIOBOUND extends Proceso {
         this.contadorCiclos = 0;
         this.cicloEntradaListo = app.getRelojGlobal();
         this.tiempoEnCola = 1;
+        this.sleepTime = cicloGenerarExcepcion;
     }
 
     private void generarExcepcion(Planificador planificador) {
         this.getPCB_proceso().setEstado("Blocked");
         System.out.println("Proceso " + this.getNombreProceso() + " bloqueado por excepción I/O");
 
-        //app.getPlanificador().bloquearProceso(this);
+        //app.getPlanificador().bloquearProceso(this, this.cicloGenerarExcepcion, this.cicloSatisfacerExcepcion);
         
+    }
+
+    public int getContadorCiclos() {
+        return contadorCiclos;
+    }
+
+    public void setContadorCiclos(int contadorCiclos) {
+        this.contadorCiclos = contadorCiclos;
+    }
+
+    public int getTiempoEnCola() {
+        return tiempoEnCola;
+    }
+
+    public void setTiempoEnCola(int tiempoEnCola) {
+        this.tiempoEnCola = tiempoEnCola;
     }
     
     private void terminar(){
@@ -48,7 +66,6 @@ public class ProcesoIOBOUND extends Proceso {
 
         if (this.getNombreProceso() != "SO"){
             System.out.println("TERMINO UN PROCESO IO BOUND");
-            System.out.println(app.getPlanificador().getColaTerminados().travel());
             app.getPlanificador().terminarProceso(this);// Encolar el proceso en Terminados
         }
 
@@ -57,7 +74,7 @@ public class ProcesoIOBOUND extends Proceso {
     private void satisfacerExcepcion(Planificador planificador) {
         System.out.println("Proceso " + this.getNombreProceso() + " listo para ejecutarse nuevamente");
         this.getPCB_proceso().setEstado("Ready"); //En realidad se va a ready y hay que tener un semáforo para la cola de listos
-        this.setCicloEntradaListo(app.getRelojGlobal());
+        this.setCicloEntradaListo(app.getRelojGlobal()); 
 
     }
 
@@ -188,5 +205,19 @@ public class ProcesoIOBOUND extends Proceso {
      */
     public void setCicloEntradaListo(int cicloEntradaListo) {
         this.cicloEntradaListo = cicloEntradaListo;
+    }
+
+    /**
+     * @return the sleepTime
+     */
+    public int getSleepTime() {
+        return sleepTime;
+    }
+
+    /**
+     * @param sleepTime the sleepTime to set
+     */
+    public void setSleepTime(int sleepTime) {
+        this.sleepTime = sleepTime;
     }
 }
