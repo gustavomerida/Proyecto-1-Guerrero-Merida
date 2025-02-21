@@ -178,7 +178,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         label2IOEXTRA.setForeground(new java.awt.Color(21, 97, 240));
         label2IOEXTRA.setText("Número de ciclos  para completar la solicitud:");
-        jPanel1.add(label2IOEXTRA, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 270, 330, 40));
+        jPanel1.add(label2IOEXTRA, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 270, 400, 40));
 
         cycleDurationExceptionTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -189,7 +189,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Cantidad de Instrucciones:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 150, 180, 40));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 150, 180, 40));
 
         processTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CPU BOUND", "I/O BOUND" }));
         processTypeComboBox.setToolTipText("");
@@ -203,7 +203,7 @@ public class ProcessMaker extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Tipo:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 200, 70, 40));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 190, 70, 40));
 
         instructionsQuantityTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -214,7 +214,7 @@ public class ProcessMaker extends javax.swing.JFrame {
 
         label1IOEXTRA.setForeground(new java.awt.Color(21, 97, 240));
         label1IOEXTRA.setText("Número de ciclos para solicitud de E/S:");
-        jPanel1.add(label1IOEXTRA, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 240, 320, 40));
+        jPanel1.add(label1IOEXTRA, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 230, 330, 40));
 
         cycleDurationESTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -249,17 +249,17 @@ public class ProcessMaker extends javax.swing.JFrame {
         activeProcessorsLabel.setForeground(new java.awt.Color(255, 255, 255));
         activeProcessorsLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         activeProcessorsLabel.setText("Número de procesadores activos:");
-        jPanel1.add(activeProcessorsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 380, 220, 50));
+        jPanel1.add(activeProcessorsLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 380, 220, 40));
 
         schedulerAlgorithmLabel.setForeground(new java.awt.Color(255, 255, 255));
         schedulerAlgorithmLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         schedulerAlgorithmLabel.setText("Algoritmo de planificacion inicial:");
-        jPanel1.add(schedulerAlgorithmLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 450, 230, 50));
+        jPanel1.add(schedulerAlgorithmLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 460, 240, 40));
 
         cycleDurationLabel.setForeground(new java.awt.Color(255, 255, 255));
         cycleDurationLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         cycleDurationLabel.setText("Duración del ciclo de ejecución de una instrucción:");
-        jPanel1.add(cycleDurationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 410, 270, 50));
+        jPanel1.add(cycleDurationLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 410, 370, 50));
 
         cycleDurationPerInstructionTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
