@@ -45,7 +45,8 @@ public class Simulator extends javax.swing.JFrame {
     private String cycleDurationParameter;
     private int processorsQuantity;
     private DefaultListModel[] modelosCPU;
-    private int relojGlobal;
+    private int relojGlobalSimulator;
+    private boolean flagLabel;
 
     private String currentAlgorithm;
 
@@ -61,11 +62,16 @@ public class Simulator extends javax.swing.JFrame {
 
         this.processorsQuantity = processorsQuantity;
         this.cycleDurationParameter = cycleDurationParameter;
-        this.relojGlobal = 0;
+        // OJITOSSS
+        
+        this.relojGlobalSimulator = app.relojGlobal;
+        
+        this.flagLabel = false;
+        
         this.currentAlgorithm = currentAlgorithm;
         // CREACION DE PROCESADORES
         this.modelosCPU = createProcessors();
-
+        
         // SET UP DE ALGORITMO EN APP Y EN SIMULADOR (GUI)
         setAlgorithm(currentAlgorithm);
         app.getPlanificador().setNombreAlgoritmo(currentAlgorithm);
@@ -92,8 +98,12 @@ public class Simulator extends javax.swing.JFrame {
                 try {
                     SwingUtilities.invokeLater(() -> {
 
+                        
+                        if (flagLabel) {
+                            updatecycleDurationLabel();
+                        }
                         ejecutarProcesos();
-                        updatecycleDurationLabel();
+                        
 
                         actualizarInterfaz(); // Refresca la UI
                         createJScrollPaneOnReady(app.getPlanificador().getColaListos());
@@ -485,10 +495,10 @@ public class Simulator extends javax.swing.JFrame {
     }
 
     private void updatecycleDurationLabel() {
-        this.relojGlobal++;
-        String relojActualString = String.valueOf(this.getRelojGlobal());
+        this.relojGlobalSimulator++;
+        String relojActualString = String.valueOf(this.relojGlobalSimulator);
         cycleDurationLabel.setText("Ciclos de reloj: " + relojActualString);
-        app.relojGlobal = this.getRelojGlobal();
+        app.relojGlobal = this.relojGlobalSimulator;
     }
 
     private void updateSpinner() {
@@ -556,6 +566,7 @@ public class Simulator extends javax.swing.JFrame {
 
     private void startSimulationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startSimulationActionPerformed
         app.startSimulator(this.processorsQuantity);
+        this.flagLabel = true;
     }//GEN-LAST:event_startSimulationActionPerformed
 
 
@@ -590,7 +601,5 @@ public class Simulator extends javax.swing.JFrame {
     /**
      * @return the relojGlobal
      */
-    public int getRelojGlobal() {
-        return relojGlobal;
-    }
+    
 }
